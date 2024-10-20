@@ -125,9 +125,27 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
   const [status, setStatus] = useState("in progress");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("Feature");
+  const [titleError, setTitleError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    let hasErrors: boolean = false;
+    if (title.trim().length === 0) {
+      hasErrors = true;
+      setTitleError("Please fill in the title");
+    } else {
+      setTitleError("");
+    }
+    if (description.trim().length === 0) {
+      hasErrors = true;
+      setDescriptionError("Please fill in the description");
+    } else {
+      setDescriptionError("");
+    }
+
+    if (hasErrors) return;
     const newItem: TodoCardProps = {
       id: Date.now(), // Ģenerēju id no izveides datuma, vēlāk pēc nepieciešamības to var mainīt
       title,
@@ -136,7 +154,7 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
       date: new Date().toLocaleDateString(),
       type,
     };
-    console.log(newItem);
+
     onAdd(newItem);
     // Atiestatu ievadlaukus pēc veiksmīgas pievienošanas
     setTitle("");
@@ -199,10 +217,15 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
             name="title"
             type="text"
             id="title"
-            className="mt-2 block w-full bg-white border border-gray-300 rounded-md p-1 text-md"
+            className={`mt-2 block w-full bg-white border rounded-md p-1 text-md ${
+              titleError ? "border-red-500" : "border-gray-300"
+            }`}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          {titleError && (
+            <p className="text-red-500 text-sm mt-1">{titleError}</p>
+          )}
         </div>
 
         {/* Description */}
@@ -216,10 +239,15 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
           <textarea
             name="description"
             id="descriptionTextarea"
-            className="h-min-150px mt-2 block w-full bg-white border border-gray-300 rounded-md p-1 text-md"
+            className={`h-min-150px mt-2 block w-full bg-white border rounded-md p-1 text-md ${
+              descriptionError ? "border-red-500" : "border-gray-300"
+            }`}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+          {descriptionError && (
+            <p className="text-red-500 text-sm mt-1">{descriptionError}</p>
+          )}
         </div>
       </div>
 
