@@ -1,9 +1,10 @@
 "use client";
 import { TrashIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
+// import { useForm, SubmitHandler } from "react-hook-form";
 
 // Datu struktūra priekš informācijas, kas tiek ielikta todo kartiņās
-interface TodoCardProps {
+interface TodoCardInfoStructure {
   id: number;
   status: string;
   title: string;
@@ -13,7 +14,7 @@ interface TodoCardProps {
 }
 
 // Testa objekti
-const testData: TodoCardProps[] = [
+const testData: TodoCardInfoStructure[] = [
   {
     id: 1,
     status: "Done",
@@ -42,14 +43,14 @@ const testData: TodoCardProps[] = [
 ];
 
 export default function Home() {
-  const [cardData, setCardData] = useState<TodoCardProps[]>(testData);
+  const [cardData, setCardData] = useState<TodoCardInfoStructure[]>(testData);
 
   // Pure or impure function, thats the question
   function handleDelete(id: number) {
     const newData = cardData.filter((cardInfo) => cardInfo.id !== id);
     setCardData(newData);
   }
-  function handleAdd(item: TodoCardProps) {
+  function handleAdd(item: TodoCardInfoStructure) {
     const newData = [item, ...cardData];
     setCardData(newData);
   }
@@ -73,7 +74,7 @@ function TodoCard({
   information,
   onDelete,
 }: {
-  information: TodoCardProps;
+  information: TodoCardInfoStructure;
   onDelete: (id: number) => void;
 }) {
   return (
@@ -120,47 +121,67 @@ function TodoCard({
   );
 }
 
-function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
-  const [title, setTitle] = useState("");
-  const [status, setStatus] = useState("in progress");
-  const [description, setDescription] = useState("");
-  const [type, setType] = useState("Feature");
-  const [titleError, setTitleError] = useState("");
-  const [descriptionError, setDescriptionError] = useState("");
+function AddTodoCard({
+  onAdd,
+}: {
+  onAdd: (item: TodoCardInfoStructure) => void;
+}) {
+  const [addTodoCardData, setAddTodoCardData] = useState({
+    status: "In progress",
+    type: "Feature",
+    title: "",
+    description: "",
+    titleError: "",
+    descriptionError: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     let hasErrors: boolean = false;
-    if (title.trim().length === 0) {
+    if (addTodoCardData.title.trim().length === 0) {
       hasErrors = true;
-      setTitleError("Please fill in the title");
+      setAddTodoCardData((prev) => {
+        return { ...prev, titleError: "Please fill in the title" };
+      });
     } else {
-      setTitleError("");
+      setAddTodoCardData((prev) => {
+        return { ...prev, titleError: "" };
+      });
     }
-    if (description.trim().length === 0) {
+    if (addTodoCardData.description.trim().length === 0) {
       hasErrors = true;
-      setDescriptionError("Please fill in the description");
+      setAddTodoCardData((prev) => {
+        return { ...prev, descriptionError: "Please fill in the description" };
+      });
     } else {
-      setDescriptionError("");
+      setAddTodoCardData((prev) => {
+        return { ...prev, descriptionError: "" };
+      });
     }
 
     if (hasErrors) return;
-    const newItem: TodoCardProps = {
+    const newItem: TodoCardInfoStructure = {
       id: Date.now(), // Ģenerēju id no izveides datuma, vēlāk pēc nepieciešamības to var mainīt
-      title,
-      status,
-      description,
+      title: addTodoCardData.title,
+      status: addTodoCardData.status,
+      description: addTodoCardData.description,
       date: new Date().toLocaleDateString(),
-      type,
+      type: addTodoCardData.type,
     };
 
     onAdd(newItem);
     // Atiestatu ievadlaukus pēc veiksmīgas pievienošanas
-    setTitle("");
-    setDescription("");
-    setStatus("In progress");
-    setType("Feature");
+
+    setAddTodoCardData((prev) => {
+      return {
+        ...prev,
+        status: "In progress",
+        type: "Feature",
+        title: "",
+        description: "",
+      };
+    });
   };
 
   return (
@@ -177,8 +198,12 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
             name="status"
             id="statusSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
+            value={addTodoCardData.status}
+            onChange={(e) =>
+              setAddTodoCardData((prev) => {
+                return { ...prev, status: e.target.value };
+              })
+            }
           >
             <option value="In progress">In progress</option>
             <option value="Done">Done</option>
@@ -194,8 +219,12 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
             name="type"
             id="typeSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
+            value={addTodoCardData.type}
+            onChange={(e) =>
+              setAddTodoCardData((prev) => {
+                return { ...prev, type: e.target.value };
+              })
+            }
           >
             <option value="Feature">Feature</option>
             <option value="Bug">Bug</option>
@@ -218,17 +247,22 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
             type="text"
             id="title"
             className={`mt-2 block w-full bg-white border rounded-md p-1 text-md ${
-              titleError ? "border-red-500" : "border-gray-300"
+              addTodoCardData.titleError ? "border-red-500" : "border-gray-300"
             }`}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            value={addTodoCardData.title}
+            onChange={(e) =>
+              setAddTodoCardData((prev) => {
+                return { ...prev, title: e.target.value };
+              })
+            }
           />
-          {titleError && (
-            <p className="text-red-500 text-sm mt-1">{titleError}</p>
+          {addTodoCardData.titleError && (
+            <p className="text-red-500 text-sm mt-1">
+              {addTodoCardData.titleError}
+            </p>
           )}
         </div>
 
-        {/* Description */}
         <div className="mt-4">
           <label
             htmlFor="descriptionTextarea"
@@ -240,18 +274,25 @@ function AddTodoCard({ onAdd }: { onAdd: (item: TodoCardProps) => void }) {
             name="description"
             id="descriptionTextarea"
             className={`h-min-150px mt-2 block w-full bg-white border rounded-md p-1 text-md ${
-              descriptionError ? "border-red-500" : "border-gray-300"
+              addTodoCardData.descriptionError
+                ? "border-red-500"
+                : "border-gray-300"
             }`}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={addTodoCardData.description}
+            onChange={(e) =>
+              setAddTodoCardData((prev) => {
+                return { ...prev, description: e.target.value };
+              })
+            }
           />
-          {descriptionError && (
-            <p className="text-red-500 text-sm mt-1">{descriptionError}</p>
+          {addTodoCardData.descriptionError && (
+            <p className="text-red-500 text-sm mt-1">
+              {addTodoCardData.descriptionError}
+            </p>
           )}
         </div>
       </div>
 
-      {/* Submit Button */}
       <button
         className="flex items-center justify-center font-bold text-slate-400 hover:text-lime-700 hover:bg-gray-300 transition-colors duration-300"
         type="submit"
