@@ -1,7 +1,7 @@
 "use client";
 import { TrashIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-// import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 // Datu struktūra priekš informācijas, kas tiek ielikta todo kartiņās
 interface TodoCardInfoStructure {
@@ -126,68 +126,41 @@ function AddTodoCard({
 }: {
   onAdd: (item: TodoCardInfoStructure) => void;
 }) {
-  const [addTodoCardData, setAddTodoCardData] = useState({
-    status: "In progress",
-    type: "Feature",
-    title: "",
-    description: "",
-    titleError: "",
-    descriptionError: "",
+  interface TodoFormInputsStructure {
+    title: string;
+    status: string;
+    description: string;
+    type: string;
+  }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    defaultValues: {
+      status: "In progress",
+      type: "Feature",
+      title: "",
+      description: "",
+    },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    let hasErrors: boolean = false;
-    if (addTodoCardData.title.trim().length === 0) {
-      hasErrors = true;
-      setAddTodoCardData((prev) => {
-        return { ...prev, titleError: "Please fill in the title" };
-      });
-    } else {
-      setAddTodoCardData((prev) => {
-        return { ...prev, titleError: "" };
-      });
-    }
-    if (addTodoCardData.description.trim().length === 0) {
-      hasErrors = true;
-      setAddTodoCardData((prev) => {
-        return { ...prev, descriptionError: "Please fill in the description" };
-      });
-    } else {
-      setAddTodoCardData((prev) => {
-        return { ...prev, descriptionError: "" };
-      });
-    }
-
-    if (hasErrors) return;
+  const onFormSubmit = (data: TodoFormInputsStructure) => {
     const newItem: TodoCardInfoStructure = {
-      id: Date.now(), // Ģenerēju id no izveides datuma, vēlāk pēc nepieciešamības to var mainīt
-      title: addTodoCardData.title,
-      status: addTodoCardData.status,
-      description: addTodoCardData.description,
+      id: Date.now(),
+      ...data,
       date: new Date().toLocaleDateString(),
-      type: addTodoCardData.type,
     };
-
     onAdd(newItem);
-    // Atiestatu ievadlaukus pēc veiksmīgas pievienošanas
-
-    setAddTodoCardData((prev) => {
-      return {
-        ...prev,
-        status: "In progress",
-        type: "Feature",
-        title: "",
-        description: "",
-      };
-    });
+    reset();
   };
 
   return (
     <form
       className="grid grid-cols-[200px_minmax(300px,550px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden"
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onFormSubmit)}
     >
       <div className="flex flex-col justify-center mx-3">
         <div className="mb-6">
@@ -195,15 +168,9 @@ function AddTodoCard({
             Status:
           </label>
           <select
-            name="status"
+            {...register("status")}
             id="statusSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
-            value={addTodoCardData.status}
-            onChange={(e) =>
-              setAddTodoCardData((prev) => {
-                return { ...prev, status: e.target.value };
-              })
-            }
           >
             <option value="In progress">In progress</option>
             <option value="Done">Done</option>
@@ -216,15 +183,9 @@ function AddTodoCard({
             Type:
           </label>
           <select
-            name="type"
+            {...register("type")}
             id="typeSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
-            value={addTodoCardData.type}
-            onChange={(e) =>
-              setAddTodoCardData((prev) => {
-                return { ...prev, type: e.target.value };
-              })
-            }
           >
             <option value="Feature">Feature</option>
             <option value="Bug">Bug</option>
@@ -243,23 +204,14 @@ function AddTodoCard({
             Title:
           </label>
           <input
-            name="title"
-            type="text"
+            {...register("title", { required: "Please fill in the title" })}
             id="title"
             className={`mt-2 block w-full bg-white border rounded-md p-1 text-md ${
-              addTodoCardData.titleError ? "border-red-500" : "border-gray-300"
+              errors.title ? "border-red-500" : "border-gray-300"
             }`}
-            value={addTodoCardData.title}
-            onChange={(e) =>
-              setAddTodoCardData((prev) => {
-                return { ...prev, title: e.target.value };
-              })
-            }
           />
-          {addTodoCardData.titleError && (
-            <p className="text-red-500 text-sm mt-1">
-              {addTodoCardData.titleError}
-            </p>
+          {errors.title && (
+            <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
           )}
         </div>
 
@@ -271,23 +223,17 @@ function AddTodoCard({
             Description:
           </label>
           <textarea
-            name="description"
+            {...register("description", {
+              required: "Please fill in the description",
+            })}
             id="descriptionTextarea"
             className={`h-min-150px mt-2 block w-full bg-white border rounded-md p-1 text-md ${
-              addTodoCardData.descriptionError
-                ? "border-red-500"
-                : "border-gray-300"
+              errors.description ? "border-red-500" : "border-gray-300"
             }`}
-            value={addTodoCardData.description}
-            onChange={(e) =>
-              setAddTodoCardData((prev) => {
-                return { ...prev, description: e.target.value };
-              })
-            }
           />
-          {addTodoCardData.descriptionError && (
+          {errors.description && (
             <p className="text-red-500 text-sm mt-1">
-              {addTodoCardData.descriptionError}
+              {errors.description.message}
             </p>
           )}
         </div>
