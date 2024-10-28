@@ -10,11 +10,10 @@ export default function CardDetailsPage() {
   const { cardData } = useTodo();
   const params = useParams();
   const { id } = params;
-  const idNumber = +id;
-  const oneCardData = cardData.filter((card) => card.id === idNumber)[0];
+  const oneCardData = cardData.filter((card) => card.id === id)[0];
   return (
     <div>
-      {<TodoCard information={oneCardData} onDelete={null} hasLink={false} />}
+      <TodoCard information={oneCardData} onDelete={null} hasLink={false} />
     </div>
   );
 }

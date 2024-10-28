@@ -1,5 +1,5 @@
-export interface TodoCardInfoStructure {
-  id: number;
+export interface TodoCardInfo {
+  id: string;
   status: string;
   title: string;
   description: string;
@@ -7,7 +7,7 @@ export interface TodoCardInfoStructure {
   type: string;
 }
 
-export interface TodoFormInputsStructure {
+export interface TodoFormInputs {
   title: string;
   status: string;
   description: string;

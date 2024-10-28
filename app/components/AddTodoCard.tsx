@@ -2,12 +2,13 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { TodoFormInputsStructure, TodoCardInfoStructure } from "../../types";
+import { TodoFormInputs, TodoCardInfo } from "../../types";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddTodoCard({
   onAdd,
 }: {
-  onAdd: (item: TodoCardInfoStructure) => void;
+  onAdd: (item: TodoCardInfo) => void;
 }) {
   const {
     register,
@@ -23,9 +24,9 @@ export default function AddTodoCard({
     },
   });
 
-  const onFormSubmit = (data: TodoFormInputsStructure) => {
-    const newItem: TodoCardInfoStructure = {
-      id: Date.now(),
+  const onFormSubmit = (data: TodoFormInputs) => {
+    const newItem: TodoCardInfo = {
+      id: uuidv4(),
       ...data,
       date: new Date().toLocaleDateString(),
     };

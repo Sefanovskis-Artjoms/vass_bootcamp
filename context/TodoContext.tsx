@@ -2,19 +2,19 @@
 
 "use client";
 import React, { createContext, useState, useContext } from "react";
-import { TodoCardInfoStructure } from "../types";
+import { TodoCardInfo } from "../types";
 
-interface TodoContextStructure {
-  cardData: TodoCardInfoStructure[];
-  setCardData: React.Dispatch<React.SetStateAction<TodoCardInfoStructure[]>>;
+interface TodoCardContext {
+  cardData: TodoCardInfo[];
+  setCardData: React.Dispatch<React.SetStateAction<TodoCardInfo[]>>;
 }
 
-const TodoContext = createContext<TodoContextStructure | undefined>(undefined);
+const TodoContext = createContext<TodoCardContext | undefined>(undefined);
 
 export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cardData, setCardData] = useState<TodoCardInfoStructure[]>([
+  const [cardData, setCardData] = useState<TodoCardInfo[]>([
     {
-      id: 1,
+      id: "1",
       status: "Done",
       title: "HI",
       description:
@@ -23,7 +23,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       type: "Activity",
     },
     {
-      id: 2,
+      id: "2",
       status: "In progress",
       title: "Build UI",
       description: "Working on UI components",
@@ -31,7 +31,7 @@ export const TodoProvider = ({ children }: { children: React.ReactNode }) => {
       type: "Task",
     },
     {
-      id: 3,
+      id: "3",
       status: "To do",
       title: "Write Documentation",
       description: "Pending documentation work",
