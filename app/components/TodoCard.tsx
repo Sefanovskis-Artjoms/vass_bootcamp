@@ -1,7 +1,7 @@
 // components/TodoCard.tsx
 import { TrashIcon } from "@heroicons/react/20/solid";
 import React from "react";
-import { TodoCardInfoStructure } from "../../types";
+import { TodoCardInfo } from "../../types";
 import Link from "next/link";
 
 // The same card element is used in card details page, so there is some logic to make card a little bit different
@@ -11,8 +11,8 @@ export default function TodoCard({
   onDelete = null,
   hasLink = false,
 }: {
-  information: TodoCardInfoStructure;
-  onDelete: ((id: number) => void) | null;
+  information: TodoCardInfo;
+  onDelete: ((id: string) => void) | null;
   hasLink: boolean;
 }) {
   // Title part is made as a separate function to make look neater the logic with linking to a card details page
