@@ -1,14 +1,19 @@
 "use client";
 import { TodoCardInfo } from "../types";
-import { useTodo } from "../context/TodoContext";
+import dataService from "../services/dataService";
 import TodoCard from "./components/TodoCard";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const { cardData, setCardData } = useTodo();
+  const [cardData, setCardData] = useState<TodoCardInfo[]>([]);
+
+  useEffect(() => {
+    setCardData(dataService.getData());
+  }, []);
 
   function handleDelete(id: string) {
-    const newData = cardData.filter((card: TodoCardInfo) => card.id !== id);
-    setCardData(newData);
+    dataService.deleteData(id);
+    setCardData(dataService.getData());
   }
 
   return (

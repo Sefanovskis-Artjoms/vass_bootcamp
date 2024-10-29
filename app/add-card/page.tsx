@@ -1,14 +1,12 @@
 "use client";
 
+import dataService from "../../services/dataService";
 import { TodoCardInfo } from "../../types";
 import AddTodoCard from "../components/AddTodoCard";
-import { useTodo } from "../../context/TodoContext";
 
 export default function AddCard() {
-  const { cardData, setCardData } = useTodo();
-
   function handleAdd(item: TodoCardInfo) {
-    setCardData([item, ...cardData]);
+    dataService.addData(item);
   }
 
   return <AddTodoCard onAdd={handleAdd} />;

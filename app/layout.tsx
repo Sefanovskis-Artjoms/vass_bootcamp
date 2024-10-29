@@ -1,7 +1,6 @@
 // app/layout.tsx
 import "./globals.css";
 import Navigation from "./components/Navigation";
-import { TodoProvider } from "../context/TodoContext";
 
 export default function RootLayout({
   children,
@@ -13,8 +12,7 @@ export default function RootLayout({
       <body className="p-8 bg-slate-50">
         {/* The same navigation is present across all pages */}
         <Navigation />
-        {/* TodoProvider is a temporary feature to allow working with the same data across multiple pages */}
-        <TodoProvider>{children}</TodoProvider>
+        {children}
       </body>
     </html>
   );

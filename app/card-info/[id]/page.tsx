@@ -3,14 +3,17 @@
 // So a developer went on the path of a least resistance
 "use client";
 import { useParams } from "next/navigation";
-import { useTodo } from "../../../context/TodoContext";
 import TodoCard from "../../components/TodoCard";
+import dataService from "../../../services/dataService";
+import { TodoCardInfo } from "../../../types";
 
 export default function CardDetailsPage() {
-  const { cardData } = useTodo();
+  // const { cardData } = useTodo();
   const params = useParams();
   const { id } = params;
-  const oneCardData = cardData.filter((card) => card.id === id)[0];
+  const oneCardData = dataService
+    .getData()
+    .filter((card: TodoCardInfo) => card.id === id)[0];
   return (
     <div>
       <TodoCard information={oneCardData} onDelete={null} hasLink={false} />
