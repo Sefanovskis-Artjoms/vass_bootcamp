@@ -8,7 +8,6 @@ import dataService from "../../../services/dataService";
 import { TodoCardInfo } from "../../../types";
 
 export default function CardDetailsPage() {
-  // const { cardData } = useTodo();
   const params = useParams();
   const { id } = params;
   const oneCardData = dataService
