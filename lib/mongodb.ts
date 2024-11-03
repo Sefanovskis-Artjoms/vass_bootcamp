@@ -6,10 +6,13 @@ if (!DATABASE_URL) {
     "Please define the DATABASE_URL environment variable inside .env.local"
   );
 }
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
 let cached = global.mongoose;
 
 if (!cached) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
   cached = global.mongoose = { conn: null, promise: null };
 }
 
