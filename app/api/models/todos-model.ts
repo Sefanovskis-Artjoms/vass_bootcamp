@@ -19,6 +19,6 @@ const TodosSchema = new mongoose.Schema({
 });
 
 const Todo: Model<ITodo> =
-  mongoose.models?.Todo || mongoose.model("Todos", TodosSchema);
+  mongoose.models?.Todo || mongoose.model("Todo", TodosSchema);
 
 export default Todo;

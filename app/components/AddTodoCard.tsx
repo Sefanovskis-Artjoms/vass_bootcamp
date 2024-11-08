@@ -2,7 +2,7 @@
 import { PlusIcon } from "@heroicons/react/20/solid";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { TodoFormInputs, TodoCardInfo } from "../../types";
+import { TodoFormInputs, TodoCardInfo } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 export default function AddTodoCard({
