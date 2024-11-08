@@ -1,4 +1,3 @@
-"use server";
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Todo from "../models/todos-model";
