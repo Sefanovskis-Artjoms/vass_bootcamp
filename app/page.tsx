@@ -1,6 +1,6 @@
 "use client";
-import { TodoCardInfo } from "../types";
-import dataService from "../services/dataService";
+import { TodoCardInfo } from "@/types";
+import dataService from "@/services/dataService";
 import TodoCard from "./components/TodoCard";
 import { useEffect, useState } from "react";
 

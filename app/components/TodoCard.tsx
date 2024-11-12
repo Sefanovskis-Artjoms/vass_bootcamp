@@ -1,7 +1,7 @@
 // components/TodoCard.tsx
 import { TrashIcon } from "@heroicons/react/20/solid";
 import React from "react";
-import { TodoCardInfo } from "../../types";
+import { TodoCardInfo } from "@/types";
 import Link from "next/link";
 
 // The same card element is used in card details page, so there is some logic to make card a little bit different

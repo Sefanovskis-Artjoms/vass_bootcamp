@@ -3,12 +3,11 @@
 // So a developer went on the path of a least resistance
 "use client";
 import { useParams } from "next/navigation";
-import TodoCard from "../../components/TodoCard";
-import dataService from "../../../services/dataService";
-import { TodoCardInfo } from "../../../types";
+import TodoCard from "@/app/components/TodoCard";
+import dataService from "@/services/dataService";
+import { TodoCardInfo } from "@/types";
 
 export default function CardDetailsPage() {
-  // const { cardData } = useTodo();
   const params = useParams();
   const { id } = params;
   const oneCardData = dataService

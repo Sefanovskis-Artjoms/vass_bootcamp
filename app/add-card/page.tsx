@@ -1,7 +1,7 @@
 "use client";
 
-import dataService from "../../services/dataService";
-import { TodoCardInfo } from "../../types";
+import dataService from "@/services/dataService";
+import { TodoCardInfo } from "@/types";
 import AddTodoCard from "../components/AddTodoCard";
 
 export default function AddCard() {
