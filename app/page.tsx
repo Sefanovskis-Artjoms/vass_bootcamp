@@ -6,15 +6,33 @@ import { useEffect, useState } from "react";
 
 export default function HomePage() {
   const [cardData, setCardData] = useState<TodoCardInfo[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setCardData(dataService.getData());
+    async function fetchData() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await dataService.getData();
+        setCardData(data);
+      } catch {
+        setError("Failed to fetch todos. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchData();
   }, []);
 
-  function handleDelete(id: string) {
-    dataService.deleteData(id);
-    setCardData(dataService.getData());
+  async function handleDelete(id: string) {
+    await dataService.deleteData(id);
+    const updatedData = await dataService.getData();
+    setCardData(updatedData);
   }
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
 
   return (
     <div>

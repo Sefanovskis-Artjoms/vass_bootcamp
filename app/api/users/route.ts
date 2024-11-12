@@ -7,8 +7,11 @@ export async function GET() {
 
   try {
     const users = await User.find({});
-    return NextResponse.json({ data: users, success: "true" });
+    return NextResponse.json({ data: users }, { status: 200 });
   } catch {
-    return NextResponse.json({ error: "Failed to fetch User" });
+    return NextResponse.json(
+      { error: "Failed to fetch User" },
+      { status: 500 }
+    );
   }
 }
