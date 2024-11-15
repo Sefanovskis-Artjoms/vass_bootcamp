@@ -29,15 +29,22 @@ const dataService = {
     });
   },
 
-  async updateData(
+  async updateTodo(
     id: string,
     updatedTodo: Partial<TodoCardInfo>
-  ): Promise<void> {
-    await fetch(`/api/todos/${id}`, {
+  ): Promise<TodoCardInfo> {
+    const response = await fetch(`/api/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedTodo),
     });
+
+    if (!response.ok) {
+      throw new Error("Failed to update todo");
+    }
+
+    const data = await response.json();
+    return data.data;
   },
 
   async deleteData(id: string): Promise<void> {

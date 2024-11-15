@@ -39,11 +39,7 @@ export default function HomePage() {
       <ul className="space-y-4">
         {cardData.map((card: TodoCardInfo) => (
           <li key={card.id}>
-            <TodoCard
-              information={card}
-              onDelete={handleDelete}
-              hasLink={true}
-            />
+            <TodoCard information={card} onDelete={handleDelete} />
           </li>
         ))}
       </ul>
