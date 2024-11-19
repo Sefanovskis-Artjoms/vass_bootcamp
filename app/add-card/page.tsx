@@ -6,7 +6,7 @@ import AddTodoCard from "../components/AddTodoCard";
 
 export default function AddCard() {
   async function handleAdd(item: TodoCardInfo) {
-    await dataService.addData(item);
+    await dataService.addTodo(item);
   }
   return <AddTodoCard onAdd={handleAdd} />;
 }

@@ -9,10 +9,10 @@ export async function GET() {
   try {
     const todos = await Todo.find({});
     return NextResponse.json({ data: todos }, { status: 200 });
-  } catch {
+  } catch (e) {
     return NextResponse.json(
       {
-        error: "Failed to fetch Todos",
+        error: `Failed to fetch Todos: ${e}`,
       },
       { status: 500 }
     );
@@ -26,9 +26,9 @@ export async function POST(request: Request) {
     const newTodo: TodoCardInfo = await request.json();
     const createdTodo = await Todo.create(newTodo);
     return NextResponse.json({ data: createdTodo }, { status: 200 });
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Failed to add Todo", success: false },
+      { error: `Failed to add Todo: ${e}`, success: false },
       { status: 500 }
     );
   }

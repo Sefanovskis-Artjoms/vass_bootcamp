@@ -1,7 +1,7 @@
 import { TodoCardInfo } from "@/types";
 
 const dataService = {
-  async getData(): Promise<TodoCardInfo[]> {
+  async getAllTodos(): Promise<TodoCardInfo[]> {
     const response = await fetch("api/todos");
     const todoData = await response.json();
     return todoData.data;
@@ -19,7 +19,7 @@ const dataService = {
     return data.data;
   },
 
-  async addData(newTodo: TodoCardInfo): Promise<void> {
+  async addTodo(newTodo: TodoCardInfo): Promise<void> {
     await fetch("/api/todos", {
       method: "POST",
       headers: {
@@ -47,7 +47,7 @@ const dataService = {
     return data.data;
   },
 
-  async deleteData(id: string): Promise<void> {
+  async deleteTodo(id: string): Promise<void> {
     await fetch(`api/todos/${id}`, {
       method: "DELETE",
     });
