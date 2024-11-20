@@ -1,13 +1,13 @@
-import { TodoCardInfo } from "@/types";
+import { ITodo, IUser } from "@/types";
 
 const dataService = {
-  async getAllTodos(): Promise<TodoCardInfo[]> {
+  async getAllTodos(): Promise<ITodo[]> {
     const response = await fetch("api/todos");
     const todoData = await response.json();
     return todoData.data;
   },
 
-  getTodoById: async (id: string): Promise<TodoCardInfo | null> => {
+  getTodoById: async (id: string): Promise<ITodo | null> => {
     const response = await fetch(`/api/todos/${id}`);
     if (!response.ok) {
       if (response.status === 404) {
@@ -19,7 +19,7 @@ const dataService = {
     return data.data;
   },
 
-  async addTodo(newTodo: TodoCardInfo): Promise<void> {
+  async addTodo(newTodo: ITodo): Promise<void> {
     await fetch("/api/todos", {
       method: "POST",
       headers: {
@@ -29,10 +29,7 @@ const dataService = {
     });
   },
 
-  async updateTodo(
-    id: string,
-    updatedTodo: Partial<TodoCardInfo>
-  ): Promise<TodoCardInfo> {
+  async updateTodo(id: string, updatedTodo: Partial<ITodo>): Promise<ITodo> {
     const response = await fetch(`/api/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -51,6 +48,12 @@ const dataService = {
     await fetch(`api/todos/${id}`, {
       method: "DELETE",
     });
+  },
+
+  async getAllUsers(): Promise<IUser[]> {
+    const response = await fetch("api/users");
+    const userData = await response.json();
+    return userData.data;
   },
 };
 

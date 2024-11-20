@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Todo from "../../models/todos-model";
-import { TodoCardInfo } from "@/types";
+import { ITodo } from "@/types";
 
 export async function DELETE(
   request: Request,
@@ -28,9 +28,9 @@ export async function DELETE(
       },
       { status: 200 }
     );
-  } catch (e) {
+  } catch (error) {
     return NextResponse.json(
-      { error: `Failed to delete the todo: ${e}` },
+      { error: `Failed to delete the todo: ${error}` },
       { status: 500 }
     );
   }
@@ -44,7 +44,7 @@ export async function PUT(
   const { id } = params;
 
   try {
-    const updatedTodoData: Partial<TodoCardInfo> = await request.json();
+    const updatedTodoData: Partial<ITodo> = await request.json();
 
     const updatedTodo = await Todo.findOneAndUpdate(
       { id },
@@ -57,9 +57,9 @@ export async function PUT(
     }
 
     return NextResponse.json({ data: updatedTodo }, { status: 200 });
-  } catch (e) {
+  } catch (error) {
     return NextResponse.json(
-      { error: `Failed to update Todo: ${e}` },
+      { error: `Failed to update Todo: ${error}` },
       { status: 500 }
     );
   }
@@ -81,9 +81,9 @@ export async function GET(
     }
 
     return NextResponse.json({ data: todo }, { status: 200 });
-  } catch (e) {
+  } catch (error) {
     return NextResponse.json(
-      { error: `Failed to fetch Todo: ${e}` },
+      { error: `Failed to fetch Todo: ${error}` },
       { status: 500 }
     );
   }

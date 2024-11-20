@@ -1,4 +1,4 @@
-export interface TodoCardInfo {
+export interface ITodo {
   id: string;
   status: string;
   title: string;
@@ -12,4 +12,12 @@ export interface TodoFormInputs {
   status: string;
   description: string;
   type: string;
+}
+
+export interface IUser extends Document {
+  id: string;
+  username: string;
+  name: string;
+  surname: string;
+  password: string;
 }

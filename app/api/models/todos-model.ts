@@ -1,12 +1,10 @@
+import { ITodo } from "@/types";
 import mongoose, { Model, Document } from "mongoose";
 
-export interface ITodo extends Document {
+// Model needs interface that extends Document to work properly, so I extended the ITodo interface
+// But there was an issue that I need to redefine the id field
+export interface ITodoDodument extends ITodo, Document {
   id: string;
-  status: string;
-  title: string;
-  description: string;
-  date: string;
-  type: string;
 }
 
 const TodosSchema = new mongoose.Schema({
@@ -18,7 +16,7 @@ const TodosSchema = new mongoose.Schema({
   type: String,
 });
 
-const Todo: Model<ITodo> =
+const Todo: Model<ITodoDodument> =
   mongoose.models?.Todo || mongoose.model("Todo", TodosSchema);
 
 export default Todo;

@@ -1,11 +1,11 @@
 "use client";
-import { TodoCardInfo } from "@/types";
+import { ITodo } from "@/types";
 import dataService from "@/services/dataService";
 import TodoCard from "./components/TodoCard";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const [cardData, setCardData] = useState<TodoCardInfo[]>([]);
+  const [cardData, setCardData] = useState<ITodo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -38,7 +38,7 @@ export default function HomePage() {
   return (
     <div>
       <ul className="space-y-4">
-        {cardData.map((card: TodoCardInfo) => (
+        {cardData.map((card: ITodo) => (
           <li key={card.id}>
             <TodoCard information={card} onDelete={handleDelete} />
           </li>
