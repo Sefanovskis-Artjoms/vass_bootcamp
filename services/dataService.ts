@@ -1,47 +1,49 @@
-import { TodoCardInfo } from "../types";
-
-let todoData: TodoCardInfo[] = [
-  {
-    id: "1",
-    status: "Done",
-    title: "HI",
-    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit...",
-    date: "12/24/0000",
-    type: "Activity",
-  },
-  {
-    id: "2",
-    status: "In progress",
-    title: "Build UI",
-    description: "Working on UI components",
-    date: "12/25/0000",
-    type: "Task",
-  },
-  {
-    id: "3",
-    status: "To do",
-    title: "Write Documentation",
-    description: "Pending documentation work",
-    date: "12/26/0000",
-    type: "Task",
-  },
-];
+import { TodoCardInfo } from "@/types";
 
 const dataService = {
-  getData: (): TodoCardInfo[] => todoData,
-
-  addData: (newTodo: TodoCardInfo): void => {
-    todoData = [newTodo, ...todoData];
+  async getData(): Promise<TodoCardInfo[]> {
+    const response = await fetch("api/todos");
+    const todoData = await response.json();
+    return todoData.data;
   },
 
-  updateData: (id: string, updatedTodo: Partial<TodoCardInfo>): void => {
-    todoData = todoData.map((todoItem) =>
-      todoItem.id === id ? { ...todoItem, ...updatedTodo } : todoItem
-    );
+  getTodoById: async (id: string): Promise<TodoCardInfo | null> => {
+    const response = await fetch(`/api/todos/${id}`);
+    if (!response.ok) {
+      if (response.status === 404) {
+        return null;
+      }
+      throw new Error("Failed to fetch the todo item");
+    }
+    const data = await response.json();
+    return data.data;
   },
 
-  deleteData: (id: string): void => {
-    todoData = todoData.filter((todoItem) => todoItem.id !== id);
+  async addData(newTodo: TodoCardInfo): Promise<void> {
+    await fetch("/api/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newTodo),
+    });
+  },
+
+  async updateData(
+    id: string,
+    updatedTodo: Partial<TodoCardInfo>
+  ): Promise<void> {
+    await fetch(`/api/todos/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedTodo),
+    });
+  },
+
+  async deleteData(id: string): Promise<void> {
+    await fetch(`api/todos/${id}`, {
+      method: "DELETE",
+    });
   },
 };
 
