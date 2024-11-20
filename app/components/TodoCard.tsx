@@ -1,34 +1,14 @@
-// components/TodoCard.tsx
 import { TrashIcon } from "@heroicons/react/20/solid";
-import React from "react";
 import { TodoCardInfo } from "@/types";
 import Link from "next/link";
 
-// The same card element is used in card details page, so there is some logic to make card a little bit different
-// in different use cases -> title part is not link in card details and it doesnt have a delete card option
 export default function TodoCard({
   information,
-  onDelete = null,
-  hasLink = false,
+  onDelete,
 }: {
   information: TodoCardInfo;
-  onDelete: ((id: string) => void) | null;
-  hasLink: boolean;
+  onDelete: (id: string) => void;
 }) {
-  // Title part is made as a separate function to make look neater the logic with linking to a card details page
-  // User gets redirected to a card details page on clicking the title part
-  function TitlePart() {
-    return (
-      <>
-        <span className="font-bold text-xl text-gray-800">
-          {information.title}
-        </span>
-        <span className="text-sm text-slate-500">
-          , created on: {information.date}
-        </span>
-      </>
-    );
-  }
   return (
     <div className="grid grid-cols-[150px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
       <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
@@ -52,30 +32,25 @@ export default function TodoCard({
 
       <div className="p-4">
         <div>
-          {/* This is used if the card is used in card details page, so it wouldnt have a title as a link */}
-          {hasLink ? (
-            <Link href={`/card-info/${information.id}`}>
-              <TitlePart />
-            </Link>
-          ) : (
-            <TitlePart />
-          )}
+          <Link href={`/card-info/${information.id}`}>
+            <span className="font-bold text-xl text-gray-800">
+              {information.title}
+            </span>
+            <span className="text-sm text-slate-500">
+              , created on: {information.date}
+            </span>
+          </Link>
         </div>
         <div className="mt-2 text-gray-700">{information.description}</div>
       </div>
 
-      {/* Additionally the deteletion part is not possible in card details page */}
-      {onDelete ? (
-        <button
-          className="flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-100 transition-colors duration-300"
-          onClick={() => onDelete(information.id)}
-        >
-          <TrashIcon className="h-7 w-7 mr-1" />
-          <span className="text-md font-semibold">Delete</span>
-        </button>
-      ) : (
-        ""
-      )}
+      <button
+        className="flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-100 transition-colors duration-300"
+        onClick={() => onDelete(information.id)}
+      >
+        <TrashIcon className="h-7 w-7 mr-1" />
+        <span className="text-md font-semibold">Delete</span>
+      </button>
     </div>
   );
 }

@@ -14,9 +14,10 @@ export default function HomePage() {
       setIsLoading(true);
       setError(null);
       try {
-        const data = await dataService.getData();
+        const data = await dataService.getAllTodos();
         setCardData(data);
-      } catch {
+      } catch (e) {
+        console.error(e);
         setError("Failed to fetch todos. Please try again later.");
       } finally {
         setIsLoading(false);
@@ -26,8 +27,8 @@ export default function HomePage() {
   }, []);
 
   async function handleDelete(id: string) {
-    await dataService.deleteData(id);
-    const updatedData = await dataService.getData();
+    await dataService.deleteTodo(id);
+    const updatedData = await dataService.getAllTodos();
     setCardData(updatedData);
   }
 
@@ -39,11 +40,7 @@ export default function HomePage() {
       <ul className="space-y-4">
         {cardData.map((card: TodoCardInfo) => (
           <li key={card.id}>
-            <TodoCard
-              information={card}
-              onDelete={handleDelete}
-              hasLink={true}
-            />
+            <TodoCard information={card} onDelete={handleDelete} />
           </li>
         ))}
       </ul>
