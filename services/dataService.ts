@@ -51,7 +51,7 @@ const dataService = {
   },
 
   async getAllUsers(): Promise<IUser[]> {
-    const response = await fetch("api/users");
+    const response = await fetch("/api/users");
     const userData = await response.json();
     return userData.data;
   },

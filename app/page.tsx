@@ -16,8 +16,8 @@ export default function HomePage() {
       try {
         const data = await dataService.getAllTodos();
         setCardData(data);
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(error);
         setError("Failed to fetch todos. Please try again later.");
       } finally {
         setIsLoading(false);

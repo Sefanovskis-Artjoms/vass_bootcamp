@@ -1,10 +1,10 @@
-"use client";
-import { ITodo } from "@/types";
+import dataService from "@/services/dataService";
+import { ITodo, IUser } from "@/types";
 import {
   PencilSquareIcon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/16/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function TodoDetails({
@@ -15,6 +15,33 @@ export default function TodoDetails({
   onEdit: (updatedTodo: ITodo) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState<IUser[] | null>(null);
+  const [assignedTo, setAssignedTo] = useState<string>("");
+
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const data = await dataService.getAllUsers();
+        setUserData(data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+    fetchUserData();
+  }, []);
+
+  useEffect(() => {
+    const assignedUser = userData?.find(
+      (user) => user.id === information.assignedTo
+    );
+    if (!assignedUser) {
+      setAssignedTo("UNASSIGNED");
+      return;
+    }
+    setAssignedTo(
+      `${assignedUser.name} ${assignedUser.surname} (${assignedUser.username})`
+    );
+  }, [userData, information.assignedTo]);
 
   const {
     register,
@@ -26,6 +53,7 @@ export default function TodoDetails({
       description: information.description,
       status: information.status,
       type: information.type,
+      assignedTo: information.assignedTo,
     },
   });
 
@@ -74,8 +102,8 @@ export default function TodoDetails({
         </div>
       </div>
 
-      <div className="p-4">
-        <div>
+      <div className="p-4 flex flex-col">
+        <div className="mb-2">
           <span className="font-bold text-xl text-gray-800">
             {isEditing ? (
               <input
@@ -91,26 +119,52 @@ export default function TodoDetails({
           <span className="text-sm text-slate-500">
             , created on: {information.date}
           </span>
+          {errors.title && (
+            <p className="text-red-500 text-sm">{errors.title.message}</p>
+          )}
         </div>
-        <div className="mt-2 text-gray-700">
+        <div className="mb-4 text-gray-700">
           {isEditing ? (
             <textarea
               {...register("description", {
                 required: "Description is required",
               })}
-              className={`p-1 text-md bg-transparent border rounded border-gray-500 w-full
+              className={`p-1 text-md bg-transparent border rounded border-gray-500 min-w-full min-h-[150px] 
                  ${errors.description ? "border-red-500" : "border-gray-300"}`}
             />
           ) : (
             information.description
           )}
+          {errors.description && (
+            <p className="text-red-500 text-sm">{errors.description.message}</p>
+          )}
         </div>
-        {errors.title && (
-          <p className="text-red-500 text-sm">{errors.title.message}</p>
-        )}
-        {errors.description && (
-          <p className="text-red-500 text-sm">{errors.description.message}</p>
-        )}
+
+        <div className="mt-auto">
+          <span className="text-sm text-slate-500">Assigned to: </span>
+          {isEditing ? (
+            <select
+              {...register("assignedTo")}
+              id="assignToSelect"
+              className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
+            >
+              <option value="UNASSIGNED">UNASSIGNED</option>
+              {userData === null ? (
+                <option disabled>Loading users...</option>
+              ) : (
+                userData.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name} {user.surname} ({user.username})
+                  </option>
+                ))
+              )}
+            </select>
+          ) : (
+            <span className="text-gray-900">
+              {assignedTo ? assignedTo : "Loading..."}
+            </span>
+          )}
+        </div>
       </div>
 
       {isEditing ? (

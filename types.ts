@@ -5,6 +5,7 @@ export interface ITodo {
   description: string;
   date: string;
   type: string;
+  assignedTo: string;
 }
 
 export interface TodoFormInputs {
@@ -12,6 +13,7 @@ export interface TodoFormInputs {
   status: string;
   description: string;
   type: string;
+  assignedTo: string;
 }
 
 export interface IUser extends Document {

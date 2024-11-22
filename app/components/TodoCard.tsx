@@ -30,7 +30,7 @@ export default function TodoCard({
         </div>
       </div>
 
-      <div className="p-4">
+      <div className="p-4 flex flex-col">
         <div>
           <Link href={`/card-info/${information.id}`}>
             <span className="font-bold text-xl text-gray-800">
