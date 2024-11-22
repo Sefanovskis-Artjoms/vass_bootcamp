@@ -3,13 +3,13 @@
 import { useParams } from "next/navigation";
 import TodoDetails from "@/app/components/TodoDetails";
 import dataService from "@/services/dataService";
-import { TodoCardInfo } from "@/types";
+import { ITodo } from "@/types";
 import { useEffect, useState } from "react";
 
 export default function CardDetailsPage() {
   const { id } = useParams();
   const idString: string = typeof id === "string" ? id : id[0];
-  const [oneTodoData, setOneTodoData] = useState<TodoCardInfo | null>(null);
+  const [oneTodoData, setOneTodoData] = useState<ITodo | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -24,15 +24,15 @@ export default function CardDetailsPage() {
             setError("Todo not found.");
           }
         }
-      } catch (e) {
-        console.error(e);
+      } catch (error) {
+        console.error(error);
         setError("Failed to fetch Todo data. Please try again later.");
       }
     }
     fetchData();
   }, [idString]);
 
-  const handleEdit = async (updatedTodo: TodoCardInfo) => {
+  const handleEdit = async (updatedTodo: ITodo) => {
     setError(null);
     try {
       const updated = await dataService.updateTodo(idString, updatedTodo);

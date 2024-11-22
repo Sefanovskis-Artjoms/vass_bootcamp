@@ -8,9 +8,9 @@ export async function GET() {
   try {
     const users = await User.find({});
     return NextResponse.json({ data: users }, { status: 200 });
-  } catch (e) {
+  } catch (error) {
     return NextResponse.json(
-      { error: `Failed to fetch User: ${e}` },
+      { error: `Failed to fetch User: ${error}` },
       { status: 500 }
     );
   }

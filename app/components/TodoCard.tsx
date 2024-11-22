@@ -1,12 +1,12 @@
 import { TrashIcon } from "@heroicons/react/20/solid";
-import { TodoCardInfo } from "@/types";
+import { ITodo } from "@/types";
 import Link from "next/link";
 
 export default function TodoCard({
   information,
   onDelete,
 }: {
-  information: TodoCardInfo;
+  information: ITodo;
   onDelete: (id: string) => void;
 }) {
   return (

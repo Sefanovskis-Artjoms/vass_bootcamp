@@ -1,5 +1,5 @@
 "use client";
-import { TodoCardInfo } from "@/types";
+import { ITodo } from "@/types";
 import {
   PencilSquareIcon,
   ClipboardDocumentCheckIcon,
@@ -11,8 +11,8 @@ export default function TodoDetails({
   information,
   onEdit,
 }: {
-  information: TodoCardInfo;
-  onEdit: (updatedTodo: TodoCardInfo) => void;
+  information: ITodo;
+  onEdit: (updatedTodo: ITodo) => void;
 }) {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -20,7 +20,7 @@ export default function TodoDetails({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<TodoCardInfo>({
+  } = useForm<ITodo>({
     defaultValues: {
       title: information.title,
       description: information.description,
@@ -29,7 +29,7 @@ export default function TodoDetails({
     },
   });
 
-  const onSubmit = (editedInformation: TodoCardInfo) => {
+  const onSubmit = (editedInformation: ITodo) => {
     onEdit(editedInformation);
     setIsEditing(false);
   };

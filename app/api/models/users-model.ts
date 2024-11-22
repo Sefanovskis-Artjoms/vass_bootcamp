@@ -1,11 +1,10 @@
+import { IUser } from "@/types";
 import mongoose, { Model, Document } from "mongoose";
 
-export interface IUser extends Document {
+// Model needs interface that extends Document to work properly, so I extended the ITodo interface
+// But there was an issue that I need to redefine the id field
+export interface IUserDodument extends IUser, Document {
   id: string;
-  username: string;
-  name: string;
-  surname: string;
-  password: string;
 }
 
 const UserSchema = new mongoose.Schema({
@@ -16,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   password: String,
 });
 
-const User: Model<IUser> =
+const User: Model<IUserDodument> =
   mongoose.models?.User || mongoose.model("User", UserSchema);
 
 export default User;
