@@ -1,30 +1,16 @@
 // components/AddTodoCard.tsx
 import { PlusIcon } from "@heroicons/react/20/solid";
-import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { TodoFormInputs, ITodo, IUser } from "@/types";
 import { v4 as uuidv4 } from "uuid";
-import dataService from "@/services/dataService";
 
 export default function AddTodoCard({
   onAdd,
+  userData,
 }: {
   onAdd: (item: ITodo) => void;
+  userData: IUser[];
 }) {
-  const [userData, setUserData] = useState<IUser[] | null>(null);
-
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const data = await dataService.getAllUsers();
-        setUserData(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchUserData();
-  }, []);
- 
   const {
     register,
     handleSubmit,
@@ -97,7 +83,7 @@ export default function AddTodoCard({
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
             <option value="UNASSIGNED">UNASSIGNED</option>
-            {userData === null ? (
+            {userData.length === 0 ? (
               <option disabled>Loading users...</option>
             ) : (
               userData.map((user) => (
