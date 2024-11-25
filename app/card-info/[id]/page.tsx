@@ -40,6 +40,7 @@ export default function CardDetailsPage() {
         setUserData(data);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setError("Failed to fetch user data. Please try again later.");
       }
     }
     fetchUserData();
@@ -54,8 +55,8 @@ export default function CardDetailsPage() {
       } else {
         setError("Failed to update Todo.");
       }
-    } catch (e) {
-      console.error(e);
+    } catch (error) {
+      console.error(error);
       setError("Failed to update Todo data. Please try again later.");
     }
   };
