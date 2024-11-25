@@ -3,13 +3,14 @@
 import { useParams } from "next/navigation";
 import TodoDetails from "@/app/components/TodoDetails";
 import dataService from "@/services/dataService";
-import { ITodo } from "@/types";
+import { ITodo, IUser } from "@/types";
 import { useEffect, useState } from "react";
 
 export default function CardDetailsPage() {
   const { id } = useParams();
   const idString: string = typeof id === "string" ? id : id[0];
   const [oneTodoData, setOneTodoData] = useState<ITodo | null>(null);
+  const [userData, setUserData] = useState<IUser[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -32,6 +33,18 @@ export default function CardDetailsPage() {
     fetchData();
   }, [idString]);
 
+  useEffect(() => {
+    async function fetchUserData() {
+      try {
+        const data = await dataService.getAllUsers();
+        setUserData(data);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    }
+    fetchUserData();
+  }, []);
+
   const handleEdit = async (updatedTodo: ITodo) => {
     setError(null);
     try {
@@ -52,7 +65,11 @@ export default function CardDetailsPage() {
 
   return (
     <div>
-      <TodoDetails information={oneTodoData} onEdit={handleEdit} />
+      <TodoDetails
+        information={oneTodoData}
+        onEdit={handleEdit}
+        userData={userData}
+      />
     </div>
   );
 }

@@ -1,47 +1,21 @@
-import dataService from "@/services/dataService";
 import { ITodo, IUser } from "@/types";
 import {
   PencilSquareIcon,
   ClipboardDocumentCheckIcon,
 } from "@heroicons/react/16/solid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function TodoDetails({
   information,
   onEdit,
+  userData,
 }: {
   information: ITodo;
   onEdit: (updatedTodo: ITodo) => void;
+  userData: IUser[];
 }) {
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState<IUser[] | null>(null);
-  const [assignedTo, setAssignedTo] = useState<string>("");
-
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const data = await dataService.getAllUsers();
-        setUserData(data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-    fetchUserData();
-  }, []);
-
-  useEffect(() => {
-    const assignedUser = userData?.find(
-      (user) => user.id === information.assignedTo
-    );
-    if (!assignedUser) {
-      setAssignedTo("UNASSIGNED");
-      return;
-    }
-    setAssignedTo(
-      `${assignedUser.name} ${assignedUser.surname} (${assignedUser.username})`
-    );
-  }, [userData, information.assignedTo]);
 
   const {
     register,
@@ -61,6 +35,14 @@ export default function TodoDetails({
     onEdit(editedInformation);
     setIsEditing(false);
   };
+
+  const assignedUser = userData?.find(
+    (user) => user.id === information.assignedTo
+  );
+
+  const assignedTo: string = !assignedUser
+    ? "UNASSIGNED"
+    : `${assignedUser.name} ${assignedUser.surname} (${assignedUser.username})`;
 
   return (
     <div className="grid grid-cols-[160px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
@@ -160,9 +142,7 @@ export default function TodoDetails({
               )}
             </select>
           ) : (
-            <span className="text-gray-900">
-              {assignedTo ? assignedTo : "Loading..."}
-            </span>
+            <span className="text-gray-900">{assignedTo}</span>
           )}
         </div>
       </div>
