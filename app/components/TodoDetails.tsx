@@ -1,3 +1,5 @@
+"use client";
+
 import { ITodo, IUser } from "@/types";
 import {
   PencilSquareIcon,
