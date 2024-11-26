@@ -1,68 +1,50 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import TodoDetails from "@/app/components/TodoDetails";
 import dataService from "@/services/dataService";
-import { ITodo, IUser } from "@/types";
-import { useEffect, useState } from "react";
+import { ITodo } from "@/types";
 
-export default function CardDetailsPage() {
-  const { id } = useParams();
-  const idString: string = typeof id === "string" ? id : id[0];
-  const [oneTodoData, setOneTodoData] = useState<ITodo | null>(null);
-  const [userData, setUserData] = useState<IUser[]>([]);
-  const [error, setError] = useState<string | null>(null);
+export default async function CardDetailsPage({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { id } = params;
 
-  useEffect(() => {
-    async function fetchData() {
-      setError(null);
-      try {
-        if (idString) {
-          const todo = await dataService.getTodoById(idString);
-          if (todo) {
-            setOneTodoData(todo);
-          } else {
-            setError("Todo not found.");
-          }
-        }
-      } catch (error) {
-        console.error(error);
-        setError("Failed to fetch Todo data. Please try again later.");
-      }
-    }
-    fetchData();
-  }, [idString]);
-
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const data = await dataService.getAllUsers();
-        setUserData(data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setError("Failed to fetch user data. Please try again later.");
-      }
-    }
-    fetchUserData();
-  }, []);
-
-  const handleEdit = async (updatedTodo: ITodo) => {
-    setError(null);
+  const fetchTodoData = async (id: string) => {
     try {
-      const updated = await dataService.updateTodo(idString, updatedTodo);
-      if (typeof updated !== "undefined") {
-        setOneTodoData(updated);
-      } else {
-        setError("Failed to update Todo.");
-      }
+      const oneTodoData = await dataService.getTodoById(id);
+      return oneTodoData;
     } catch (error) {
-      console.error(error);
-      setError("Failed to update Todo data. Please try again later.");
+      console.error("Error fetching todo data:", error);
+      return null;
     }
   };
 
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (!oneTodoData) return <p>Loading...</p>;
+  const fetchUserData = async () => {
+    try {
+      const userData = await dataService.getAllUsers();
+      return userData;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+  };
+
+  const userData = await fetchUserData();
+  const oneTodoData = await fetchTodoData(id);
+
+  if (!oneTodoData || !userData) {
+    return <p className="text-red-500">Error in fetching data</p>;
+  }
+
+  const handleEdit = async (updatedTodo: ITodo) => {
+    try {
+      await dataService.updateTodo(id, updatedTodo);
+      return { success: true, updatedTodo };
+    } catch (error) {
+      console.error("Error updating todo:", error);
+      return { success: false, error: "Failed to update todo" };
+    }
+  };
 
   return (
     <div>
