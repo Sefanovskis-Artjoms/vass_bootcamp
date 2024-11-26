@@ -8,7 +8,10 @@ const dataService = {
   },
 
   getTodoById: async (id: string): Promise<ITodo | null> => {
-    const response = await fetch(`/api/todos/${id}`);
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/todos/${id}`);
     if (!response.ok) {
       if (response.status === 404) {
         return null;
@@ -51,7 +54,10 @@ const dataService = {
   },
 
   async getAllUsers(): Promise<IUser[]> {
-    const response = await fetch("/api/users");
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/users`);
     const userData = await response.json();
     return userData.data;
   },
