@@ -2,7 +2,10 @@ import { ITodo, IUser } from "@/types";
 
 const dataService = {
   async getAllTodos(): Promise<ITodo[]> {
-    const response = await fetch("api/todos");
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/todos`);
     const todoData = await response.json();
     return todoData.data;
   },
@@ -23,7 +26,10 @@ const dataService = {
   },
 
   async addTodo(newTodo: ITodo): Promise<void> {
-    await fetch("/api/todos", {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    await fetch(`${baseUrl}/api/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +39,10 @@ const dataService = {
   },
 
   async updateTodo(id: string, updatedTodo: Partial<ITodo>): Promise<ITodo> {
-    const response = await fetch(`/api/todos/${id}`, {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedTodo),
@@ -48,7 +57,10 @@ const dataService = {
   },
 
   async deleteTodo(id: string): Promise<void> {
-    await fetch(`api/todos/${id}`, {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    await fetch(`${baseUrl}api/todos/${id}`, {
       method: "DELETE",
     });
   },

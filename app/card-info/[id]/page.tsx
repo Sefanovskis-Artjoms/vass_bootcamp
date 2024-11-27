@@ -37,8 +37,9 @@ export default async function CardDetailsPage({
   }
 
   const handleEdit = async (updatedTodo: ITodo) => {
+    "use server";
     try {
-      await dataService.updateTodo(id, updatedTodo);
+      await dataService.updateTodo(updatedTodo.id, updatedTodo);
       return { success: true, updatedTodo };
     } catch (error) {
       console.error("Error updating todo:", error);
@@ -50,7 +51,7 @@ export default async function CardDetailsPage({
     <div>
       <TodoDetails
         information={oneTodoData}
-        onEdit={handleEdit}
+        onEditAction={handleEdit}
         userData={userData}
       />
     </div>

@@ -10,14 +10,17 @@ import { useForm } from "react-hook-form";
 
 export default function TodoDetails({
   information,
-  onEdit,
+  onEditAction,
   userData,
 }: {
   information: ITodo;
-  onEdit: (updatedTodo: ITodo) => void;
+  onEditAction: (
+    updatedTodo: ITodo
+  ) => Promise<{ success: boolean; updatedTodo?: ITodo; error?: string }>;
   userData: IUser[];
 }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   const {
     register,
@@ -33,8 +36,14 @@ export default function TodoDetails({
     },
   });
 
-  const onSubmit = (editedInformation: ITodo) => {
-    onEdit(editedInformation);
+  const onSubmit = async (editedInformation: ITodo) => {
+    const result = await onEditAction(editedInformation);
+    if (!result.success) {
+      setUpdateError("There was an issue while updating the todo.");
+      return;
+    }
+
+    setUpdateError(null);
     setIsEditing(false);
   };
 
@@ -176,6 +185,7 @@ export default function TodoDetails({
               )}
             </select>
           </div>
+          {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
         </div>
         <button
           className="flex items-center justify-center text-slate-400 hover:text-lime-700 hover:bg-gray-300 transition-colors duration-300"
