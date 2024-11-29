@@ -37,7 +37,10 @@ export default function TodoDetails({
   });
 
   const onSubmit = async (editedInformation: ITodo) => {
-    const result = await onEditAction(editedInformation);
+    const result = await onEditAction({
+      ...editedInformation,
+      id: information.id,
+    });
     if (!result.success) {
       setUpdateError("There was an issue while updating the todo.");
       return;
