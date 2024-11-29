@@ -60,7 +60,7 @@ const dataService = {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
-    await fetch(`${baseUrl}api/todos/${id}`, {
+    await fetch(`${baseUrl}/api/todos/${id}`, {
       method: "DELETE",
     });
   },

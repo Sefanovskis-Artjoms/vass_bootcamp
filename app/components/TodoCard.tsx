@@ -1,14 +1,29 @@
+"use client";
+
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { ITodo } from "@/types";
 import Link from "next/link";
+import { useState, useTransition } from "react";
 
 export default function TodoCard({
   information,
-  onDelete,
+  deleteTodoAction,
 }: {
   information: ITodo;
-  onDelete: (id: string) => void;
+  deleteTodoAction: (
+    id: string
+  ) => Promise<{ success: boolean; error: string }>;
 }) {
+  const [isPending, startTransition] = useTransition();
+  const [deletingError, setDeletingError] = useState<string | null>(null);
+
+  function handleDelete() {
+    startTransition(async () => {
+      const result = await deleteTodoAction(information.id);
+      if (!result.success) setDeletingError(result.error);
+    });
+  }
+
   return (
     <div className="grid grid-cols-[150px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
       <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
@@ -42,14 +57,18 @@ export default function TodoCard({
           </Link>
         </div>
         <div className="mt-2 text-gray-700">{information.description}</div>
+        {deletingError && <p className="text-red-500 mt-2">{deletingError}</p>}
       </div>
 
       <button
         className="flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-100 transition-colors duration-300"
-        onClick={() => onDelete(information.id)}
+        onClick={handleDelete}
+        disabled={isPending}
       >
+        <span className="text-md font-semibold">
+          {isPending ? "Deleting..." : "Delete"}
+        </span>
         <TrashIcon className="h-7 w-7 mr-1" />
-        <span className="text-md font-semibold">Delete</span>
       </button>
     </div>
   );
