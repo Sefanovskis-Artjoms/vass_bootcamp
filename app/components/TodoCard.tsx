@@ -12,7 +12,7 @@ export default function TodoCard({
   information: ITodo;
   deleteTodoAction: (
     id: string
-  ) => Promise<{ success: boolean; error: string }>;
+  ) => Promise<{ success: boolean; error?: string }>;
 }) {
   const [isPending, startTransition] = useTransition();
   const [deletingError, setDeletingError] = useState<string | null>(null);
@@ -20,7 +20,7 @@ export default function TodoCard({
   function handleDelete() {
     startTransition(async () => {
       const result = await deleteTodoAction(information.id);
-      if (!result.success) setDeletingError(result.error);
+      if (!result.success) setDeletingError(result.error ?? "Failed to delete");
     });
   }
 
