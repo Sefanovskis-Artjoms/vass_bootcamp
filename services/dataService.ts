@@ -5,7 +5,9 @@ const dataService = {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
-    const response = await fetch(`${baseUrl}/api/todos`);
+    const response = await fetch(`${baseUrl}/api/todos`, {
+      next: { tags: ["todoData"] },
+    });
     const todoData = await response.json();
     return todoData.data;
   },

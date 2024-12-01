@@ -1,7 +1,7 @@
 import { ITodo } from "@/types";
 import dataService from "@/services/dataService";
 import TodoCard from "./components/TodoCard";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export default async function HomePage() {
   async function fetchTodoData() {
@@ -23,7 +23,7 @@ export default async function HomePage() {
     "use server";
     try {
       await dataService.deleteTodo(id);
-      revalidatePath("/");
+      revalidateTag("todoData");
       return { success: true };
     } catch (error) {
       console.error("Error deleting todo:", error);

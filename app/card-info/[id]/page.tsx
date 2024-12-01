@@ -1,6 +1,7 @@
 import TodoDetails from "@/app/components/TodoDetails";
 import dataService from "@/services/dataService";
 import { ITodo } from "@/types";
+import { revalidateTag } from "next/cache";
 
 export default async function CardDetailsPage({
   params,
@@ -40,6 +41,7 @@ export default async function CardDetailsPage({
     "use server";
     try {
       await dataService.updateTodo(updatedTodo.id, updatedTodo);
+      revalidateTag("todoData");
       return { success: true, updatedTodo };
     } catch (error) {
       console.error("Error updating todo:", error);
