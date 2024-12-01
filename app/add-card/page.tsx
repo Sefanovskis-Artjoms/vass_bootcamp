@@ -1,31 +1,29 @@
-"use client";
-
 import dataService from "@/services/dataService";
-import { ITodo, IUser } from "@/types";
+import { ITodo } from "@/types";
 import AddTodoCard from "../components/AddTodoCard";
-import { useEffect, useState } from "react";
+import { revalidateTag } from "next/cache";
 
-export default function AddCard() {
-  const [userData, setUserData] = useState<IUser[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchUserData() {
-      try {
-        const data = await dataService.getAllUsers();
-        setUserData(data);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        setError("Failed to fetch user data. Please try again later.");
-      }
+export default async function AddCard() {
+  const fetchUserData = async () => {
+    try {
+      const userData = await dataService.getAllUsers();
+      return userData;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      return null;
     }
-    fetchUserData();
-  }, []);
+  };
 
   async function handleAdd(item: ITodo) {
+    "use server";
     await dataService.addTodo(item);
+    revalidateTag("todoData");
   }
 
-  if (error) return <p className="text-red-500">{error}</p>;
-  return <AddTodoCard onAdd={handleAdd} userData={userData} />;
+  const userData = await fetchUserData();
+
+  if (!userData)
+    return <p className="text-red-500">Error in fetching user data</p>;
+
+  return <AddTodoCard onAddAction={handleAdd} userData={userData} />;
 }

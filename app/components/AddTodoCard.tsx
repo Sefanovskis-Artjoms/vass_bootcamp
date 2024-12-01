@@ -1,14 +1,15 @@
-// components/AddTodoCard.tsx
+"use client";
+
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useForm } from "react-hook-form";
 import { TodoFormInputs, ITodo, IUser } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 export default function AddTodoCard({
-  onAdd,
+  onAddAction,
   userData,
 }: {
-  onAdd: (item: ITodo) => void;
+  onAddAction: (item: ITodo) => void;
   userData: IUser[];
 }) {
   const {
@@ -32,7 +33,7 @@ export default function AddTodoCard({
       ...data,
       date: new Date().toLocaleDateString(),
     };
-    onAdd(newItem);
+    onAddAction(newItem);
     reset();
   };
 
