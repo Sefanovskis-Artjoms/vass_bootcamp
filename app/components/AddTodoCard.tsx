@@ -1,14 +1,16 @@
-// components/AddTodoCard.tsx
+"use client";
+
 import { PlusIcon } from "@heroicons/react/20/solid";
-import React from "react";
 import { useForm } from "react-hook-form";
-import { TodoFormInputs, ITodo } from "@/types";
+import { TodoFormInputs, ITodo, IUser } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 
 export default function AddTodoCard({
-  onAdd,
+  onAddAction,
+  userData,
 }: {
-  onAdd: (item: ITodo) => void;
+  onAddAction: (item: ITodo) => void;
+  userData: IUser[];
 }) {
   const {
     register,
@@ -21,6 +23,7 @@ export default function AddTodoCard({
       type: "Feature",
       title: "",
       description: "",
+      assignedTo: "UNASSIGNED",
     },
   });
 
@@ -30,16 +33,16 @@ export default function AddTodoCard({
       ...data,
       date: new Date().toLocaleDateString(),
     };
-    onAdd(newItem);
+    onAddAction(newItem);
     reset();
   };
 
   return (
     <form
-      className="grid grid-cols-[200px_minmax(300px,550px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden"
+      className="grid grid-cols-[200px_minmax(300px,550px)_120px] w-fit min-h-max bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden"
       onSubmit={handleSubmit(onFormSubmit)}
     >
-      <div className="flex flex-col justify-center mx-3">
+      <div className="flex flex-col justify-center mx-3 my-10">
         <div className="mb-6">
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
             Status:
@@ -55,7 +58,7 @@ export default function AddTodoCard({
           </select>
         </div>
 
-        <div>
+        <div className="mb-6">
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
             Type:
           </label>
@@ -68,6 +71,28 @@ export default function AddTodoCard({
             <option value="Bug">Bug</option>
             <option value="Story">Story</option>
             <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
+            Assign to:
+          </label>
+          <select
+            {...register("assignedTo")}
+            id="assignToSelect"
+            className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
+          >
+            <option value="UNASSIGNED">UNASSIGNED</option>
+            {userData.length === 0 ? (
+              <option disabled>Loading users...</option>
+            ) : (
+              userData.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name} {user.surname} ({user.username})
+                </option>
+              ))
+            )}
           </select>
         </div>
       </div>
@@ -104,7 +129,7 @@ export default function AddTodoCard({
               required: "Please fill in the description",
             })}
             id="descriptionTextarea"
-            className={`h-min-150px mt-2 block w-full bg-white border rounded-md p-1 text-md ${
+            className={`min-h-[150px] mt-2 block w-full bg-white border rounded-md p-1 text-md ${
               errors.description ? "border-red-500" : "border-gray-300"
             }`}
           />

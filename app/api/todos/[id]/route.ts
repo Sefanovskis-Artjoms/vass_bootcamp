@@ -29,8 +29,9 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
+    console.error(`Failed to delete the todo: ${error}`);
     return NextResponse.json(
-      { error: `Failed to delete the todo: ${error}` },
+      { error: `Failed to delete the todo` },
       { status: 500 }
     );
   }
@@ -58,8 +59,9 @@ export async function PUT(
 
     return NextResponse.json({ data: updatedTodo }, { status: 200 });
   } catch (error) {
+    console.error(`Failed to update Todo: ${error}`);
     return NextResponse.json(
-      { error: `Failed to update Todo: ${error}` },
+      { error: `Failed to update Todo` },
       { status: 500 }
     );
   }
@@ -82,8 +84,9 @@ export async function GET(
 
     return NextResponse.json({ data: todo }, { status: 200 });
   } catch (error) {
+    console.error(`Failed to fetch Todo: ${error}`);
     return NextResponse.json(
-      { error: `Failed to fetch Todo: ${error}` },
+      { error: `Failed to fetch Todo` },
       { status: 500 }
     );
   }

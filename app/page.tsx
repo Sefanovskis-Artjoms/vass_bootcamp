@@ -1,46 +1,42 @@
-"use client";
 import { ITodo } from "@/types";
 import dataService from "@/services/dataService";
 import TodoCard from "./components/TodoCard";
-import { useEffect, useState } from "react";
+import { revalidateTag } from "next/cache";
 
-export default function HomePage() {
-  const [cardData, setCardData] = useState<ITodo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const data = await dataService.getAllTodos();
-        setCardData(data);
-      } catch (e) {
-        console.error(e);
-        setError("Failed to fetch todos. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
+export default async function HomePage() {
+  async function fetchTodoData() {
+    try {
+      return await dataService.getAllTodos();
+    } catch (error) {
+      console.error("Error fetching todo data:", error);
+      return null;
     }
-    fetchData();
-  }, []);
-
-  async function handleDelete(id: string) {
-    await dataService.deleteTodo(id);
-    const updatedData = await dataService.getAllTodos();
-    setCardData(updatedData);
   }
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
+  const cardData: ITodo[] | null = await fetchTodoData();
+
+  if (cardData === null) {
+    return <p className="text-red-500">Error in fetching data</p>;
+  }
+
+  async function deleteTodo(id: string) {
+    "use server";
+    try {
+      await dataService.deleteTodo(id);
+      revalidateTag("todoData");
+      return { success: true };
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+      return { success: false, error: "Failed to delete todo" };
+    }
+  }
 
   return (
     <div>
       <ul className="space-y-4">
         {cardData.map((card: ITodo) => (
           <li key={card.id}>
-            <TodoCard information={card} onDelete={handleDelete} />
+            <TodoCard information={card} deleteTodoAction={deleteTodo} />
           </li>
         ))}
       </ul>

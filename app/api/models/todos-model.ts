@@ -14,6 +14,7 @@ const TodosSchema = new mongoose.Schema({
   description: String,
   date: String,
   type: String,
+  assignedTo: String,
 });
 
 const Todo: Model<ITodoDodument> =

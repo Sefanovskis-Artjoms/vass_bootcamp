@@ -2,13 +2,21 @@ import { ITodo, IUser } from "@/types";
 
 const dataService = {
   async getAllTodos(): Promise<ITodo[]> {
-    const response = await fetch("api/todos");
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/todos`, {
+      next: { tags: ["todoData"] },
+    });
     const todoData = await response.json();
     return todoData.data;
   },
 
   getTodoById: async (id: string): Promise<ITodo | null> => {
-    const response = await fetch(`/api/todos/${id}`);
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/todos/${id}`);
     if (!response.ok) {
       if (response.status === 404) {
         return null;
@@ -20,7 +28,10 @@ const dataService = {
   },
 
   async addTodo(newTodo: ITodo): Promise<void> {
-    await fetch("/api/todos", {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    await fetch(`${baseUrl}/api/todos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,7 +41,10 @@ const dataService = {
   },
 
   async updateTodo(id: string, updatedTodo: Partial<ITodo>): Promise<ITodo> {
-    const response = await fetch(`/api/todos/${id}`, {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedTodo),
@@ -45,13 +59,19 @@ const dataService = {
   },
 
   async deleteTodo(id: string): Promise<void> {
-    await fetch(`api/todos/${id}`, {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    await fetch(`${baseUrl}/api/todos/${id}`, {
       method: "DELETE",
     });
   },
 
   async getAllUsers(): Promise<IUser[]> {
-    const response = await fetch("api/users");
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/users`);
     const userData = await response.json();
     return userData.data;
   },
