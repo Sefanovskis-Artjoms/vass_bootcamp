@@ -75,6 +75,18 @@ const dataService = {
     const userData = await response.json();
     return userData.data;
   },
+
+  async getUserDetails(userId: string): Promise<IUser> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/users/${userId}`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch user details");
+    }
+    const data = await response.json();
+    return data;
+  },
 };
 
 export default dataService;
