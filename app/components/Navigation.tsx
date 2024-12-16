@@ -7,10 +7,10 @@ export default async function Navigation() {
   const session = await auth();
 
   let name, surname;
-  if (session) {
-    const user = await dataService.getUserDetails(session?.user?.id as string);
-    name = user?.name;
-    surname = user?.surname;
+  if (session?.user?.id) {
+    const user = await dataService.getUserDetails(session.user.id);
+    name = user.name;
+    surname = user.surname;
   }
   return (
     <nav className="flex items-center justify-between bg-gray-200 p-4 rounded-md shadow-md border border-slate-500 mb-8">
