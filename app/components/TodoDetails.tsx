@@ -1,6 +1,6 @@
 "use client";
 
-import { ITodo, IUser } from "@/types";
+import { IErrorDetail, ITodo, IUser } from "@/types";
 import {
   PencilSquareIcon,
   ClipboardDocumentCheckIcon,
@@ -14,9 +14,7 @@ export default function TodoDetails({
   userData,
 }: {
   information: ITodo;
-  onEditAction: (
-    updatedTodo: ITodo
-  ) => Promise<{ success: boolean; updatedTodo?: ITodo; error?: string }>;
+  onEditAction: (updatedTodo: ITodo) => Promise<{ updatedTodo: ITodo }>;
   userData: IUser[];
 }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -37,17 +35,19 @@ export default function TodoDetails({
   });
 
   const onSubmit = async (editedInformation: ITodo) => {
-    const result = await onEditAction({
-      ...editedInformation,
-      id: information.id,
-    });
-    if (!result.success) {
-      setUpdateError("There was an issue while updating the todo.");
-      return;
-    }
+    try {
+      await onEditAction({
+        ...editedInformation,
+        id: information.id,
+      });
 
-    setUpdateError(null);
-    setIsEditing(false);
+      setUpdateError(null);
+      setIsEditing(false);
+    } catch (error) {
+      setUpdateError(
+        (error as IErrorDetail).message || "Failed to update the Todo"
+      );
+    }
   };
 
   const assignedUser = userData?.find(

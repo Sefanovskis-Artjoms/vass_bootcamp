@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Todo from "../models/todos-model";
-import { ITodo } from "@/types";
+import { IErrorDetail, ITodo } from "@/types";
 
 export async function GET() {
   await connectDB();
@@ -11,10 +11,11 @@ export async function GET() {
     return NextResponse.json({ data: todos }, { status: 200 });
   } catch (error) {
     console.error(`Failed to fetch Todos: ${error}`);
-    return NextResponse.json(
-      { error: `Failed to fetch Todos` },
-      { status: 500 }
-    );
+    const errorResponse: IErrorDetail = {
+      type: "SERVER",
+      message: "Failed to fetch Todos",
+    };
+    return NextResponse.json({ error: errorResponse }, { status: 500 });
   }
 }
 
@@ -27,9 +28,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ data: createdTodo }, { status: 200 });
   } catch (error) {
     console.error(`Failed to add Todo: ${error}`);
-    return NextResponse.json(
-      { error: `Failed to add Todo`, success: false },
-      { status: 500 }
-    );
+    const errorResponse: IErrorDetail = {
+      type: "SERVER",
+      message: "Failed to add Todo",
+    };
+    return NextResponse.json({ error: errorResponse }, { status: 500 });
   }
 }

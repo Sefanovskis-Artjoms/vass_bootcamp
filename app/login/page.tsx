@@ -15,6 +15,7 @@ export default function LoginPage() {
       revalidatePath("/");
       redirect("/");
     } catch (error) {
+      console.error(`Failed to login: ${error}`);
       throw error;
     }
   }

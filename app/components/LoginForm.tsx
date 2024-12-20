@@ -9,7 +9,7 @@ export default function LoginForm({
 }: {
   onLoginAction: (username: string, password: string) => void;
 }) {
-  const [serverError, setServerError] = useState<string | null>(null);
+  const [formError, setFormError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -23,9 +23,9 @@ export default function LoginForm({
 
   const onFormSubmit = async (data: { username: string; password: string }) => {
     try {
-      await onLoginAction(data.username, data.password);
+      onLoginAction(data.username, data.password);
     } catch {
-      setServerError("Invalid username or password");
+      setFormError("Invalid username or password");
     }
   };
 
@@ -88,9 +88,7 @@ export default function LoginForm({
         >
           LOG-IN <ArrowRightEndOnRectangleIcon className="ml-2 h-5 w-5" />
         </button>
-        {serverError && (
-          <p className="text-red-500 text-sm mt-1">{serverError}</p>
-        )}
+        {formError && <p className="text-red-500 text-sm mt-1">{formError}</p>}
       </form>
     </div>
   );

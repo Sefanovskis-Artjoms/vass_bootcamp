@@ -16,14 +16,20 @@ export default async function AddCard() {
 
   async function handleAdd(item: ITodo) {
     "use server";
-    await dataService.addTodo(item);
-    revalidateTag("todoData");
+    try {
+      await dataService.addTodo(item);
+      revalidateTag("todoData");
+    } catch (error) {
+      console.error("Error adding todo:", error);
+      throw error;
+    }
   }
 
   const userData = await fetchUserData();
 
-  if (!userData)
+  if (!userData) {
     return <p className="text-red-500">Error in fetching user data</p>;
+  }
 
   return <AddTodoCard onAddAction={handleAdd} userData={userData} />;
 }

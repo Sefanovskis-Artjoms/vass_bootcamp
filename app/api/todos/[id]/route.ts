@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Todo from "../../models/todos-model";
-import { ITodo } from "@/types";
+import { IErrorDetail, ITodo } from "@/types";
 
 export async function DELETE(
   request: Request,
@@ -13,27 +13,37 @@ export async function DELETE(
     const { id } = params;
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      const errorResponse: IErrorDetail = {
+        type: "FORM",
+        field: "id",
+        message: "ID is required",
+      };
+      return NextResponse.json({ error: errorResponse }, { status: 400 });
     }
 
     const result = await Todo.findOneAndDelete({ id: id });
 
     if (!result) {
-      return NextResponse.json({ error: "Todo not found" }, { status: 404 });
+      const errorResponse: IErrorDetail = {
+        type: "FORM",
+        message: "Todo not found",
+      };
+      return NextResponse.json({ error: errorResponse }, { status: 404 });
     }
 
     return NextResponse.json(
       {
-        message: "Todo deleted successfully",
+        data: "Todo deleted successfully",
       },
       { status: 200 }
     );
   } catch (error) {
     console.error(`Failed to delete the todo: ${error}`);
-    return NextResponse.json(
-      { error: `Failed to delete the todo` },
-      { status: 500 }
-    );
+    const errorResponse: IErrorDetail = {
+      type: "SERVER",
+      message: "Failed to delete the todo",
+    };
+    return NextResponse.json({ error: errorResponse }, { status: 500 });
   }
 }
 
@@ -54,16 +64,21 @@ export async function PUT(
     );
 
     if (!updatedTodo) {
-      return NextResponse.json({ error: "Todo not found" }, { status: 404 });
+      const errorResponse: IErrorDetail = {
+        type: "FORM",
+        message: "Todo not found",
+      };
+      return NextResponse.json({ error: errorResponse }, { status: 404 });
     }
 
     return NextResponse.json({ data: updatedTodo }, { status: 200 });
   } catch (error) {
     console.error(`Failed to update Todo: ${error}`);
-    return NextResponse.json(
-      { error: `Failed to update Todo` },
-      { status: 500 }
-    );
+    const errorResponse: IErrorDetail = {
+      type: "SERVER",
+      message: "Failed to update Todo",
+    };
+    return NextResponse.json({ error: errorResponse }, { status: 500 });
   }
 }
 
@@ -79,15 +94,20 @@ export async function GET(
     const todo = await Todo.findOne({ id: id });
 
     if (!todo) {
-      return NextResponse.json({ error: "Todo not found" }, { status: 404 });
+      const errorResponse: IErrorDetail = {
+        type: "FORM",
+        message: "Todo not found",
+      };
+      return NextResponse.json({ error: errorResponse }, { status: 404 });
     }
 
     return NextResponse.json({ data: todo }, { status: 200 });
   } catch (error) {
     console.error(`Failed to fetch Todo: ${error}`);
-    return NextResponse.json(
-      { error: `Failed to fetch Todo` },
-      { status: 500 }
-    );
+    const errorResponse: IErrorDetail = {
+      type: "SERVER",
+      message: "Failed to fetch Todo",
+    };
+    return NextResponse.json({ error: errorResponse }, { status: 500 });
   }
 }

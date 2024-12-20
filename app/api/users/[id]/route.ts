@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import User from "../../models/users-model";
+import { IErrorDetail } from "@/types";
 
 export async function GET(
   request: Request,
@@ -10,7 +11,12 @@ export async function GET(
     const { id } = params;
 
     if (!id) {
-      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+      const errorResponse: IErrorDetail = {
+        type: "FORM",
+        field: "id",
+        message: "ID is required",
+      };
+      return NextResponse.json({ error: errorResponse }, { status: 400 });
     }
 
     await connectDB();
@@ -18,15 +24,20 @@ export async function GET(
     const user = await User.findOne({ id: id });
 
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      const errorResponse: IErrorDetail = {
+        type: "FORM",
+        message: "User not found",
+      };
+      return NextResponse.json({ error: errorResponse }, { status: 404 });
     }
 
     return NextResponse.json(user);
   } catch (error) {
     console.error("Error fetching user details:", error);
-    return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
-    );
+    const errorResponse: IErrorDetail = {
+      type: "SERVER",
+      message: "Internal Server Error",
+    };
+    return NextResponse.json({ error: errorResponse }, { status: 500 });
   }
 }

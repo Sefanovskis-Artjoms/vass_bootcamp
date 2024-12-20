@@ -24,10 +24,9 @@ export default async function HomePage() {
     try {
       await dataService.deleteTodo(id);
       revalidateTag("todoData");
-      return { success: true };
     } catch (error) {
       console.error("Error deleting todo:", error);
-      return { success: false, error: "Failed to delete todo" };
+      throw error;
     }
   }
 
