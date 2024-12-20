@@ -40,10 +40,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session({ session, token }) {
       session.user.id = token.id as string;
+
       return session;
     },
   },
   session: {
     strategy: "jwt",
+    maxAge: 24 * 60 * 60,
   },
 });
