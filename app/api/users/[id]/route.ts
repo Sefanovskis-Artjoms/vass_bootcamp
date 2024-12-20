@@ -31,7 +31,7 @@ export async function GET(
       return NextResponse.json({ error: errorResponse }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json({ data: user }, { status: 200 });
   } catch (error) {
     console.error("Error fetching user details:", error);
     const errorResponse: IErrorDetail = {

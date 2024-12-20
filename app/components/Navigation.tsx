@@ -5,12 +5,19 @@ import dataService from "@/services/dataService";
 
 export default async function Navigation() {
   const session = await auth();
+  console.log(session);
 
-  let name, surname;
+  let name,
+    surname: string = "";
+  let userDataError: boolean = false;
   if (session?.user?.id) {
-    const user = await dataService.getUserDetails(session.user.id);
-    name = user.name;
-    surname = user.surname;
+    try {
+      const user = await dataService.getUserDetails(session.user.id as string);
+      name = user.name;
+      surname = user.surname;
+    } catch {
+      userDataError = true;
+    }
   }
   return (
     <nav className="flex items-center justify-between bg-gray-200 p-4 rounded-md shadow-md border border-slate-500 mb-8">
@@ -49,9 +56,11 @@ export default async function Navigation() {
       </ul>
       {session && (
         <div className="flex items-center gap-x-12">
-          <div className="font-bold text-lg text-gray-700">
-            Hi {name} {surname}
-          </div>
+          {!userDataError && (
+            <div className="font-bold text-lg text-gray-700">
+              Hi {name} {surname}
+            </div>
+          )}
           <SignOutButton />
         </div>
       )}
