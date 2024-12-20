@@ -5,7 +5,6 @@ import dataService from "@/services/dataService";
 
 export default async function Navigation() {
   const session = await auth();
-  console.log(session);
 
   let name,
     surname: string = "";
