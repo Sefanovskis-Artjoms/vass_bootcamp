@@ -1,22 +1,21 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import User from "../../models/users-model";
-import { IResponse, IUser } from "@/types";
-
+import User from "../../../models/users-model";
+import { IResponse } from "@/types";
+ 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { username: string } }
 ) {
   try {
-    const { id } = params;
-
-    if (!id) {
+    const { username } = params;
+    if (!username) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
-          field: "id",
-          message: "ID is required",
+          field: "username",
+          message: "Username is required",
         },
       };
       return NextResponse.json(response, { status: 400 });
@@ -24,25 +23,17 @@ export async function GET(
 
     await connectDB();
 
-    const user = await User.findOne({ id: id });
+    const user = await User.findOne({ username });
 
-    if (!user) {
-      const response: IResponse = {
-        success: false,
-        error: {
-          type: "FORM",
-          message: "User not found",
-        },
-      };
-      return NextResponse.json(response, { status: 404 });
-    }
+    const isUnique = user ? false : true;
 
-    const response: IResponse<IUser> = {
+    const response: IResponse<{ isUnique: boolean }> = {
       success: true,
-      data: user,
+      data: { isUnique },
     };
     return NextResponse.json(response, { status: 200 });
-  } catch {
+  } catch (error) {
+    console.error("Error fetching user details:", error);
     const response: IResponse = {
       success: false,
       error: {

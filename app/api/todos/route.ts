@@ -1,21 +1,28 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Todo from "../models/todos-model";
-import { IErrorDetail, ITodo } from "@/types";
+import { IResponse, ITodo } from "@/types";
 
 export async function GET() {
   await connectDB();
 
   try {
     const todos = await Todo.find({});
-    return NextResponse.json({ data: todos }, { status: 200 });
+    const response: IResponse<ITodo[]> = {
+      success: true,
+      data: todos,
+    };
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error(`Failed to fetch Todos: ${error}`);
-    const errorResponse: IErrorDetail = {
-      type: "SERVER",
-      message: "Failed to fetch Todos",
+    const response: IResponse = {
+      success: false,
+      error: {
+        type: "SERVER",
+        message: "Failed to fetch Todos",
+      },
     };
-    return NextResponse.json({ error: errorResponse }, { status: 500 });
+    return NextResponse.json(response, { status: 500 });
   }
 }
 
@@ -25,13 +32,19 @@ export async function POST(request: Request) {
   try {
     const newTodo: ITodo = await request.json();
     const createdTodo = await Todo.create(newTodo);
-    return NextResponse.json({ data: createdTodo }, { status: 200 });
-  } catch (error) {
-    console.error(`Failed to add Todo: ${error}`);
-    const errorResponse: IErrorDetail = {
-      type: "SERVER",
-      message: "Failed to add Todo",
+    const response: IResponse<ITodo> = {
+      success: true,
+      data: createdTodo,
     };
-    return NextResponse.json({ error: errorResponse }, { status: 500 });
+    return NextResponse.json(response, { status: 200 });
+  } catch {
+    const response: IResponse = {
+      success: false,
+      error: {
+        type: "SERVER",
+        message: "Failed to add Todo",
+      },
+    };
+    return NextResponse.json(response, { status: 500 });
   }
 }

@@ -1,18 +1,22 @@
 "use client";
 
+import { IResponse } from "@/types";
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm({
   onLoginAction,
 }: {
-  onLoginAction: (username: string, password: string) => void;
+  onLoginAction: (username: string, password: string) => Promise<IResponse>;
 }) {
+  const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -22,11 +26,29 @@ export default function LoginForm({
   });
 
   const onFormSubmit = async (data: { username: string; password: string }) => {
-    try {
-      onLoginAction(data.username, data.password);
-    } catch {
-      setFormError("Invalid username or password");
+    const loginResponse: IResponse = await onLoginAction(
+      data.username,
+      data.password
+    );
+    if (loginResponse.success) {
+      router.push("/");
+      router.refresh();
+      return;
     }
+    if (
+      loginResponse.error.type === "FORM" &&
+      loginResponse.error.field === "password"
+    ) {
+      setError("password", {
+        type: "manual",
+        message: loginResponse.error.message,
+      });
+      return;
+    }
+    setFormError(
+      loginResponse?.error?.message ??
+        "Unexpected error occurred, please try again later..."
+    );
   };
 
   return (
@@ -82,12 +104,16 @@ export default function LoginForm({
             </p>
           )}
         </div>
+        <div className="mb-6 text-right underline underline-offset-2">
+          <a href="/register">Have no account? Register here!</a>
+        </div>
         <button
           type="submit"
-          className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="mb-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
           LOG-IN <ArrowRightEndOnRectangleIcon className="ml-2 h-5 w-5" />
         </button>
+
         {formError && <p className="text-red-500 text-sm mt-1">{formError}</p>}
       </form>
     </div>

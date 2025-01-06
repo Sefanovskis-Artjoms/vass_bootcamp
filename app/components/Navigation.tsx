@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import SignOutButton from "./SignOutButton";
 import dataService from "@/services/dataService";
+import { IResponse, IUser } from "@/types";
 
 export default async function Navigation() {
   const session = await auth();
@@ -10,12 +11,13 @@ export default async function Navigation() {
     surname: string = "";
   let userDataError: boolean = false;
   if (session?.user?.id) {
-    try {
-      const user = await dataService.getUserDetails(session.user.id as string);
-      name = user.name;
-      surname = user.surname;
-    } catch {
+    const userDetailsResponse: IResponse<IUser> =
+      await dataService.getUserDetails(session.user.id as string);
+    if (!userDetailsResponse.success) {
       userDataError = true;
+    } else {
+      name = userDetailsResponse.data.name;
+      surname = userDetailsResponse.data.surname;
     }
   }
   return (

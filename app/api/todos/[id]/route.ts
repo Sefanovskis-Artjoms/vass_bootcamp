@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Todo from "../../models/todos-model";
-import { IErrorDetail, ITodo } from "@/types";
+import { IResponse, ITodo } from "@/types";
 
 export async function DELETE(
   request: Request,
@@ -13,37 +13,44 @@ export async function DELETE(
     const { id } = params;
 
     if (!id) {
-      const errorResponse: IErrorDetail = {
-        type: "FORM",
-        field: "id",
-        message: "ID is required",
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          field: "id",
+          message: "ID is required",
+        },
       };
-      return NextResponse.json({ error: errorResponse }, { status: 400 });
+      return NextResponse.json(response, { status: 400 });
     }
 
     const result = await Todo.findOneAndDelete({ id: id });
 
     if (!result) {
-      const errorResponse: IErrorDetail = {
-        type: "FORM",
-        message: "Todo not found",
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          message: "Todo not found",
+        },
       };
-      return NextResponse.json({ error: errorResponse }, { status: 404 });
+      return NextResponse.json(response, { status: 404 });
     }
 
-    return NextResponse.json(
-      {
-        data: "Todo deleted successfully",
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error(`Failed to delete the todo: ${error}`);
-    const errorResponse: IErrorDetail = {
-      type: "SERVER",
-      message: "Failed to delete the todo",
+    const response: IResponse = {
+      success: true,
+      data: "Todo deleted successfully",
     };
-    return NextResponse.json({ error: errorResponse }, { status: 500 });
+    return NextResponse.json(response, { status: 200 });
+  } catch {
+    const response: IResponse = {
+      success: false,
+      error: {
+        type: "SERVER",
+        message: "Internal Server Error",
+      },
+    };
+    return NextResponse.json(response, { status: 500 });
   }
 }
 
@@ -64,21 +71,30 @@ export async function PUT(
     );
 
     if (!updatedTodo) {
-      const errorResponse: IErrorDetail = {
-        type: "FORM",
-        message: "Todo not found",
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          message: "Todo not found",
+        },
       };
-      return NextResponse.json({ error: errorResponse }, { status: 404 });
+      return NextResponse.json(response, { status: 404 });
     }
 
-    return NextResponse.json({ data: updatedTodo }, { status: 200 });
-  } catch (error) {
-    console.error(`Failed to update Todo: ${error}`);
-    const errorResponse: IErrorDetail = {
-      type: "SERVER",
-      message: "Failed to update Todo",
+    const response: IResponse<ITodo> = {
+      success: true,
+      data: updatedTodo,
     };
-    return NextResponse.json({ error: errorResponse }, { status: 500 });
+    return NextResponse.json(response, { status: 200 });
+  } catch {
+    const response: IResponse = {
+      success: false,
+      error: {
+        type: "SERVER",
+        message: "Internal Server Error",
+      },
+    };
+    return NextResponse.json(response, { status: 500 });
   }
 }
 
@@ -94,20 +110,29 @@ export async function GET(
     const todo = await Todo.findOne({ id: id });
 
     if (!todo) {
-      const errorResponse: IErrorDetail = {
-        type: "FORM",
-        message: "Todo not found",
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          message: "Todo not found",
+        },
       };
-      return NextResponse.json({ error: errorResponse }, { status: 404 });
+      return NextResponse.json(response, { status: 404 });
     }
 
-    return NextResponse.json({ data: todo }, { status: 200 });
-  } catch (error) {
-    console.error(`Failed to fetch Todo: ${error}`);
-    const errorResponse: IErrorDetail = {
-      type: "SERVER",
-      message: "Failed to fetch Todo",
+    const response: IResponse<ITodo> = {
+      success: true,
+      data: todo,
     };
-    return NextResponse.json({ error: errorResponse }, { status: 500 });
+    return NextResponse.json(response, { status: 200 });
+  } catch {
+    const response: IResponse = {
+      success: false,
+      error: {
+        type: "SERVER",
+        message: "Internal Server Error",
+      },
+    };
+    return NextResponse.json(response, { status: 500 });
   }
 }

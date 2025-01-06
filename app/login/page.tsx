@@ -1,7 +1,7 @@
 import { signIn } from "@/auth";
 import LoginForm from "../components/LoginForm";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { AuthError } from "next-auth";
+import { IResponse } from "@/types";
 
 export default function LoginPage({
   searchParams,
@@ -21,11 +21,31 @@ export default function LoginPage({
         password,
         redirect: false,
       });
-      revalidatePath("/");
-      redirect("/");
+      const response: IResponse = {
+        success: true,
+        data: null,
+      };
+      return response;
     } catch (error) {
-      console.error(`Failed to login: ${error}`);
-      throw error;
+      if (error instanceof AuthError && error.type === "CredentialsSignin") {
+        const response: IResponse = {
+          success: false,
+          error: {
+            type: "FORM",
+            field: "password",
+            message: "Invalid username or password",
+          },
+        };
+        return response;
+      }
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "SERVER",
+          message: "Unexpected error occurred, please try again later...",
+        },
+      };
+      return response;
     }
   }
 

@@ -1,7 +1,7 @@
-import { ITodo, IUser, IErrorDetail } from "@/types";
+import { ITodo, IUser, IResponse } from "@/types";
 
 const dataService = {
-  async getAllTodos(): Promise<ITodo[]> {
+  async getAllTodos(): Promise<IResponse<ITodo[]>> {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
@@ -9,30 +9,20 @@ const dataService = {
       next: { tags: ["todoData"] },
     });
 
-    const responseData = await response.json();
-
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
-
-    return responseData.data;
+    const responseData: IResponse<ITodo[]> = await response.json();
+    return responseData;
   },
 
-  getTodoById: async (id: string): Promise<ITodo | null> => {
+  getTodoById: async (id: string): Promise<IResponse<ITodo>> => {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
-
     const response = await fetch(`${baseUrl}/api/todos/${id}`);
-    const responseData = await response.json();
+    const responseData: IResponse<ITodo> = await response.json();
 
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
-
-    return responseData.data;
+    return responseData;
   },
 
-  async addTodo(newTodo: ITodo): Promise<void> {
+  async addTodo(newTodo: ITodo): Promise<IResponse<ITodo>> {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
@@ -44,16 +34,15 @@ const dataService = {
       body: JSON.stringify(newTodo),
     });
 
-    const responseData = await response.json();
+    const responseData: IResponse<ITodo> = await response.json();
 
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
-
-    return responseData.data;
+    return responseData;
   },
 
-  async updateTodo(id: string, updatedTodo: Partial<ITodo>): Promise<ITodo> {
+  async updateTodo(
+    id: string,
+    updatedTodo: Partial<ITodo>
+  ): Promise<IResponse<ITodo>> {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
@@ -63,16 +52,12 @@ const dataService = {
       body: JSON.stringify(updatedTodo),
     });
 
-    const responseData = await response.json();
+    const responseData: IResponse<ITodo> = await response.json();
 
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
-
-    return responseData.data;
+    return responseData;
   },
 
-  async deleteTodo(id: string): Promise<void> {
+  async deleteTodo(id: string): Promise<IResponse> {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
@@ -80,41 +65,61 @@ const dataService = {
       method: "DELETE",
     });
 
-    const responseData = await response.json();
+    const responseData: IResponse = await response.json();
 
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
-
-    return responseData.data;
+    return responseData;
   },
 
-  async getAllUsers(): Promise<IUser[]> {
+  async addUser(newUser: IUser): Promise<IResponse<IUser>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+
+    const responseData: IResponse<IUser> = await response.json();
+
+    return responseData;
+  },
+
+  async getAllUsers(): Promise<IResponse<IUser[]>> {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
     const response = await fetch(`${baseUrl}/api/users`);
-    const responseData = await response.json();
+    const responseData: IResponse<IUser[]> = await response.json();
 
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
-
-    return responseData.data;
+    return responseData;
   },
 
-  async getUserDetails(userId: string): Promise<IUser> {
+  async getUserDetails(userId: string): Promise<IResponse<IUser>> {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
     const response = await fetch(`${baseUrl}/api/users/${userId}`);
-    const responseData = await response.json();
+    const responseData: IResponse<IUser> = await response.json();
 
-    if (!response.ok) {
-      throw responseData.error as IErrorDetail;
-    }
+    return responseData;
+  },
 
-    return responseData.data;
+  async isUsernameUnique(
+    username: string
+  ): Promise<IResponse<{ isUnique: boolean }>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(
+      `${baseUrl}/api/users/is-username-unique/${username}`
+    );
+    const responseData: IResponse<{ isUnique: boolean }> =
+      await response.json();
+
+    return responseData;
   },
 };
 
