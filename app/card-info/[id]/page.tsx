@@ -1,4 +1,5 @@
 import TodoDetails from "@/app/components/TodoDetails";
+import { auth } from "@/auth";
 import dataService from "@/services/dataService";
 import { IResponse, ITodo, IUser } from "@/types";
 import { revalidateTag } from "next/cache";
@@ -9,6 +10,9 @@ export default async function CardDetailsPage({
   params: { id: string };
 }) {
   const { id } = params;
+  const session = await auth();
+  const userRole = session?.user?.role;
+  const canEdit = userRole === "Admin" || userRole === "Manager";
 
   async function fetchTodoData(id: string): Promise<ITodo | null> {
     const oneTodoData: IResponse<ITodo> = await dataService.getTodoById(id);
@@ -49,8 +53,9 @@ export default async function CardDetailsPage({
     <div>
       <TodoDetails
         information={oneTodoData}
-        onEditAction={handleEdit}
+        onEditAction={canEdit ? handleEdit : undefined}
         userData={userData}
+        userRole={userRole}
       />
     </div>
   );

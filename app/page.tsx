@@ -2,6 +2,7 @@ import { IResponse, ITodo } from "@/types";
 import dataService from "@/services/dataService";
 import TodoCard from "./components/TodoCard";
 import { revalidateTag } from "next/cache";
+import { auth } from "@/auth";
 
 export default async function HomePage() {
   async function fetchTodoData(): Promise<ITodo[] | null> {
@@ -12,6 +13,9 @@ export default async function HomePage() {
     }
     return getAllTodosResponse.data;
   }
+
+  const session = await auth();
+  const userRole = session?.user?.role;
 
   const cardData: ITodo[] | null = await fetchTodoData();
 
@@ -34,7 +38,10 @@ export default async function HomePage() {
       <ul className="space-y-4">
         {cardData.map((card: ITodo) => (
           <li key={card.id}>
-            <TodoCard information={card} deleteTodoAction={deleteTodo} />
+            <TodoCard
+              information={card}
+              deleteTodoAction={userRole === "Admin" ? deleteTodo : undefined}
+            />
           </li>
         ))}
       </ul>

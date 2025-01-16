@@ -91,7 +91,9 @@ const dataService = {
     const baseUrl =
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
-    const response = await fetch(`${baseUrl}/api/users`);
+    const response = await fetch(`${baseUrl}/api/users`, {
+      next: { tags: ["userData"] },
+    });
     const responseData: IResponse<IUser[]> = await response.json();
 
     return responseData;
@@ -102,6 +104,23 @@ const dataService = {
       typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
 
     const response = await fetch(`${baseUrl}/api/users/${userId}`);
+    const responseData: IResponse<IUser> = await response.json();
+
+    return responseData;
+  },
+
+  async updateUser(updatedUser: Partial<IUser>): Promise<IResponse<IUser>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/users/${updatedUser.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedUser),
+    });
+
     const responseData: IResponse<IUser> = await response.json();
 
     return responseData;

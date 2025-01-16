@@ -21,7 +21,8 @@ export interface IUser {
   username: string;
   name: string;
   surname: string;
-  password: string;
+  password?: string;
+  role: string;
 }
 
 export type IResponse<T = unknown> =
