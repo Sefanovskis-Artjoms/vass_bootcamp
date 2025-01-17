@@ -1,16 +1,16 @@
-import { ITodo } from "@/types";
+import { IResponse, ITodo } from "@/types";
 import dataService from "@/services/dataService";
 import TodoCard from "./components/TodoCard";
 import { revalidateTag } from "next/cache";
 
 export default async function HomePage() {
-  async function fetchTodoData() {
-    try {
-      return await dataService.getAllTodos();
-    } catch (error) {
-      console.error("Error fetching todo data:", error);
+  async function fetchTodoData(): Promise<ITodo[] | null> {
+    const getAllTodosResponse: IResponse<ITodo[]> =
+      await dataService.getAllTodos();
+    if (!getAllTodosResponse.success) {
       return null;
     }
+    return getAllTodosResponse.data;
   }
 
   const cardData: ITodo[] | null = await fetchTodoData();
@@ -19,15 +19,14 @@ export default async function HomePage() {
     return <p className="text-red-500">Error in fetching data</p>;
   }
 
-  async function deleteTodo(id: string) {
+  async function deleteTodo(id: string): Promise<IResponse> {
     "use server";
-    try {
-      await dataService.deleteTodo(id);
+
+    const deleteTodoResponse: IResponse = await dataService.deleteTodo(id);
+    if (deleteTodoResponse.success) {
       revalidateTag("todoData");
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-      throw error;
     }
+    return deleteTodoResponse;
   }
 
   return (

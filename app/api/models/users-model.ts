@@ -8,11 +8,11 @@ export interface IUserDodument extends IUser, Document {
 }
 
 const UserSchema = new mongoose.Schema({
-  id: String,
-  username: String,
-  name: String,
-  surname: String,
-  password: String,
+  id: { type: String, required: true, unique: true },
+  username: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
+  surname: { type: String, required: true },
+  password: { type: String, required: true },
 });
 
 const User: Model<IUserDodument> =

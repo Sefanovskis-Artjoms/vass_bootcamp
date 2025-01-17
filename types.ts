@@ -16,7 +16,7 @@ export interface TodoFormInputs {
   assignedTo: string;
 }
 
-export interface IUser extends Document {
+export interface IUser {
   id: string;
   username: string;
   name: string;
@@ -24,8 +24,18 @@ export interface IUser extends Document {
   password: string;
 }
 
-export interface IErrorDetail {
-  type: string;
-  field?: string;
-  message: string;
-}
+export type IResponse<T = unknown> =
+  | {
+      success: true;
+      data: T;
+      error?: never;
+    }
+  | {
+      success: false;
+      data?: never;
+      error: {
+        type: string;
+        field?: string;
+        message: string;
+      };
+    };

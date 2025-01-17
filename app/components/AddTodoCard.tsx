@@ -2,7 +2,7 @@
 
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useForm } from "react-hook-form";
-import { TodoFormInputs, ITodo, IUser, IErrorDetail } from "@/types";
+import { TodoFormInputs, ITodo, IUser, IResponse } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
 
@@ -10,7 +10,7 @@ export default function AddTodoCard({
   onAddAction,
   userData,
 }: {
-  onAddAction: (item: ITodo) => void;
+  onAddAction: (item: ITodo) => Promise<IResponse<ITodo>>;
   userData: IUser[];
 }) {
   const {
@@ -29,22 +29,20 @@ export default function AddTodoCard({
   });
   const [formError, setFormError] = useState<string | null>(null);
 
-  const onFormSubmit = (data: TodoFormInputs) => {
+  const onFormSubmit = async (data: TodoFormInputs) => {
     const newItem: ITodo = {
       id: uuidv4(),
       ...data,
       date: new Date().toLocaleDateString(),
     };
-    try {
-      onAddAction(newItem);
-      reset();
-      setFormError(null);
-    } catch (error) {
-      setFormError(
-        (error as IErrorDetail).message ||
-          "Unexpected error occured while adding Todo, please try again."
-      );
+
+    const addActionResponse = await onAddAction(newItem);
+    if (!addActionResponse.success) {
+      setFormError(addActionResponse.error.message);
+      return;
     }
+    reset();
+    setFormError(null);
   };
 
   return (

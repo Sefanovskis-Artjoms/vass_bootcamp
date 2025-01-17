@@ -1,31 +1,28 @@
 import dataService from "@/services/dataService";
-import { ITodo } from "@/types";
+import { IResponse, ITodo, IUser } from "@/types";
 import AddTodoCard from "../components/AddTodoCard";
 import { revalidateTag } from "next/cache";
 
 export default async function AddCard() {
-  const fetchUserData = async () => {
-    try {
-      const userData = await dataService.getAllUsers();
-      return userData;
-    } catch (error) {
-      console.error("Error fetching user data:", error);
+  async function fetchUserData(): Promise<IUser[] | null> {
+    const getUserDataResponse: IResponse<IUser[]> =
+      await dataService.getAllUsers();
+    if (!getUserDataResponse.success) {
       return null;
     }
-  };
-
-  async function handleAdd(item: ITodo) {
-    "use server";
-    try {
-      await dataService.addTodo(item);
-      revalidateTag("todoData");
-    } catch (error) {
-      console.error("Error adding todo:", error);
-      throw error;
-    }
+    return getUserDataResponse.data;
   }
 
-  const userData = await fetchUserData();
+  async function handleAdd(item: ITodo): Promise<IResponse<ITodo>> {
+    "use server";
+    const addTodoResponse: IResponse<ITodo> = await dataService.addTodo(item);
+    if (addTodoResponse.success) {
+      revalidateTag("todoData");
+    }
+    return addTodoResponse;
+  }
+
+  const userData: IUser[] | null = await fetchUserData();
 
   if (!userData) {
     return <p className="text-red-500">Error in fetching user data</p>;
