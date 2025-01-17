@@ -2,8 +2,9 @@
 
 import { PlusIcon } from "@heroicons/react/20/solid";
 import { useForm } from "react-hook-form";
-import { TodoFormInputs, ITodo, IUser } from "@/types";
+import { TodoFormInputs, ITodo, IUser, IErrorDetail } from "@/types";
 import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 
 export default function AddTodoCard({
   onAddAction,
@@ -26,6 +27,7 @@ export default function AddTodoCard({
       assignedTo: "UNASSIGNED",
     },
   });
+  const [formError, setFormError] = useState<string | null>(null);
 
   const onFormSubmit = (data: TodoFormInputs) => {
     const newItem: ITodo = {
@@ -33,8 +35,16 @@ export default function AddTodoCard({
       ...data,
       date: new Date().toLocaleDateString(),
     };
-    onAddAction(newItem);
-    reset();
+    try {
+      onAddAction(newItem);
+      reset();
+      setFormError(null);
+    } catch (error) {
+      setFormError(
+        (error as IErrorDetail).message ||
+          "Unexpected error occured while adding Todo, please try again."
+      );
+    }
   };
 
   return (
@@ -139,6 +149,7 @@ export default function AddTodoCard({
             </p>
           )}
         </div>
+        {formError && <p className="text-red-500 mt-2">{formError}</p>}
       </div>
 
       <button

@@ -23,3 +23,9 @@ export interface IUser extends Document {
   surname: string;
   password: string;
 }
+
+export interface IErrorDetail {
+  type: string;
+  field?: string;
+  message: string;
+}

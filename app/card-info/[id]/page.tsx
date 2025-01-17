@@ -1,6 +1,6 @@
 import TodoDetails from "@/app/components/TodoDetails";
 import dataService from "@/services/dataService";
-import { ITodo } from "@/types";
+import { ITodo, IUser } from "@/types";
 import { revalidateTag } from "next/cache";
 
 export default async function CardDetailsPage({
@@ -30,8 +30,8 @@ export default async function CardDetailsPage({
     }
   };
 
-  const userData = await fetchUserData();
-  const oneTodoData = await fetchTodoData(id);
+  const userData: IUser[] | null = await fetchUserData();
+  const oneTodoData: ITodo | null = await fetchTodoData(id);
 
   if (!oneTodoData || !userData) {
     return <p className="text-red-500">Error in fetching data</p>;
@@ -42,10 +42,10 @@ export default async function CardDetailsPage({
     try {
       await dataService.updateTodo(updatedTodo.id, updatedTodo);
       revalidateTag("todoData");
-      return { success: true, updatedTodo };
+      return { updatedTodo };
     } catch (error) {
       console.error("Error updating todo:", error);
-      return { success: false, error: "Failed to update todo" };
+      throw error;
     }
   };
 

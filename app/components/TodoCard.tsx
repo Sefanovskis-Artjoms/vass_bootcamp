@@ -1,7 +1,7 @@
 "use client";
 
 import { TrashIcon } from "@heroicons/react/20/solid";
-import { ITodo } from "@/types";
+import { IErrorDetail, ITodo } from "@/types";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 
@@ -10,17 +10,21 @@ export default function TodoCard({
   deleteTodoAction,
 }: {
   information: ITodo;
-  deleteTodoAction: (
-    id: string
-  ) => Promise<{ success: boolean; error?: string }>;
+  deleteTodoAction: (id: string) => void;
 }) {
   const [isPending, startTransition] = useTransition();
   const [deletingError, setDeletingError] = useState<string | null>(null);
 
   function handleDelete() {
     startTransition(async () => {
-      const result = await deleteTodoAction(information.id);
-      if (!result.success) setDeletingError(result.error ?? "Failed to delete");
+      try {
+        deleteTodoAction(information.id);
+      } catch (error) {
+        setDeletingError(
+          (error as IErrorDetail).message ||
+            "Unexpected error occured while deleting Todo"
+        );
+      }
     });
   }
 
