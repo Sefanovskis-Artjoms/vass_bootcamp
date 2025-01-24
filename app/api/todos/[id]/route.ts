@@ -75,7 +75,7 @@ export async function PUT(
         success: false,
         error: {
           type: "FORM",
-          message: "Todo not found",
+          message: "To do not found",
         },
       };
       return NextResponse.json(response, { status: 404 });
@@ -91,7 +91,7 @@ export async function PUT(
       success: false,
       error: {
         type: "SERVER",
-        message: "Internal Server Error",
+        message: "Internal server error",
       },
     };
     return NextResponse.json(response, { status: 500 });
@@ -114,7 +114,7 @@ export async function GET(
         success: false,
         error: {
           type: "FORM",
-          message: "Todo not found",
+          message: "To do not found",
         },
       };
       return NextResponse.json(response, { status: 404 });
@@ -130,7 +130,7 @@ export async function GET(
       success: false,
       error: {
         type: "SERVER",
-        message: "Internal Server Error",
+        message: "Internal server error",
       },
     };
     return NextResponse.json(response, { status: 500 });

@@ -1,8 +1,9 @@
 import { IResponse, ITodo } from "@/types";
 import dataService from "@/services/dataService";
-import TodoCard from "./components/TodoCard";
+import TodoCard from "../components/TodoCard";
 import { revalidateTag } from "next/cache";
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 export default async function HomePage() {
   async function fetchTodoData(): Promise<ITodo[] | null> {
@@ -16,11 +17,11 @@ export default async function HomePage() {
 
   const session = await auth();
   const userRole = session?.user?.role;
-
+  const t = await getTranslations("TodoCards");
   const cardData: ITodo[] | null = await fetchTodoData();
 
   if (cardData === null) {
-    return <p className="text-red-500">Error in fetching data</p>;
+    return <p className="text-red-500">{t("Error in fetching data")}</p>;
   }
 
   async function deleteTodo(id: string): Promise<IResponse> {

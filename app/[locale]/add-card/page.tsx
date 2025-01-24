@@ -1,7 +1,8 @@
 import dataService from "@/services/dataService";
 import { IResponse, ITodo, IUser } from "@/types";
-import AddTodoCard from "../components/AddTodoCard";
+import AddTodoCard from "../../components/AddTodoCard";
 import { revalidateTag } from "next/cache";
+import { getTranslations } from "next-intl/server";
 
 export default async function AddCard() {
   async function fetchUserData(): Promise<IUser[] | null> {
@@ -22,10 +23,11 @@ export default async function AddCard() {
     return addTodoResponse;
   }
 
+  const t = await getTranslations("TodoCards");
   const userData: IUser[] | null = await fetchUserData();
 
   if (!userData) {
-    return <p className="text-red-500">Error in fetching user data</p>;
+    return <p className="text-red-500">{t("Error in fetching user data")}</p>;
   }
 
   return <AddTodoCard onAddAction={handleAdd} userData={userData} />;

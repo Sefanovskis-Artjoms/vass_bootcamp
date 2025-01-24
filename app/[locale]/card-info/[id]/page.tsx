@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import dataService from "@/services/dataService";
 import { IResponse, ITodo, IUser } from "@/types";
 import { revalidateTag } from "next/cache";
+import { getTranslations } from "next-intl/server";
 
 export default async function CardDetailsPage({
   params,
@@ -11,6 +12,7 @@ export default async function CardDetailsPage({
 }) {
   const { id } = params;
   const session = await auth();
+  const t = await getTranslations("TodoCards");
   const userRole = session?.user?.role;
   const canEdit = userRole === "Admin" || userRole === "Manager";
 
@@ -34,7 +36,7 @@ export default async function CardDetailsPage({
   const oneTodoData: ITodo | null = await fetchTodoData(id);
 
   if (!oneTodoData || !userData) {
-    return <p className="text-red-500">Error in fetching data</p>;
+    return <p className="text-red-500">{t("Error in fetching data")}</p>;
   }
 
   const handleEdit = async (updatedTodo: ITodo) => {

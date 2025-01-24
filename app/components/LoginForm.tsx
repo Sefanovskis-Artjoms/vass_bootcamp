@@ -5,6 +5,8 @@ import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { Link } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm({
   onLoginAction,
@@ -13,6 +15,7 @@ export default function LoginForm({
 }) {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
+  const t = useTranslations("Credentials");
   const {
     register,
     handleSubmit,
@@ -41,20 +44,21 @@ export default function LoginForm({
     ) {
       setError("password", {
         type: "manual",
-        message: loginResponse.error.message,
+        message: t(loginResponse.error.message),
       });
       return;
     }
     setFormError(
-      loginResponse?.error?.message ??
-        "Unexpected error occurred, please try again later..."
+      loginResponse?.error?.message
+        ? t(loginResponse.error.message)
+        : t("Unexpected error occurred, please try again later")
     );
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-gray-200 rounded-lg shadow-md border border-slate-500">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        Login
+        {t("Login")}
       </h2>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-4">
@@ -62,11 +66,11 @@ export default function LoginForm({
             htmlFor="username"
             className="block text-sm font-medium text-gray-700"
           >
-            Username:
+            {t("Username")}:
           </label>
           <input
             {...register("username", {
-              required: "Please enter your username",
+              required: t("Enter username"),
             })}
             type="text"
             id="username"
@@ -85,11 +89,11 @@ export default function LoginForm({
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
           >
-            Password:
+            {t("Password")}:
           </label>
           <input
             {...register("password", {
-              required: "Please enter your password",
+              required: t("Enter password"),
             })}
             type="password"
             id="password"
@@ -105,13 +109,13 @@ export default function LoginForm({
           )}
         </div>
         <div className="mb-6 text-right underline underline-offset-2">
-          <a href="/register">Have no account? Register here!</a>
+          <Link href="/register">{t("Not registered?")}</Link>
         </div>
         <button
           type="submit"
-          className="mb-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          className="mb-2 w-full flex justify-center uppercase py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
-          LOG-IN <ArrowRightEndOnRectangleIcon className="ml-2 h-5 w-5" />
+          {t("Login")} <ArrowRightEndOnRectangleIcon className="ml-2 h-5 w-5" />
         </button>
 
         {formError && <p className="text-red-500 text-sm mt-1">{formError}</p>}
