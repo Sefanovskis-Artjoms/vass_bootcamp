@@ -23,11 +23,13 @@ export default async function AddCard() {
     return addTodoResponse;
   }
 
-  const t = await getTranslations("TodoCards");
+  const t = await getTranslations();
   const userData: IUser[] | null = await fetchUserData();
 
   if (!userData) {
-    return <p className="text-red-500">{t("Error in fetching user data")}</p>;
+    return (
+      <p className="text-red-500">{t("Errors.Error in fetching user data")}</p>
+    );
   }
 
   return <AddTodoCard onAddAction={handleAdd} userData={userData} />;

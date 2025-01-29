@@ -10,7 +10,6 @@ export default function LanguageSwitcher() {
   const currentLocale = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const otherLocales = availableLocales.filter((loc) => loc !== currentLocale);
-
   return (
     <div
       className="relative inline-block text-left"

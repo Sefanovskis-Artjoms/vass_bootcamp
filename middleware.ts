@@ -14,12 +14,16 @@ export async function middleware(request: NextRequest) {
     routing.defaultLocale;
 
   if (!session) {
-    if (pathname === `/${locale}/login`) return;
-    const loginUrl = new URL(`/${locale}/login?refresh=true`, request.url);
+    if (pathname === `/${locale}/login` || pathname === `/${locale}/register`)
+      return intlResponse;
+    const loginUrl = new URL(`/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  if (session && pathname === `/${locale}/login`) {
+  if (
+    session &&
+    (pathname === `/${locale}/login` || pathname === `/${locale}/register`)
+  ) {
     return NextResponse.redirect(new URL(`/${locale}`, request.url));
   }
 
@@ -39,11 +43,12 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
+    "/(en|lv|ru)",
     "/(en|lv|ru)/add-card",
-    "/(en|lv|ru)/card-info/[id]",
-    "/(en|lv|ru)/login",
+    "/(en|lv|ru)/card-info/:id*",
+    "/(en|lv|ru)/login/",
     "/(en|lv|ru)/view-users",
-    "/(en|lv|ru)/view-user-details/[id]",
+    "/(en|lv|ru)/view-user-details/:id*",
   ],
 };
 

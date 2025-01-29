@@ -29,7 +29,7 @@ export default function AddTodoCard({
     },
   });
 
-  const t = useTranslations("TodoCards");
+  const t = useTranslations();
   const [formError, setFormError] = useState<string | null>(null);
 
   const onFormSubmit = async (data: TodoFormInputs) => {
@@ -41,7 +41,13 @@ export default function AddTodoCard({
 
     const addActionResponse = await onAddAction(newItem);
     if (!addActionResponse.success) {
-      setFormError(t(addActionResponse.error.message));
+      setFormError(
+        t(`Pages.ToDoPages.Errors.${addActionResponse.error.message}`, {
+          default: t(
+            "Errors.Unexpected error occurred, please try again later"
+          ),
+        })
+      );
       return;
     }
     reset();
@@ -56,47 +62,51 @@ export default function AddTodoCard({
       <div className="flex flex-col justify-center mx-3 my-10">
         <div className="mb-6">
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
-            {t("Status")}:
+            {t("Pages.ToDoPages.Status")}:
           </label>
           <select
             {...register("status")}
             id="statusSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="In progress">{t("In progress")}</option>
-            <option value="Done">{t("Done")}</option>
-            <option value="To do">{t("To do")}</option>
+            <option value="In progress">
+              {t("Pages.ToDoPages.In progress")}
+            </option>
+            <option value="Done">{t("Pages.ToDoPages.Done")}</option>
+            <option value="To do">{t("Pages.ToDoPages.To do")}</option>
           </select>
         </div>
 
         <div className="mb-6">
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
-            {t("Type")}:
+            {t("Pages.ToDoPages.Type")}:
           </label>
           <select
             {...register("type")}
             id="typeSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="Feature">{t("Feature")}</option>
-            <option value="Bug">{t("Bug")}</option>
-            <option value="Story">{t("Story")}</option>
-            <option value="Other">{t("Other")}</option>
+            <option value="Feature">{t("Pages.ToDoPages.Feature")}</option>
+            <option value="Bug">{t("Pages.ToDoPages.Bug")}</option>
+            <option value="Story">{t("Pages.ToDoPages.Story")}</option>
+            <option value="Other">{t("Pages.ToDoPages.Other")}</option>
           </select>
         </div>
 
         <div>
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
-            {t("Assign to")}:
+            {t("Pages.ToDoPages.Assign to")}:
           </label>
           <select
             {...register("assignedTo")}
             id="assignToSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="UNASSIGNED">{t("Unassigned")}</option>
+            <option value="UNASSIGNED">
+              {t("Pages.ToDoPages.Unassigned")}
+            </option>
             {userData.length === 0 ? (
-              <option disabled> {t("Loading users")} </option>
+              <option disabled> {t("Pages.ToDoPages.Loading users")} </option>
             ) : (
               userData.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -114,10 +124,12 @@ export default function AddTodoCard({
             htmlFor="title"
             className="text-slate-800 text-lg font-semibold block"
           >
-            {t("Title")}:
+            {t("Pages.ToDoPages.Title")}:
           </label>
           <input
-            {...register("title", { required: t("Title required") })}
+            {...register("title", {
+              required: t("Pages.ToDoPages.Form Messages.Title required"),
+            })}
             id="title"
             className={`mt-2 block w-full bg-white border rounded-md p-1 text-md ${
               errors.title ? "border-red-500" : "border-gray-300"
@@ -133,11 +145,11 @@ export default function AddTodoCard({
             htmlFor="descriptionTextarea"
             className="text-slate-800 text-lg font-semibold block"
           >
-            {t("Description")}:
+            {t("Pages.ToDoPages.Description")}:
           </label>
           <textarea
             {...register("description", {
-              required: t("Description required"),
+              required: t("Pages.ToDoPages.Form Messages.Description required"),
             })}
             id="descriptionTextarea"
             className={`min-h-[150px] mt-2 block w-full bg-white border rounded-md p-1 text-md ${
@@ -158,7 +170,7 @@ export default function AddTodoCard({
         type="submit"
       >
         <PlusIcon className="h-8 w-max mr-1" />
-        <span className="text-lg">{t("Add")}</span>
+        <span className="text-lg">{t("Common.Add")}</span>
       </button>
     </form>
   );

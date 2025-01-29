@@ -17,11 +17,11 @@ export default async function HomePage() {
 
   const session = await auth();
   const userRole = session?.user?.role;
-  const t = await getTranslations("TodoCards");
+  const t = await getTranslations();
   const cardData: ITodo[] | null = await fetchTodoData();
 
   if (cardData === null) {
-    return <p className="text-red-500">{t("Error in fetching data")}</p>;
+    return <p className="text-red-500">{t("Errors.Error in fetching data")}</p>;
   }
 
   async function deleteTodo(id: string): Promise<IResponse> {

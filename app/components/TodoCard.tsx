@@ -15,6 +15,7 @@ export default function TodoCard({
 }) {
   const [isPending, startTransition] = useTransition();
   const [deletingError, setDeletingError] = useState<string | null>(null);
+  const t = useTranslations();
 
   function handleDelete() {
     startTransition(async () => {
@@ -22,30 +23,34 @@ export default function TodoCard({
       const deleteTodoResponse = await deleteTodoAction(information.id);
 
       if (!deleteTodoResponse.success) {
-        setDeletingError(t(deleteTodoResponse.error.message));
+        setDeletingError(
+          t(`Pages.ToDoPages.Errors.${deleteTodoResponse.error.message}`, {
+            default: t(
+              "Errors.Unexpected error occurred, please try again later"
+            ),
+          })
+        );
       }
     });
   }
-
-  const t = useTranslations("TodoCards");
 
   return (
     <div className="grid grid-cols-[150px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
       <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
         <div className="mb-4">
           <label className="text-slate-500 text-sm block mb-[-6px]">
-            {t("Status")}:
+            {t("Pages.ToDoPages.Status")}:
           </label>
           <div className="text-xl font-semibold text-gray-800">
-            {t(`${information.status}`)}
+            {t(`Pages.ToDoPages.${information.status}`)}
           </div>
         </div>
         <div>
           <label className="text-slate-500 text-sm block mb-[-6px]">
-            {t("Type")}:
+            {t("Pages.ToDoPages.Type")}:
           </label>
           <div className="text-xl font-semibold text-gray-800">
-            {t(`${information.type}`)}
+            {t(`Pages.ToDoPages.${information.type}`)}
           </div>
         </div>
       </div>
@@ -57,7 +62,7 @@ export default function TodoCard({
               {information.title}
             </span>
             <span className="text-sm text-slate-500">
-              , {t("created on")}: {information.date}
+              , {t("Pages.ToDoPages.created on")}: {information.date}
             </span>
           </Link>
         </div>
@@ -71,7 +76,7 @@ export default function TodoCard({
           disabled={isPending}
         >
           <span className="text-md font-semibold">
-            {isPending ? t("Deleting") : t("Delete")}
+            {isPending ? t("Common.Deleting") : t("Common.Delete")}
           </span>
           <TrashIcon className="h-7 w-7 mr-1" />
         </button>

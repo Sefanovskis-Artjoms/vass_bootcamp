@@ -12,7 +12,7 @@ export default async function CardDetailsPage({
 }) {
   const { id } = params;
   const session = await auth();
-  const t = await getTranslations("TodoCards");
+  const t = await getTranslations();
   const userRole = session?.user?.role;
   const canEdit = userRole === "Admin" || userRole === "Manager";
 
@@ -36,7 +36,7 @@ export default async function CardDetailsPage({
   const oneTodoData: ITodo | null = await fetchTodoData(id);
 
   if (!oneTodoData || !userData) {
-    return <p className="text-red-500">{t("Error in fetching data")}</p>;
+    return <p className="text-red-500">{t("Errors.Error in fetching data")}</p>;
   }
 
   const handleEdit = async (updatedTodo: ITodo) => {
