@@ -67,6 +67,12 @@
       "Title": "Virsraksts",
       "created on": "izveidots",
       "Description": "Apraksts",
+      "Search": "Meklēt",
+      "Newest first": "Jaunākie vispirms",
+      "Oldest first": "Vecākie vispirms",
+      "Filter by type": "Atlasīt pēc tipa",
+      "Reset selection": "Atiestatīt izvēli",
+      "Filter by status": "Atlasīt pēc statusa",
       "Form Messages": {
         "Title required": "Virsraksts ir obligāts",
         "Description required": "Apraksts ir obligāts"
@@ -90,6 +96,10 @@
       "View details": "Skatīt detaļas",
       "View": "Skatīt",
       "User details": "Lietotāja informācija",
+      "Search": "Meklēt",
+      "Search by fields": "Meklēt pēc laukiem",
+      "Reset selection": "Atiestatīt izvēli",
+      "Filter by role": "Atlasīt pēc lomas",
       "Errors": {
         "Error in updating user role": "Kļūda lietotāja lomas atjaunināšanā"
       }

@@ -1,11 +1,11 @@
 import "../globals.css";
 import Navigation from "../components/Navigation";
 import connectDB from "@/lib/mongodb";
-
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import ReduxProvider from "../components/ReduxProvider";
 
 export default async function RootLayout({
   children,
@@ -25,10 +25,12 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body className="p-8 bg-slate-50">
-        <NextIntlClientProvider messages={messages}>
-          <Navigation />
-          {children}
-        </NextIntlClientProvider>
+        <ReduxProvider>
+          <NextIntlClientProvider messages={messages}>
+            <Navigation />
+            {children}
+          </NextIntlClientProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

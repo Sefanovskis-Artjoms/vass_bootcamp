@@ -1,3 +1,15 @@
+export interface IUserSearchState {
+  searchQuery: string;
+  searchFields: string[];
+  filterRoles: string[];
+}
+
+export interface ITodoSearchState {
+  searchQuery: string;
+  sortOrder: "newest" | "oldest";
+  filterTypes: string[];
+  filterStatuses: string[];
+}
 export interface ITodo {
   id: string;
   status: string;

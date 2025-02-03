@@ -67,6 +67,12 @@
       "Title": "Title",
       "created on": "created on",
       "Description": "Description",
+      "Search": "Search",
+      "Newest first": "Newest first",
+      "Oldest first": "Oldest first",
+      "Filter by type": "Filter by type",
+      "Reset selection": "Reset selection",
+      "Filter by status": "Filter by status",
       "Form Messages": {
         "Title required": "Title is required",
         "Description required": "Description is required"
@@ -90,6 +96,10 @@
       "View details": "View details",
       "View": "View",
       "User details": "User details",
+      "Search": "Search",
+      "Search by fields": "Search by fields",
+      "Reset selection": "Reset selection",
+      "Filter by role": "Filter by role",
       "Errors": {
         "Error in updating user role": "Error in updating role"
       }
