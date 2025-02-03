@@ -61,6 +61,7 @@ export default function LoginPage() {
       name: data.name,
       surname: data.surname,
       password: hashedPassword,
+      role: "User",
     };
     const addUserResponse = await dataservice.addUser(newUser);
     if (!addUserResponse.success) {

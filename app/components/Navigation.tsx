@@ -43,15 +43,26 @@ export default async function Navigation() {
                 To do list
               </Link>
             </li>
-            <li>
-              <Link
-                href="/add-card"
-                className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
-              >
-                Add todo item
-              </Link>
-            </li>
-            <li></li>
+            {session.user.role === "Admin" && (
+              <>
+                <li>
+                  <Link
+                    href="/add-card"
+                    className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+                  >
+                    Add todo item
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/view-users"
+                    className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+                  >
+                    View all users
+                  </Link>
+                </li>
+              </>
+            )}
           </>
         )}
       </ul>

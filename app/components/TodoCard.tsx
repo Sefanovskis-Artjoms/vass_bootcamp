@@ -10,13 +10,14 @@ export default function TodoCard({
   deleteTodoAction,
 }: {
   information: ITodo;
-  deleteTodoAction: (id: string) => Promise<IResponse>;
+  deleteTodoAction?: (id: string) => Promise<IResponse>;
 }) {
   const [isPending, startTransition] = useTransition();
   const [deletingError, setDeletingError] = useState<string | null>(null);
 
   function handleDelete() {
     startTransition(async () => {
+      if (!deleteTodoAction) return;
       const deleteTodoResponse = await deleteTodoAction(information.id);
 
       if (!deleteTodoResponse.success) {
@@ -60,17 +61,18 @@ export default function TodoCard({
         <div className="mt-2 text-gray-700">{information.description}</div>
         {deletingError && <p className="text-red-500 mt-2">{deletingError}</p>}
       </div>
-
-      <button
-        className="flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-100 transition-colors duration-300"
-        onClick={handleDelete}
-        disabled={isPending}
-      >
-        <span className="text-md font-semibold">
-          {isPending ? "Deleting..." : "Delete"}
-        </span>
-        <TrashIcon className="h-7 w-7 mr-1" />
-      </button>
+      {deleteTodoAction && (
+        <button
+          className="flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-100 transition-colors duration-300"
+          onClick={handleDelete}
+          disabled={isPending}
+        >
+          <span className="text-md font-semibold">
+            {isPending ? "Deleting..." : "Delete"}
+          </span>
+          <TrashIcon className="h-7 w-7 mr-1" />
+        </button>
+      )}
     </div>
   );
 }
