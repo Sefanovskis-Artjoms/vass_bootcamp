@@ -6,12 +6,10 @@ import { RootState } from "@/store/store";
 
 export default function TodoList({
   todoData,
-  userRole,
   deleteTodo,
 }: {
   todoData: ITodo[];
-  userRole: string | undefined;
-  deleteTodo: (id: string) => Promise<IResponse>;
+  deleteTodo?: (id: string) => Promise<IResponse>;
 }) {
   const { searchQuery, sortOrder, filterTypes, filterStatuses } = useSelector(
     (state: RootState) => state.todoSearch
@@ -51,10 +49,7 @@ export default function TodoList({
     <ul className="space-y-4">
       {filteredData.map((card: ITodo) => (
         <li key={card.id}>
-          <TodoCard
-            information={card}
-            deleteTodoAction={userRole === "Admin" ? deleteTodo : undefined}
-          />
+          <TodoCard information={card} deleteTodoAction={deleteTodo} />
         </li>
       ))}
     </ul>

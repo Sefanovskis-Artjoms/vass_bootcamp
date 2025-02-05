@@ -13,6 +13,12 @@ export async function middleware(request: NextRequest) {
     routing.locales.find((loc) => pathname.startsWith(`/${loc}`)) ||
     routing.defaultLocale;
 
+  const adminPages = [
+    `${locale}/add-card`,
+    `${locale}/view-users`,
+    `${locale}/view-user-details`,
+  ];
+
   if (!session) {
     if (pathname === `/${locale}/login` || pathname === `/${locale}/register`)
       return intlResponse;
@@ -28,9 +34,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (
-    pathname !== "/" &&
-    pathname !== `/${locale}` &&
-    !pathname.startsWith(`${locale}/card-info/`) &&
+    adminPages.some((adminPage) => pathname.startsWith(`/${adminPage}`)) &&
     session.user.role !== "Admin"
   ) {
     return NextResponse.redirect(new URL(`/${locale}`, request.url));

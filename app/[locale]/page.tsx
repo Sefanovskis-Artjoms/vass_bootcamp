@@ -40,8 +40,7 @@ export default async function HomePage() {
       <TodoListSearchBar />
       <TodoList
         todoData={cardData}
-        userRole={userRole}
-        deleteTodo={deleteTodo}
+        deleteTodo={userRole === "Admin" ? deleteTodo : undefined}
       />
     </>
   );
