@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import User from "../../models/users-model";
-import { IResponse, IUser } from "@/types";
+import Group from "../../models/groups-model";
+import { IResponse, IGroup } from "@/types";
 
 export async function GET(
   request: Request,
@@ -24,22 +24,24 @@ export async function GET(
 
     await connectDB();
 
-    const user = await User.findOne({ id: id });
+    const group = await Group.findOne({
+      id: id,
+    });
 
-    if (!user) {
+    if (!group) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
-          message: "User not found",
+          message: "Group not found",
         },
       };
       return NextResponse.json(response, { status: 404 });
     }
 
-    const response: IResponse<IUser> = {
+    const response: IResponse<IGroup> = {
       success: true,
-      data: user,
+      data: group,
     };
     return NextResponse.json(response, { status: 200 });
   } catch {
@@ -73,7 +75,7 @@ export async function PUT(
       return NextResponse.json(response, { status: 400 });
     }
 
-    const body: Partial<IUser> = await request.json();
+    const body: Partial<IGroup> = await request.json();
 
     if (Object.keys(body).length === 0) {
       const response: IResponse = {
@@ -88,26 +90,77 @@ export async function PUT(
 
     await connectDB();
 
-    const user = await User.findOneAndUpdate(
+    const group = await Group.findOneAndUpdate(
       { id: id },
       { $set: body },
       { new: true }
     );
 
-    if (!user) {
+    if (!group) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
-          message: "User not found",
+          message: "Group not found",
         },
       };
       return NextResponse.json(response, { status: 404 });
     }
 
-    const response: IResponse<IUser> = {
+    const response: IResponse<IGroup> = {
       success: true,
-      data: user,
+      data: group,
+    };
+    return NextResponse.json(response, { status: 200 });
+  } catch {
+    const response: IResponse = {
+      success: false,
+      error: {
+        type: "SERVER",
+        message: "Internal Server Error",
+      },
+    };
+    return NextResponse.json(response, { status: 500 });
+  }
+}
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await connectDB();
+
+    const { id } = params;
+
+    if (!id) {
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          field: "id",
+          message: "ID is required",
+        },
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    const result = await Group.findOneAndDelete({ id: id });
+
+    if (!result) {
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          message: "Group not found",
+        },
+      };
+      return NextResponse.json(response, { status: 404 });
+    }
+
+    const response: IResponse = {
+      success: true,
+      data: "Group deleted successfully",
     };
     return NextResponse.json(response, { status: 200 });
   } catch {

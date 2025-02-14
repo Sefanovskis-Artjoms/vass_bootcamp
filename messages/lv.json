@@ -6,10 +6,20 @@
     "Save": "Saglabāt",
     "Delete": "Dzēst",
     "Deleting": "Dzēšās",
+    "Confirm": "Apstiprināt",
     "Add": "Pievienot",
+    "Adding": "Pievienojās",
     "Edit": "Rediģēt",
     "Back": "Atpakaļ",
-    "Cancel": "Atcelt"
+    "Cancel": "Atcelt",
+    "Remove": "Noņemt",
+    "Removing": "Noņem",
+    "Errors": {
+      "Error in fetching user data": "Kļūda lietotāja datu iegūšanā",
+      "Internal server error": "Iekšēja servera kļūda",
+      "Error in fetching data": "Kļūda datu iegūšanā",
+      "Unexpected error occurred, please try again later": "Notikusi neparedzēta kļūda, lūdzu mēģiniet vēlāk"
+    }
   },
   "Pages": {
     "Login": {
@@ -62,6 +72,8 @@
       "Other": "Cits",
       "Assign to": "Piešķirt",
       "Assigned to": "Piešķirts",
+      "to User": "Lietotājam",
+      "to Group": "Grupai",
       "Unassigned": "Nepiešķirts",
       "Loading users": "Lādē lietotājus",
       "Title": "Virsraksts",
@@ -103,18 +115,28 @@
       "Errors": {
         "Error in updating user role": "Kļūda lietotāja lomas atjaunināšanā"
       }
+    },
+    "GroupPages": {
+      "Create new group": "Izveidot jaunu grupu",
+      "Group name": "Grupas nosaukums",
+      "Nr": "Nr",
+      "User count": "Lietotāju skaits",
+      "Name": "Nosaukums",
+      "View details": "Skatīt detaļas",
+      "group details": "- grupas detaļas",
+      "Add new user to the group": "Pievienot jaunu lietotāju grupai",
+      "View users in the group": "Skatīt lietotājus grupā",
+      "Errors": {
+        "Please enter a group name": "Lūdzu ievadiet grupas nosaukumu",
+        "Error occured while creating group, please try again later": "Radusies kļūda izveidojot grupu, lūdzu mēģiniet vēlāk"
+      }
     }
   },
   "Navigation": {
     "To do list": "Darāmo saraksts",
     "Add to do item": "Pievienot darāmo",
     "View all users": "Skatīt visus lietotājus",
+    "View groups": "Skatīt grupas",
     "Hi": "Sveiki"
-  },
-  "Errors": {
-    "Error in fetching user data": "Kļūda lietotāja datu iegūšanā",
-    "Internal server error": "Iekšēja servera kļūda",
-    "Error in fetching data": "Kļūda datu iegūšanā",
-    "Unexpected error occurred, please try again later": "Notikusi neparedzēta kļūda, lūdzu mēģiniet vēlāk"
   }
 }

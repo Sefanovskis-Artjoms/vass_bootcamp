@@ -14,7 +14,8 @@ export default function ViewAndEditRole({
   const [isEditing, setIsEditing] = useState(false);
   const [newRole, setNewRole] = useState(user.role || "User");
   const [errorEditing, setErrorEditing] = useState(false);
-  const t = useTranslations();
+  const t = useTranslations("Pages.UserPages");
+  const tCommon = useTranslations("Common");
 
   const handleSave = async function () {
     const response = await handleEditAction({ id: user.id, role: newRole });
@@ -29,15 +30,15 @@ export default function ViewAndEditRole({
   if (!isEditing) {
     return (
       <div className="text-gray-700">
-        {t("Pages.UserPages.Role")}:{" "}
+        {t("Role")}:{" "}
         <span className="font-semibold text-lg ml-2.5 mr-2.5">
-          {t(`Pages.UserPages.${user.role}`)}{" "}
+          {t(user.role)}{" "}
         </span>
         <button
           className="text-gray-800 font-semibold bg-gray-300 border border-slate-500 hover:bg-gray-200 hover:text-orange-500 py-1 px-2 rounded-md transition-colors duration-300"
           onClick={() => setIsEditing((prev) => !prev)}
         >
-          {t("Common.Edit")}
+          {tCommon("Edit")}
         </button>
       </div>
     );
@@ -45,31 +46,31 @@ export default function ViewAndEditRole({
   return (
     <>
       <div className="text-gray-700">
-        {t("Pages.UserPages.Role")}:{" "}
+        {t("Role")}:{" "}
         <select
           className="border border-gray-400 rounded-md px-2 py-1 ml-2.5"
           value={newRole}
           onChange={(e) => setNewRole(e.target.value)}
         >
-          <option value="User">{t("Pages.UserPages.User")}</option>
-          <option value="Manager">{t("Pages.UserPages.Manager")}</option>
+          <option value="User">{t("User")}</option>
+          <option value="Manager">{t("Manager")}</option>
         </select>
         <button
           className="text-gray-800 font-semibold bg-gray-300 border border-slate-500 hover:bg-gray-200 hover:text-lime-700 py-1 px-2 rounded-md transition-colors duration-300 ml-2.5"
           onClick={() => handleSave()}
         >
-          {t("Common.Save")}
+          {tCommon("Save")}
         </button>
         <button
           className="text-gray-800 font-semibold bg-gray-300 border border-slate-500 hover:bg-gray-200 hover:text-red-500 py-1 px-2 rounded-md transition-colors duration-300 ml-2.5"
           onClick={() => setIsEditing(false)}
         >
-          {t("Common.Cancel")}
+          {tCommon("Cancel")}
         </button>
       </div>
       {errorEditing && (
         <div className="text-red-500">
-          {t("Pages.UserPages.Errors.Error in updating user role")}
+          {t("Errors.Error in updating user role")}
         </div>
       )}
     </>

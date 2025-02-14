@@ -1,7 +1,7 @@
 import TodoDetails from "@/app/components/TodoDetails";
 import { auth } from "@/auth";
 import dataService from "@/services/dataService";
-import { IResponse, ITodo, IUser } from "@/types";
+import { IGroup, IResponse, ITodo, IUser } from "@/types";
 import { revalidateTag } from "next/cache";
 import { getTranslations } from "next-intl/server";
 
@@ -12,9 +12,12 @@ export default async function CardDetailsPage({
 }) {
   const { id } = params;
   const session = await auth();
-  const t = await getTranslations();
+  const t = await getTranslations("Common");
   const userRole = session?.user?.role;
   const canEdit = userRole === "Admin" || userRole === "Manager";
+  const userData: IUser[] | null = await fetchUserData();
+  const oneTodoData: ITodo | null = await fetchTodoData(id);
+  const groupData: IGroup[] | null = await fetchGroupData();
 
   async function fetchTodoData(id: string): Promise<ITodo | null> {
     const oneTodoData: IResponse<ITodo> = await dataService.getTodoById(id);
@@ -32,11 +35,13 @@ export default async function CardDetailsPage({
     return getUserResponse.data;
   }
 
-  const userData: IUser[] | null = await fetchUserData();
-  const oneTodoData: ITodo | null = await fetchTodoData(id);
-
-  if (!oneTodoData || !userData) {
-    return <p className="text-red-500">{t("Errors.Error in fetching data")}</p>;
+  async function fetchGroupData(): Promise<IGroup[] | null> {
+    const getGroupResponse: IResponse<IGroup[]> =
+      await dataService.getAllGroups();
+    if (!getGroupResponse.success) {
+      return null;
+    }
+    return getGroupResponse.data;
   }
 
   const handleEdit = async (updatedTodo: ITodo) => {
@@ -51,6 +56,10 @@ export default async function CardDetailsPage({
     return updateTodoResponse;
   };
 
+  if (!oneTodoData || !userData || !groupData) {
+    return <p className="text-red-500">{t("Errors.Error in fetching data")}</p>;
+  }
+
   return (
     <div>
       <TodoDetails
@@ -58,6 +67,7 @@ export default async function CardDetailsPage({
         onEditAction={canEdit ? handleEdit : undefined}
         userData={userData}
         userRole={userRole}
+        groupData={groupData}
       />
     </div>
   );

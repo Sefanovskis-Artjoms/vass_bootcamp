@@ -1,4 +1,4 @@
-import RegisterForm from "../../components/RegisterForm";
+import RegisterForm from "./components/RegisterForm";
 import { IResponse, IUser } from "@/types";
 import dataservice from "@/services/dataService";
 import { v4 as uuidv4 } from "uuid";

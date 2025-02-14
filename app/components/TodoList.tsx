@@ -15,26 +15,22 @@ export default function TodoList({
     (state: RootState) => state.todoSearch
   );
 
-  // Filtering todos by search query in title.
   let filteredData = todoData.filter((todo) =>
     todo.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Filtering todos by todo type
   if (filterTypes.length > 0) {
     filteredData = filteredData.filter((todo) =>
       filterTypes.includes(todo.type)
     );
   }
 
-  // Filtering todos by status
   if (filterStatuses.length > 0) {
     filteredData = filteredData.filter((todo) =>
       filterStatuses.includes(todo.status)
     );
   }
 
-  // Sorting todos by date
   filteredData.sort((a, b) => {
     const [dayA, monthA, yearA] = a.date.split(".");
     const [dayB, monthB, yearB] = b.date.split(".");

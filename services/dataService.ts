@@ -1,4 +1,4 @@
-import { ITodo, IUser, IResponse } from "@/types";
+import { ITodo, IUser, IResponse, IGroup } from "@/types";
 
 const dataService = {
   async getAllTodos(): Promise<IResponse<ITodo[]>> {
@@ -8,6 +8,21 @@ const dataService = {
     const response = await fetch(`${baseUrl}/api/todos`, {
       next: { tags: ["todoData"] },
     });
+
+    const responseData: IResponse<ITodo[]> = await response.json();
+    return responseData;
+  },
+
+  async getAssignedTodos(userId: string): Promise<IResponse<ITodo[]>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(
+      `${baseUrl}/api/todos/get-assigned/${userId}`,
+      {
+        next: { tags: ["todoData"] },
+      }
+    );
 
     const responseData: IResponse<ITodo[]> = await response.json();
     return responseData;
@@ -137,6 +152,99 @@ const dataService = {
     );
     const responseData: IResponse<{ isUnique: boolean }> =
       await response.json();
+
+    return responseData;
+  },
+
+  async getAllGroups(): Promise<IResponse<IGroup[]>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/groups`, {
+      next: { tags: ["groupData"] },
+    });
+
+    const responseData: IResponse<IGroup[]> = await response.json();
+    return responseData;
+  },
+
+  getGroupById: async (id: string): Promise<IResponse<IGroup>> => {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+    const response = await fetch(`${baseUrl}/api/groups/${id}`, {
+      next: { tags: ["oneGroupData"] },
+    });
+    const responseData: IResponse<IGroup> = await response.json();
+
+    return responseData;
+  },
+
+  async addGroup(newGroup: IGroup): Promise<IResponse<IGroup>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/groups`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newGroup),
+    });
+
+    const responseData: IResponse<IGroup> = await response.json();
+
+    return responseData;
+  },
+
+  async deleteGroup(id: string): Promise<IResponse> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/groups/${id}`, {
+      method: "DELETE",
+    });
+
+    const responseData: IResponse = await response.json();
+
+    return responseData;
+  },
+
+  async addUserToGroup(
+    groupId: string,
+    userId: string
+  ): Promise<IResponse<IGroup>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/groups/${groupId}/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const responseData: IResponse<IGroup> = await response.json();
+
+    return responseData;
+  },
+
+  async removeUserFromGroup(
+    groupId: string,
+    userId: string
+  ): Promise<IResponse<IGroup>> {
+    const baseUrl =
+      typeof window === "undefined" ? process.env.NEXT_PUBLIC_BASE_URL : "";
+
+    const response = await fetch(`${baseUrl}/api/groups/${groupId}/users`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+
+    const responseData: IResponse<IGroup> = await response.json();
 
     return responseData;
   },

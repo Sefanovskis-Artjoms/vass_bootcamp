@@ -20,7 +20,8 @@ export default function RegisterForm({
 }) {
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
-  const t = useTranslations();
+  const t = useTranslations("Pages.Register");
+  const tCommon = useTranslations("Common");
   const {
     register,
     handleSubmit,
@@ -47,7 +48,7 @@ export default function RegisterForm({
       if (data.password !== data.repeatPassword) {
         setError("repeatPassword", {
           type: "manual",
-          message: t("Pages.Register.Form Messages.Passwords do not match"),
+          message: t("Form Messages.Passwords do not match"),
         });
         return;
       }
@@ -57,35 +58,29 @@ export default function RegisterForm({
         if (response.error?.field === "username") {
           setError("username", {
             type: "manual",
-            message: t(
-              "Pages.Register.Form Messages." + response.error.message
-            ),
+            message: t("Form Messages." + response.error.message),
           });
           return;
         }
         if (response.error.field === "password") {
           setError("password", {
             type: "manual",
-            message: t(
-              "Pages.Register.Form Messages." + response.error.message
-            ),
+            message: t("Form Messages." + response.error.message),
           });
           return;
         }
         if (response.error.field === "repeatPassword") {
           setError("repeatPassword", {
             type: "manual",
-            message: t(
-              "Pages.Register.Form Messages." + response.error.message
-            ),
+            message: t("Form Messages." + response.error.message),
           });
           return;
         }
       }
 
       setFormError(
-        t("Pages.Register.Errors." + response.error?.message, {
-          default: t(
+        t("Errors." + response.error?.message, {
+          default: tCommon(
             "Errors.Unexpected error occurred, please try again later"
           ),
         })
@@ -97,13 +92,13 @@ export default function RegisterForm({
     <div className="max-w-md mx-auto mt-10 p-6 bg-gray-200 rounded-lg shadow-md border border-slate-500">
       <div className="mt-6 mb-6 flex items-center justify-center relative">
         <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-          {t("Pages.Register.Register")}
+          {t("Register")}
         </h2>
         <Link
           href="/login"
           className="absolute right-0 border border-slate-500 px-4 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-gray-600 hover:text-slate-50"
         >
-          {t("Common.Back")}
+          {tCommon("Back")}
         </Link>
       </div>
       <form onSubmit={handleSubmit(onFormSubmit)}>
@@ -112,13 +107,11 @@ export default function RegisterForm({
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Register.Name")}:
+            {t("Name")}:
           </label>
           <input
             {...register("name", {
-              required: t(
-                "Pages.Register.Form Messages.Please enter your name"
-              ),
+              required: t("Form Messages.Please enter your name"),
             })}
             type="text"
             id="name"
@@ -136,13 +129,11 @@ export default function RegisterForm({
             htmlFor="surname"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Register.Surname")}:
+            {t("Surname")}:
           </label>
           <input
             {...register("surname", {
-              required: t(
-                "Pages.Register.Form Messages.Please enter your surname"
-              ),
+              required: t("Form Messages.Please enter your surname"),
             })}
             type="text"
             id="surname"
@@ -162,17 +153,15 @@ export default function RegisterForm({
             htmlFor="username"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Register.Username")}:
+            {t("Username")}:
           </label>
           <input
             {...register("username", {
-              required: t(
-                "Pages.Register.Form Messages.Please enter your username"
-              ),
+              required: t("Form Messages.Please enter your username"),
               minLength: {
                 value: 5,
                 message: t(
-                  "Pages.Register.Form Messages.Username must be at least 5 characters long"
+                  "Form Messages.Username must be at least 5 characters long"
                 ),
               },
             })}
@@ -194,17 +183,15 @@ export default function RegisterForm({
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Register.Password")}:
+            {t("Password")}:
           </label>
           <input
             {...register("password", {
-              required: t(
-                "Pages.Register.Form Messages.Please enter your password"
-              ),
+              required: t("Form Messages.Please enter your password"),
               minLength: {
                 value: 6,
                 message: t(
-                  "Pages.Register.Form Messages.Password must be at least 6 characters long"
+                  "Form Messages.Password must be at least 6 characters long"
                 ),
               },
             })}
@@ -227,13 +214,11 @@ export default function RegisterForm({
             htmlFor="repeatPassword"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Register.Repeat password")}:
+            {t("Repeat password")}:
           </label>
           <input
             {...register("repeatPassword", {
-              required: t(
-                "Pages.Register.Form Messages.Please repeat your password"
-              ),
+              required: t("Form Messages.Please repeat your password"),
             })}
             type="password"
             id="repeatPassword"
@@ -253,9 +238,7 @@ export default function RegisterForm({
           className="mb-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           disabled={isPending}
         >
-          {isPending
-            ? t("Pages.Register.Registering")
-            : t("Pages.Register.Register")}
+          {isPending ? t("Registering") : t("Register")}
           <UserPlusIcon className="ml-2 h-5 w-5" />
         </button>
 

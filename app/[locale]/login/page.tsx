@@ -1,5 +1,5 @@
 import { signIn } from "@/auth";
-import LoginForm from "../../components/LoginForm";
+import LoginForm from "./components/LoginForm";
 import { AuthError } from "next-auth";
 import { IResponse } from "@/types";
 

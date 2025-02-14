@@ -1,15 +1,27 @@
 export interface IUserSearchState {
-  searchQuery: string;
-  searchFields: string[];
-  filterRoles: string[];
+  [namespace: string]: {
+    searchQuery: string;
+    searchFields: string[];
+    filterRoles: string[];
+  };
 }
-
 export interface ITodoSearchState {
   searchQuery: string;
   sortOrder: "newest" | "oldest";
   filterTypes: string[];
   filterStatuses: string[];
 }
+
+export interface IGroupSearchState {
+  searchQuery: string;
+}
+
+export interface IGroup {
+  id: string;
+  name: string;
+  users: string[];
+}
+
 export interface ITodo {
   id: string;
   status: string;
@@ -17,7 +29,10 @@ export interface ITodo {
   description: string;
   date: string;
   type: string;
-  assignedTo: string;
+  assignedTo: {
+    type: string;
+    id: string;
+  };
 }
 
 export interface TodoFormInputs {
@@ -25,7 +40,10 @@ export interface TodoFormInputs {
   status: string;
   description: string;
   type: string;
-  assignedTo: string;
+  assignedTo: {
+    type: string;
+    id: string;
+  };
 }
 
 export interface IUser {
