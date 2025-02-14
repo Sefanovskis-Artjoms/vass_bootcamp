@@ -1,10 +1,13 @@
 import { auth } from "@/auth";
-import Link from "next/link";
 import SignOutButton from "./SignOutButton";
+import LanguageSwithcer from "./LanguageSwithcer";
 import dataService from "@/services/dataService";
 import { IResponse, IUser } from "@/types";
+import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 export default async function Navigation() {
+  const t = await getTranslations();
   const session = await auth();
 
   let name,
@@ -27,9 +30,9 @@ export default async function Navigation() {
           <li>
             <Link
               href="/login"
-              className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+              className="shadow-md text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
             >
-              Log-In
+              {t("Common.Log-in")}
             </Link>
           </li>
         )}
@@ -38,9 +41,9 @@ export default async function Navigation() {
             <li>
               <Link
                 href="/"
-                className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+                className="shadow-md text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
               >
-                To do list
+                {t("Navigation.To do list")}
               </Link>
             </li>
             {session.user.role === "Admin" && (
@@ -48,17 +51,17 @@ export default async function Navigation() {
                 <li>
                   <Link
                     href="/add-card"
-                    className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+                    className="shadow-md text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
                   >
-                    Add todo item
+                    {t("Navigation.Add to do item")}
                   </Link>
                 </li>
                 <li>
                   <Link
                     href="/view-users"
-                    className="text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+                    className="shadow-md text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
                   >
-                    View all users
+                    {t("Navigation.View all users")}
                   </Link>
                 </li>
               </>
@@ -66,16 +69,19 @@ export default async function Navigation() {
           </>
         )}
       </ul>
-      {session && (
-        <div className="flex items-center gap-x-12">
-          {!userDataError && (
-            <div className="font-bold text-lg text-gray-700">
-              Hi {name} {surname}
-            </div>
-          )}
-          <SignOutButton />
-        </div>
-      )}
+      <div className="flex items-center gap-x-10">
+        <LanguageSwithcer />
+        {session && (
+          <>
+            {!userDataError && (
+              <div className="font-bold text-lg text-gray-700">
+                {t("Navigation.Hi")} {name} {surname}
+              </div>
+            )}
+            <SignOutButton />
+          </>
+        )}
+      </div>
     </nav>
   );
 }

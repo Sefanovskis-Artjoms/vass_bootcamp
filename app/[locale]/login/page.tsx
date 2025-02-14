@@ -1,18 +1,9 @@
 import { signIn } from "@/auth";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../../components/LoginForm";
 import { AuthError } from "next-auth";
 import { IResponse } from "@/types";
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string };
-}) {
-  const refresh = searchParams.refresh === "true";
-  if (refresh) {
-    return <meta httpEquiv="refresh" content="0; URL=/login" />;
-  }
-
+export default function LoginPage() {
   async function handleLogin(username: string, password: string) {
     "use server";
     try {
@@ -42,7 +33,7 @@ export default function LoginPage({
         success: false,
         error: {
           type: "SERVER",
-          message: "Unexpected error occurred, please try again later...",
+          message: "Unexpected error occurred, please try again later",
         },
       };
       return response;

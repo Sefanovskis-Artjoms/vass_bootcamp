@@ -4,8 +4,10 @@ import { UserPlusIcon } from "@heroicons/react/20/solid";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { IResponse } from "@/types";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 
-export default function LoginForm({
+export default function RegisterForm({
   onRegisterAction,
 }: {
   onRegisterAction: (data: {
@@ -18,6 +20,7 @@ export default function LoginForm({
 }) {
   const [isPending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string | null>(null);
+  const t = useTranslations();
   const {
     register,
     handleSubmit,
@@ -44,7 +47,7 @@ export default function LoginForm({
       if (data.password !== data.repeatPassword) {
         setError("repeatPassword", {
           type: "manual",
-          message: "Passwords do not match",
+          message: t("Pages.Register.Form Messages.Passwords do not match"),
         });
         return;
       }
@@ -54,29 +57,38 @@ export default function LoginForm({
         if (response.error?.field === "username") {
           setError("username", {
             type: "manual",
-            message: response.error.message,
+            message: t(
+              "Pages.Register.Form Messages." + response.error.message
+            ),
           });
           return;
         }
         if (response.error.field === "password") {
           setError("password", {
             type: "manual",
-            message: response.error.message,
+            message: t(
+              "Pages.Register.Form Messages." + response.error.message
+            ),
           });
           return;
         }
         if (response.error.field === "repeatPassword") {
           setError("repeatPassword", {
             type: "manual",
-            message: response.error.message,
+            message: t(
+              "Pages.Register.Form Messages." + response.error.message
+            ),
           });
           return;
         }
       }
 
       setFormError(
-        response.error?.message ??
-          "Unexpected error occured while registering, please try again later"
+        t("Pages.Register.Errors." + response.error?.message, {
+          default: t(
+            "Errors.Unexpected error occurred, please try again later"
+          ),
+        })
       );
     });
   };
@@ -85,14 +97,14 @@ export default function LoginForm({
     <div className="max-w-md mx-auto mt-10 p-6 bg-gray-200 rounded-lg shadow-md border border-slate-500">
       <div className="mt-6 mb-6 flex items-center justify-center relative">
         <h2 className="text-2xl font-bold text-gray-800 absolute left-1/2 transform -translate-x-1/2">
-          Register
+          {t("Pages.Register.Register")}
         </h2>
-        <a
+        <Link
           href="/login"
           className="absolute right-0 border border-slate-500 px-4 py-2 rounded-md text-sm font-medium text-slate-700 hover:bg-gray-600 hover:text-slate-50"
         >
-          Back
-        </a>
+          {t("Common.Back")}
+        </Link>
       </div>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-4">
@@ -100,11 +112,13 @@ export default function LoginForm({
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
-            Name:
+            {t("Pages.Register.Name")}:
           </label>
           <input
             {...register("name", {
-              required: "Please enter your name",
+              required: t(
+                "Pages.Register.Form Messages.Please enter your name"
+              ),
             })}
             type="text"
             id="name"
@@ -122,11 +136,13 @@ export default function LoginForm({
             htmlFor="surname"
             className="block text-sm font-medium text-gray-700"
           >
-            Surname:
+            {t("Pages.Register.Surname")}:
           </label>
           <input
             {...register("surname", {
-              required: "Please enter your surname",
+              required: t(
+                "Pages.Register.Form Messages.Please enter your surname"
+              ),
             })}
             type="text"
             id="surname"
@@ -146,14 +162,18 @@ export default function LoginForm({
             htmlFor="username"
             className="block text-sm font-medium text-gray-700"
           >
-            Username:
+            {t("Pages.Register.Username")}:
           </label>
           <input
             {...register("username", {
-              required: "Please enter your username",
+              required: t(
+                "Pages.Register.Form Messages.Please enter your username"
+              ),
               minLength: {
                 value: 5,
-                message: "Username must be at least 5 characters long",
+                message: t(
+                  "Pages.Register.Form Messages.Username must be at least 5 characters long"
+                ),
               },
             })}
             type="text"
@@ -174,14 +194,18 @@ export default function LoginForm({
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
           >
-            Password:
+            {t("Pages.Register.Password")}:
           </label>
           <input
             {...register("password", {
-              required: "Please enter your password",
+              required: t(
+                "Pages.Register.Form Messages.Please enter your password"
+              ),
               minLength: {
                 value: 6,
-                message: "Password must be at least 6 characters long",
+                message: t(
+                  "Pages.Register.Form Messages.Password must be at least 6 characters long"
+                ),
               },
             })}
             type="password"
@@ -203,11 +227,13 @@ export default function LoginForm({
             htmlFor="repeatPassword"
             className="block text-sm font-medium text-gray-700"
           >
-            Repeat Password:
+            {t("Pages.Register.Repeat password")}:
           </label>
           <input
             {...register("repeatPassword", {
-              required: "Please repeat your password",
+              required: t(
+                "Pages.Register.Form Messages.Please repeat your password"
+              ),
             })}
             type="password"
             id="repeatPassword"
@@ -227,7 +253,9 @@ export default function LoginForm({
           className="mb-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
           disabled={isPending}
         >
-          {isPending ? "Registering..." : "Register"}{" "}
+          {isPending
+            ? t("Pages.Register.Registering")
+            : t("Pages.Register.Register")}
           <UserPlusIcon className="ml-2 h-5 w-5" />
         </button>
 

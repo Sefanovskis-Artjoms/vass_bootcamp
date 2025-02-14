@@ -1,6 +1,7 @@
 import dataService from "@/services/dataService";
 import { IResponse, IUser } from "@/types";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
+import { getTranslations } from "next-intl/server";
 
 export default async function ViewUsers() {
   async function fetchUserData(): Promise<IUser[] | null> {
@@ -13,20 +14,27 @@ export default async function ViewUsers() {
   }
 
   const userData: IUser[] | null = await fetchUserData();
+  const t = await getTranslations();
 
   if (!userData) {
-    return <p className="text-red-500">Error in fetching user data</p>;
+    return (
+      <p className="text-red-500">
+        {t("Pages.UserPages.Errors.Error in fetching user data")}
+      </p>
+    );
   }
 
   return (
     <ul className="grid grid-cols-[1fr_repeat(5,4fr)] border rounded-md overflow-hidden list-none p-0 border border-gray-600 max-w-5xl text-center">
       <li key={0} className="contents font-bold text-gray-900">
-        <div className="p-2 bg-gray-400">Nr</div>
-        <div className="p-2 bg-gray-400">Name</div>
-        <div className="p-2 bg-gray-400">Surname</div>
-        <div className="p-2 bg-gray-400">Username</div>
-        <div className="p-2 bg-gray-400">Role</div>
-        <div className="p-2 bg-gray-400">View Details</div>
+        <div className="p-2 bg-gray-400">{t("Pages.UserPages.Nr")}</div>
+        <div className="p-2 bg-gray-400">{t("Pages.UserPages.Name")}</div>
+        <div className="p-2 bg-gray-400">{t("Pages.UserPages.Surname")}</div>
+        <div className="p-2 bg-gray-400">{t("Pages.UserPages.Username")}</div>
+        <div className="p-2 bg-gray-400">{t("Pages.UserPages.Role")}</div>
+        <div className="p-2 bg-gray-400">
+          {t("Pages.UserPages.User details")}
+        </div>
       </li>
       {userData.map((user, i) => {
         const bgColour = i % 2 === 0 ? "bg-gray-100" : "bg-gray-200";
@@ -39,12 +47,14 @@ export default async function ViewUsers() {
             <div className={`p-2 ${bgColour}`}>{user.name}</div>
             <div className={`p-2 ${bgColour}`}>{user.surname}</div>
             <div className={`p-2 ${bgColour}`}>{user.username}</div>
-            <div className={`p-2 ${bgColour}`}>{user.role}</div>
+            <div className={`p-2 ${bgColour}`}>
+              {t(`Pages.UserPages.${user.role}`)}
+            </div>
             <Link
               className={`p-2 ${bgColour} hover:bg-gray-300 hover:text-gray-800`}
               href={`/view-user-details/${user.id}`}
             >
-              View
+              {t("Pages.UserPages.View")}
             </Link>
           </li>
         );

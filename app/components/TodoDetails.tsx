@@ -7,6 +7,7 @@ import {
 } from "@heroicons/react/16/solid";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 export default function TodoDetails({
   information,
@@ -21,6 +22,7 @@ export default function TodoDetails({
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
+  const t = useTranslations();
 
   const {
     register,
@@ -38,17 +40,21 @@ export default function TodoDetails({
 
   const onSubmit = async (editedInformation: ITodo) => {
     if (!onEditAction) return;
-    const EditTodoResponse: IResponse<ITodo> = await onEditAction({
+    const editTodoResponse: IResponse<ITodo> = await onEditAction({
       ...editedInformation,
       id: information.id,
     });
 
-    if (EditTodoResponse.success) {
+    if (editTodoResponse.success) {
       setIsEditing(false);
       setUpdateError(null);
       return;
     }
-    setUpdateError(EditTodoResponse.error.message);
+    setUpdateError(
+      t("Pages.ToDoPages.Errors." + editTodoResponse.error.message, {
+        default: t("Errors.Unexpected error occurred, please try again later"),
+      })
+    );
   };
 
   const assignedUser = userData?.find(
@@ -56,25 +62,29 @@ export default function TodoDetails({
   );
 
   const assignedTo: string = !assignedUser
-    ? "UNASSIGNED"
+    ? t("Pages.ToDoPages.Unassigned")
     : `${assignedUser.name} ${assignedUser.surname} (${assignedUser.username})`;
 
   // For readibility component split into three parts: view state, full edit state(for admins), limited edit state(for managers)
   // Not sure if this is the best approach as it completely ignores DRY principle, but at least it's readable
   if (!isEditing) {
     return (
-      <div className="grid grid-cols-[160px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
+      <div className="grid grid-cols-[160px_minmax(400px,600px)_160px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
         <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
           <div className="mb-4">
-            <label className="text-slate-500 text-sm block ">Status:</label>
+            <label className="text-slate-500 text-sm block ">
+              {t("Pages.ToDoPages.Status")}:
+            </label>
             <div className="text-xl font-semibold text-gray-800">
-              {information.status}
+              {t(`Pages.ToDoPages.${information.status}`)}
             </div>
           </div>
           <div>
-            <label className="text-slate-500 text-sm block">Type:</label>
+            <label className="text-slate-500 text-sm block">
+              {t("Pages.ToDoPages.Type")}:
+            </label>
             <div className="text-xl font-semibold text-gray-800">
-              {information.type}
+              {t(`Pages.ToDoPages.${information.type}`)}
             </div>
           </div>
         </div>
@@ -85,14 +95,16 @@ export default function TodoDetails({
               {information.title}
             </span>
             <span className="text-sm text-slate-500">
-              , created on: {information.date}
+              , {t("Pages.ToDoPages.created on")}: {information.date}
             </span>
           </div>
 
           <div className="mb-4 text-gray-700">{information.description}</div>
 
           <div className="mt-auto">
-            <span className="text-sm text-slate-500">Assigned to: </span>
+            <span className="text-sm text-slate-500">
+              {t("Pages.ToDoPages.Assigned to")}:{" "}
+            </span>
             <span className="text-gray-900">{assignedTo}</span>
           </div>
         </div>
@@ -103,7 +115,7 @@ export default function TodoDetails({
             onClick={() => setIsEditing(true)}
           >
             <PencilSquareIcon className="h-7 w-7 mr-1" />
-            <span className="text-md font-semibold">Edit</span>
+            <span className="text-md font-semibold">{t("Common.Edit")}</span>
           </button>
         )}
       </div>
@@ -114,27 +126,33 @@ export default function TodoDetails({
       <div className="grid grid-cols-[160px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
         <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
           <div className="mb-4">
-            <label className="text-slate-500 text-sm block ">Status:</label>
+            <label className="text-slate-500 text-sm block ">
+              {t("Pages.ToDoPages.Status")}:
+            </label>
             <select
               {...register("status")}
               className="text-xl font-semibold text-gray-800 bg-transparent border rounded border-gray-500"
             >
-              <option value="In progress">In progress</option>
-              <option value="Done">Done</option>
-              <option value="To do">To do</option>
+              <option value="In progress">
+                {t("Pages.ToDoPages.In progress")}
+              </option>
+              <option value="Done">{t("Pages.ToDoPages.Done")}</option>
+              <option value="To do">{t("Pages.ToDoPages.To do")}</option>
             </select>
           </div>
           <div>
-            <label className="text-slate-500 text-sm block">Type:</label>
+            <label className="text-slate-500 text-sm block">
+              {t("Pages.ToDoPages.Type")}:
+            </label>
 
             <select
               {...register("type")}
               className="text-xl font-semibold text-gray-800 bg-transparent border rounded border-gray-500"
             >
-              <option value="Feature">Feature</option>
-              <option value="Bug">Bug</option>
-              <option value="Story">Story</option>
-              <option value="Other">Other</option>
+              <option value="Feature">{t("Pages.ToDoPages.Feature")}</option>
+              <option value="Bug">{t("Pages.ToDoPages.Bug")}</option>
+              <option value="Story">{t("Pages.ToDoPages.Story")}</option>
+              <option value="Other">{t("Pages.ToDoPages.Other")}</option>
             </select>
           </div>
         </div>
@@ -144,13 +162,15 @@ export default function TodoDetails({
             <span className="font-bold text-xl text-gray-800">
               <input
                 type="text"
-                {...register("title", { required: "Title is required" })}
+                {...register("title", {
+                  required: t("Pages.ToDoPages.Form Messages.Title required"),
+                })}
                 className={`p-1 text-xl font-semibold bg-transparent border rounded border-gray-500
                     ${errors.title ? "border-red-500" : "border-gray-300"}`}
               />
             </span>
             <span className="text-sm text-slate-500">
-              , created on: {information.date}
+              , {t("Pages.ToDoPages.created on")}: {information.date}
             </span>
             {errors.title && (
               <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -159,7 +179,9 @@ export default function TodoDetails({
           <div className="mb-4 text-gray-700">
             <textarea
               {...register("description", {
-                required: "Description is required",
+                required: t(
+                  "Pages.ToDoPages.Form Messages.Description required"
+                ),
               })}
               className={`p-1 text-md bg-transparent border rounded border-gray-500 min-w-full min-h-[150px] 
                    ${
@@ -174,15 +196,19 @@ export default function TodoDetails({
           </div>
 
           <div className="mt-auto">
-            <span className="text-sm text-slate-500">Assigned to: </span>
+            <span className="text-sm text-slate-500">
+              {t("Pages.ToDoPages.Assign to")}:{" "}
+            </span>
             <select
               {...register("assignedTo")}
               id="assignToSelect"
               className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
             >
-              <option value="UNASSIGNED">UNASSIGNED</option>
+              <option value="UNASSIGNED">
+                {t("Pages.ToDoPages.Unassigned")}
+              </option>
               {userData === null ? (
-                <option disabled>Loading users...</option>
+                <option disabled> {t("Pages.ToDoPages.Loading users")} </option>
               ) : (
                 userData.map((user) => (
                   <option key={user.id} value={user.id}>
@@ -199,7 +225,7 @@ export default function TodoDetails({
           onClick={handleSubmit(onSubmit)}
         >
           <ClipboardDocumentCheckIcon className="h-7 w-7 mr-1" />
-          <span className="text-md font-semibold">Save</span>
+          <span className="text-md font-semibold">{t("Common.Save")}</span>
         </button>
       </div>
     );
@@ -208,15 +234,19 @@ export default function TodoDetails({
     <div className="grid grid-cols-[160px_minmax(400px,600px)_120px] w-fit min-h-[150px] bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden">
       <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
         <div className="mb-4">
-          <label className="text-slate-500 text-sm block ">Status:</label>
+          <label className="text-slate-500 text-sm block ">
+            {t("Pages.ToDoPages.Status")}:
+          </label>
           <div className="text-xl font-semibold text-gray-800">
-            {information.status}
+            {t(`Pages.ToDoPages.${information.status}`)}
           </div>
         </div>
         <div>
-          <label className="text-slate-500 text-sm block">Type:</label>
+          <label className="text-slate-500 text-sm block">
+            {t("Pages.ToDoPages.Type")}:
+          </label>
           <div className="text-xl font-semibold text-gray-800">
-            {information.type}
+            {t(`Pages.ToDoPages.${information.type}`)}
           </div>
         </div>
       </div>
@@ -227,21 +257,25 @@ export default function TodoDetails({
             {information.title}
           </span>
           <span className="text-sm text-slate-500">
-            , created on: {information.date}
+            , {t("Pages.ToDoPages.created on")}: {information.date}
           </span>
         </div>
         <div className="mb-4 text-gray-700">{information.description}</div>
 
         <div className="mt-auto">
-          <span className="text-sm text-slate-500">Assigned to: </span>
+          <span className="text-sm text-slate-500">
+            {t("Pages.ToDoPages.Assigned to")}:{" "}
+          </span>
           <select
             {...register("assignedTo")}
             id="assignToSelect"
             className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="UNASSIGNED">UNASSIGNED</option>
+            <option value="UNASSIGNED">
+              {t("Pages.ToDoPages.Unassigned")}
+            </option>
             {userData === null ? (
-              <option disabled>Loading users...</option>
+              <option disabled>{t("Pages.ToDoPages.Loading users")}</option>
             ) : (
               userData.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -258,7 +292,7 @@ export default function TodoDetails({
         onClick={handleSubmit(onSubmit)}
       >
         <ClipboardDocumentCheckIcon className="h-7 w-7 mr-1" />
-        <span className="text-md font-semibold">Save</span>
+        <span className="text-md font-semibold">{t("Common.Save")}</span>
       </button>
     </div>
   );

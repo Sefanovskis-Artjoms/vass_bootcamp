@@ -1,0 +1,110 @@
+{
+  "Common": {
+    "Log-out": "Izrakstīties",
+    "Log-in": "Pieteikties",
+    "Submit": "Iesniegt",
+    "Save": "Saglabāt",
+    "Delete": "Dzēst",
+    "Deleting": "Dzēšās",
+    "Add": "Pievienot",
+    "Edit": "Rediģēt",
+    "Back": "Atpakaļ",
+    "Cancel": "Atcelt"
+  },
+  "Pages": {
+    "Login": {
+      "Username": "Lietotājvārds",
+      "Password": "Parole",
+      "Have no account? Register here!": "Nav konta? Reģistrējies šeit!",
+      "Form Messages": {
+        "Please enter your username": "Lūdzu ievadiet lietotājvārdu",
+        "Please enter your password": "Lūdzu ievadiet paroli"
+      },
+      "Errors": {
+        "Invalid username or password": "Nepareizs lietotājvārds vai parole"
+      }
+    },
+    "Register": {
+      "Name": "Vārds",
+      "Surname": "Uzvārds",
+      "Username": "Lietotājvārds",
+      "Password": "Parole",
+      "Register": "Reģistrēties",
+      "Registering": "Reģistrējās",
+      "Repeat password": "Atkārtojiet paroli",
+      "Form Messages": {
+        "Please enter your name": "Lūdzu ievadiet vārdu",
+        "Please enter your surname": "Lūdzu ievadiet uzvārdu",
+        "Please enter your username": "Lūdzu ievadiet lietotājvārdu",
+        "Username is required": "Lietotājvārds ir obligāts",
+        "Username must be at least 5 characters long": "Lietotājvārdam jābūt vismaz 5 rakstzīmju garam",
+        "Username is already taken": "Lietotājvārds jau ir aizņemts",
+        "Please enter your password": "Lūdzu ievadiet paroli",
+        "Password must be at least 6 characters long": "Parolei jābūt vismaz 6 rakstzīmju garai",
+        "Please repeat your password": "Lūdzu atkārtojiet paroli",
+        "Passwords do not match": "Paroles nesakrīt"
+      },
+      "Errors": {
+        "Unexpected error occured while registering, please try again later": "Reģistrējoties notikusi neparedzēta kļūda, lūdzu mēģiniet vēlāk",
+        "Failed to create a new user": "Notikusi kļūda jauna lietotāja izveidē",
+        "Failed to sign-in": "Pieteikšanās neizdevās"
+      }
+    },
+    "ToDoPages": {
+      "Status": "Statuss",
+      "To do": "Jādara",
+      "In progress": "Procesā",
+      "Done": "Pabeigts",
+      "Type": "Tips",
+      "Feature": "Funkcija",
+      "Bug": "Kļūda",
+      "Story": "Stāsts",
+      "Other": "Cits",
+      "Assign to": "Piešķirt",
+      "Assigned to": "Piešķirts",
+      "Unassigned": "Nepiešķirts",
+      "Loading users": "Lādē lietotājus",
+      "Title": "Virsraksts",
+      "created on": "izveidots",
+      "Description": "Apraksts",
+      "Form Messages": {
+        "Title required": "Virsraksts ir obligāts",
+        "Description required": "Apraksts ir obligāts"
+      },
+      "Errors": {
+        "To do not found": "Darāmais nav atrasts",
+        "ID is required": "ID ir obligāts",
+        "Failed to add to do": "Neizdevās pievienot darāmo"
+      }
+    },
+    "UserPages": {
+      "Nr": "Nr",
+      "ID": "ID",
+      "Name": "Vārds",
+      "Surname": "Uzvārds",
+      "Username": "Lietotājvārds",
+      "Role": "Loma",
+      "Admin": "Administrators",
+      "Manager": "Menedžeris",
+      "User": "Lietotājs",
+      "View details": "Skatīt detaļas",
+      "View": "Skatīt",
+      "User details": "Lietotāja informācija",
+      "Errors": {
+        "Error in updating user role": "Kļūda lietotāja lomas atjaunināšanā"
+      }
+    }
+  },
+  "Navigation": {
+    "To do list": "Darāmo saraksts",
+    "Add to do item": "Pievienot darāmo",
+    "View all users": "Skatīt visus lietotājus",
+    "Hi": "Sveiki"
+  },
+  "Errors": {
+    "Error in fetching user data": "Kļūda lietotāja datu iegūšanā",
+    "Internal server error": "Iekšēja servera kļūda",
+    "Error in fetching data": "Kļūda datu iegūšanā",
+    "Unexpected error occurred, please try again later": "Notikusi neparedzēta kļūda, lūdzu mēģiniet vēlāk"
+  }
+}

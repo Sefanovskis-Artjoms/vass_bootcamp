@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { TodoFormInputs, ITodo, IUser, IResponse } from "@/types";
 import { v4 as uuidv4 } from "uuid";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function AddTodoCard({
   onAddAction,
@@ -27,6 +28,8 @@ export default function AddTodoCard({
       assignedTo: "UNASSIGNED",
     },
   });
+
+  const t = useTranslations();
   const [formError, setFormError] = useState<string | null>(null);
 
   const onFormSubmit = async (data: TodoFormInputs) => {
@@ -38,7 +41,13 @@ export default function AddTodoCard({
 
     const addActionResponse = await onAddAction(newItem);
     if (!addActionResponse.success) {
-      setFormError(addActionResponse.error.message);
+      setFormError(
+        t(`Pages.ToDoPages.Errors.${addActionResponse.error.message}`, {
+          default: t(
+            "Errors.Unexpected error occurred, please try again later"
+          ),
+        })
+      );
       return;
     }
     reset();
@@ -47,53 +56,57 @@ export default function AddTodoCard({
 
   return (
     <form
-      className="grid grid-cols-[200px_minmax(300px,550px)_120px] w-fit min-h-max bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden"
+      className="grid grid-cols-[200px_minmax(300px,550px)_minmax(120px,170px)] w-fit min-h-max bg-gray-200 rounded-md shadow-md border border-slate-500 overflow-hidden"
       onSubmit={handleSubmit(onFormSubmit)}
     >
       <div className="flex flex-col justify-center mx-3 my-10">
         <div className="mb-6">
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
-            Status:
+            {t("Pages.ToDoPages.Status")}:
           </label>
           <select
             {...register("status")}
             id="statusSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="In progress">In progress</option>
-            <option value="Done">Done</option>
-            <option value="To do">To do</option>
+            <option value="In progress">
+              {t("Pages.ToDoPages.In progress")}
+            </option>
+            <option value="Done">{t("Pages.ToDoPages.Done")}</option>
+            <option value="To do">{t("Pages.ToDoPages.To do")}</option>
           </select>
         </div>
 
         <div className="mb-6">
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
-            Type:
+            {t("Pages.ToDoPages.Type")}:
           </label>
           <select
             {...register("type")}
             id="typeSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="Feature">Feature</option>
-            <option value="Bug">Bug</option>
-            <option value="Story">Story</option>
-            <option value="Other">Other</option>
+            <option value="Feature">{t("Pages.ToDoPages.Feature")}</option>
+            <option value="Bug">{t("Pages.ToDoPages.Bug")}</option>
+            <option value="Story">{t("Pages.ToDoPages.Story")}</option>
+            <option value="Other">{t("Pages.ToDoPages.Other")}</option>
           </select>
         </div>
 
         <div>
           <label className="text-slate-800 text-md font-semibold block mb-[-6px]">
-            Assign to:
+            {t("Pages.ToDoPages.Assign to")}:
           </label>
           <select
             {...register("assignedTo")}
             id="assignToSelect"
             className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
           >
-            <option value="UNASSIGNED">UNASSIGNED</option>
+            <option value="UNASSIGNED">
+              {t("Pages.ToDoPages.Unassigned")}
+            </option>
             {userData.length === 0 ? (
-              <option disabled>Loading users...</option>
+              <option disabled> {t("Pages.ToDoPages.Loading users")} </option>
             ) : (
               userData.map((user) => (
                 <option key={user.id} value={user.id}>
@@ -111,10 +124,12 @@ export default function AddTodoCard({
             htmlFor="title"
             className="text-slate-800 text-lg font-semibold block"
           >
-            Title:
+            {t("Pages.ToDoPages.Title")}:
           </label>
           <input
-            {...register("title", { required: "Please fill in the title" })}
+            {...register("title", {
+              required: t("Pages.ToDoPages.Form Messages.Title required"),
+            })}
             id="title"
             className={`mt-2 block w-full bg-white border rounded-md p-1 text-md ${
               errors.title ? "border-red-500" : "border-gray-300"
@@ -130,11 +145,11 @@ export default function AddTodoCard({
             htmlFor="descriptionTextarea"
             className="text-slate-800 text-lg font-semibold block"
           >
-            Description:
+            {t("Pages.ToDoPages.Description")}:
           </label>
           <textarea
             {...register("description", {
-              required: "Please fill in the description",
+              required: t("Pages.ToDoPages.Form Messages.Description required"),
             })}
             id="descriptionTextarea"
             className={`min-h-[150px] mt-2 block w-full bg-white border rounded-md p-1 text-md ${
@@ -154,8 +169,8 @@ export default function AddTodoCard({
         className="flex items-center justify-center font-bold text-slate-400 hover:text-lime-700 hover:bg-gray-300 transition-colors duration-300"
         type="submit"
       >
-        <PlusIcon className="h-8 w-8 mr-1" />
-        <span className="text-lg">Add</span>
+        <PlusIcon className="h-8 w-max mr-1" />
+        <span className="text-lg">{t("Common.Add")}</span>
       </button>
     </form>
   );

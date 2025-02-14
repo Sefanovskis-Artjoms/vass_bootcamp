@@ -1,4 +1,4 @@
-import RegisterForm from "../components/RegisterForm";
+import RegisterForm from "../../components/RegisterForm";
 import { IResponse, IUser } from "@/types";
 import dataservice from "@/services/dataService";
 import { v4 as uuidv4 } from "uuid";
@@ -22,7 +22,7 @@ export default function LoginPage() {
         error: {
           type: "FORM",
           field: "repeatPassword",
-          message: "Passwords must match",
+          message: "Passwords do not match",
         },
       };
       return response;
@@ -79,7 +79,7 @@ export default function LoginPage() {
         success: false,
         error: {
           type: "SERVER",
-          message: "Failed to sign in",
+          message: "Failed to sign-in",
         },
       };
       return response;

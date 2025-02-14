@@ -13,8 +13,7 @@ export async function GET() {
       data: todos,
     };
     return NextResponse.json(response, { status: 200 });
-  } catch (error) {
-    console.error(`Failed to fetch Todos: ${error}`);
+  } catch {
     const response: IResponse = {
       success: false,
       error: {
@@ -42,7 +41,7 @@ export async function POST(request: Request) {
       success: false,
       error: {
         type: "SERVER",
-        message: "Failed to add Todo",
+        message: "Failed to add To do",
       },
     };
     return NextResponse.json(response, { status: 500 });
