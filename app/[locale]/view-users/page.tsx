@@ -5,8 +5,10 @@ import UserTable from "@/app/components/UserTable";
 import UserSearchBar from "@/app/components/UserSearchBar";
 
 export default async function ViewUsers() {
-  const userData: IUser[] | null = await fetchUserData();
-  const t = await getTranslations("Common");
+  const [t, userData] = await Promise.all([
+    getTranslations("Common"),
+    fetchUserData(),
+  ]);
 
   async function fetchUserData(): Promise<IUser[] | null> {
     const getUserDataResponse: IResponse<IUser[]> =

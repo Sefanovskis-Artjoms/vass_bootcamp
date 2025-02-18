@@ -8,8 +8,10 @@ import { revalidateTag } from "next/cache";
 import { getTranslations } from "next-intl/server";
 
 export default async function ViewGroups() {
-  const t = await getTranslations("Common");
-  const groupData: IGroup[] | null = await fetchGroupData();
+  const [t, groupData] = await Promise.all([
+    getTranslations("Common"),
+    fetchGroupData(),
+  ]);
 
   async function fetchGroupData(): Promise<IGroup[] | null> {
     const getAllGroupsResponse: IResponse<IGroup[]> =

@@ -12,12 +12,14 @@ export default async function CardDetailsPage({
 }) {
   const { id } = params;
   const session = await auth();
-  const t = await getTranslations("Common");
   const userRole = session?.user?.role;
   const canEdit = userRole === "Admin" || userRole === "Manager";
-  const userData: IUser[] | null = await fetchUserData();
-  const oneTodoData: ITodo | null = await fetchTodoData(id);
-  const groupData: IGroup[] | null = await fetchGroupData();
+  const t = await getTranslations("Common");
+  const [userData, oneTodoData, groupData] = await Promise.all([
+    fetchUserData(),
+    fetchTodoData(id),
+    fetchGroupData(),
+  ]);
 
   async function fetchTodoData(id: string): Promise<ITodo | null> {
     const oneTodoData: IResponse<ITodo> = await dataService.getTodoById(id);
@@ -56,7 +58,7 @@ export default async function CardDetailsPage({
     return updateTodoResponse;
   };
 
-  if (!oneTodoData || !userData || !groupData) {
+  if (oneTodoData === null || userData === null || groupData === null) {
     return <p className="text-red-500">{t("Errors.Error in fetching data")}</p>;
   }
 

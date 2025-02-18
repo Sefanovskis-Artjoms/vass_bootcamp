@@ -10,9 +10,11 @@ export default async function ViewGroupDetails({
   params: { id: string };
 }) {
   const { id } = params;
-  const userData: IUser[] | null = await fetchUserData();
-  const groupData: IGroup | null = await fetchGroupDetails(id);
-  const t = await getTranslations("Common");
+  const [t, userData, groupData] = await Promise.all([
+    getTranslations("Common"),
+    fetchUserData(),
+    fetchGroupDetails(id),
+  ]);
 
   async function fetchGroupDetails(groupID: string): Promise<IGroup | null> {
     const groupDetailsResponse: IResponse<IGroup> =
@@ -62,7 +64,7 @@ export default async function ViewGroupDetails({
     return response;
   };
 
-  if (!groupData || !userData) {
+  if (groupData === null || userData === null) {
     return (
       <p className="text-red-500">{t("Errors.Error while fetching data")}</p>
     );

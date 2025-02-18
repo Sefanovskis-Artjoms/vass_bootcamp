@@ -5,9 +5,11 @@ import { revalidateTag } from "next/cache";
 import { getTranslations } from "next-intl/server";
 
 export default async function AddCard() {
-  const t = await getTranslations("Common");
-  const userData: IUser[] | null = await fetchUserData();
-  const groupData: IGroup[] | null = await fetchGroupData();
+  const [t, userData, groupData] = await Promise.all([
+    getTranslations("Common"),
+    fetchUserData(),
+    fetchGroupData(),
+  ]);
 
   async function fetchUserData(): Promise<IUser[] | null> {
     const getUserDataResponse: IResponse<IUser[]> =
@@ -36,7 +38,7 @@ export default async function AddCard() {
     return addTodoResponse;
   }
 
-  if (!userData || !groupData) {
+  if (userData === null || groupData === null) {
     return (
       <p className="text-red-500">{t("Errors.Error in fetching user data")}</p>
     );

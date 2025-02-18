@@ -10,8 +10,11 @@ export default async function HomePage() {
   const session = await auth();
   const userRole = session?.user?.role;
   const userId = session?.user?.id;
-  const t = await getTranslations("Common");
-  const cardData: ITodo[] | null = await fetchTodoData();
+
+  const [t, cardData] = await Promise.all([
+    getTranslations("Common"),
+    fetchTodoData(),
+  ]);
 
   async function fetchTodoData(): Promise<ITodo[] | null> {
     const getAllTodosResponse = await dataService.getAssignedTodos(

@@ -11,7 +11,10 @@ export default async function ViewUserDetails({
   params: { id: string };
 }) {
   const { id } = params;
-  const t = await getTranslations("Pages.UserPages");
+  const [t, user] = await Promise.all([
+    getTranslations("Pages.UserPages"),
+    fetchUserDetails(id),
+  ]);
 
   async function fetchUserDetails(userId: string): Promise<IUser | null> {
     const userDetailsResponse: IResponse<IUser> =
@@ -20,14 +23,6 @@ export default async function ViewUserDetails({
       return null;
     }
     return userDetailsResponse.data;
-  }
-
-  const user: IUser | null = await fetchUserDetails(id);
-
-  if (!user) {
-    return (
-      <p className="text-red-500">{t("Errors.Error in fetching user data")}</p>
-    );
   }
 
   const editRoleAction = async function (newUserRole: Partial<IUser>) {
@@ -40,6 +35,12 @@ export default async function ViewUserDetails({
     }
     return response;
   };
+
+  if (user === null) {
+    return (
+      <p className="text-red-500">{t("Errors.Error in fetching user data")}</p>
+    );
+  }
 
   return (
     <div className="max-w-lg bg-gray-100 p-6 pb-10 bg-gray-200 rounded-md shadow-md border border-slate-500">
