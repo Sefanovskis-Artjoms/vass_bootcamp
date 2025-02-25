@@ -67,6 +67,12 @@
       "Title": "Заголовок",
       "created on": "создано",
       "Description": "Описание",
+      "Search": "Поиск",
+      "Newest first": "Новые в начале",
+      "Oldest first": "Старые в начале",
+      "Filter by type": "Фильтровать по типу",
+      "Reset selection": "Сбросить выбор",
+      "Filter by status": "Фильтровать по статусу",
       "Form Messages": {
         "Title required": "Заголовок обязателен",
         "Description required": "Описание обязательно"
@@ -90,6 +96,10 @@
       "View details": "Просмотреть детали",
       "View": "Просмотр",
       "User details": "Детали пользователя",
+      "Search": "Поиск",
+      "Search by fields": "Поиск по полям",
+      "Reset selection": "Сбросить выбор",
+      "Filter by role": "Фильтровать по роли",
       "Errors": {
         "Error in updating user role": "Ошибка при обновлении роли пользователя"
       }

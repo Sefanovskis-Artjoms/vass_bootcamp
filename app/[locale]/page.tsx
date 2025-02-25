@@ -1,9 +1,10 @@
 import { IResponse, ITodo } from "@/types";
 import dataService from "@/services/dataService";
-import TodoCard from "../components/TodoCard";
 import { revalidateTag } from "next/cache";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
+import TodoList from "../components/TodoList";
+import TodoListSearchBar from "../components/TodoListSearchBar";
 
 export default async function HomePage() {
   async function fetchTodoData(): Promise<ITodo[] | null> {
@@ -35,17 +36,12 @@ export default async function HomePage() {
   }
 
   return (
-    <div>
-      <ul className="space-y-4">
-        {cardData.map((card: ITodo) => (
-          <li key={card.id}>
-            <TodoCard
-              information={card}
-              deleteTodoAction={userRole === "Admin" ? deleteTodo : undefined}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <TodoListSearchBar />
+      <TodoList
+        todoData={cardData}
+        deleteTodo={userRole === "Admin" ? deleteTodo : undefined}
+      />
+    </>
   );
 }

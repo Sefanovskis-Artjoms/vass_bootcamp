@@ -21,7 +21,7 @@ export default function LanguageSwitcher() {
       </div>
 
       {isOpen && (
-        <div className="absolute bg-gray-300 border border-gray-200 rounded shadow-md">
+        <div className="absolute bg-gray-300 border border-gray-200 rounded shadow-md z-10">
           {otherLocales.map((locale) => (
             <Link
               key={locale}

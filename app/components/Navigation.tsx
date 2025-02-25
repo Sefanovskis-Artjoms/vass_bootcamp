@@ -24,7 +24,7 @@ export default async function Navigation() {
     }
   }
   return (
-    <nav className="flex items-center justify-between bg-gray-200 p-4 rounded-md shadow-md border border-slate-500 mb-8">
+    <nav className="flex items-center justify-between bg-gray-200 p-4 rounded-md shadow-md border border-slate-500 mb-4">
       <ul className="flex space-x-6">
         {!session && (
           <li>
