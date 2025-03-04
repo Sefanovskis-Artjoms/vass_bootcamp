@@ -25,14 +25,9 @@ export default function TodoCard({
 
       if (!deleteTodoResponse.success) {
         setDeletingError(
-          tCommon("Errors." + deleteTodoResponse.error.message, {
-            default: t(
-              "Errors.Unexpected error occurred, please try again later",
-              {
-                default: tCommon(
-                  "Errors.Unexpected error occurred, please try again later"
-                ),
-              }
+          t("Errors." + deleteTodoResponse.error.message, {
+            default: tCommon(
+              "Errors.Unexpected error occurred, please try again later"
             ),
           })
         );
