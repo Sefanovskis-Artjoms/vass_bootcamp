@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "../../auth";
 import SignOutButton from "./SignOutButton";
 import LanguageSwithcer from "./LanguageSwitcher";
 import dataService from "@/services/dataService";
