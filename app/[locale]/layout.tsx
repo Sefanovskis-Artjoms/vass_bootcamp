@@ -1,6 +1,6 @@
 import "../globals.css";
 import Navigation from "../components/Navigation";
-import connectDB from "@/lib/mongodb";
+import connectDB from "@/utils/mongodb";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
