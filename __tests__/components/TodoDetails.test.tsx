@@ -2,23 +2,13 @@ import TodoDetails from "@/app/components/TodoDetails";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { NextIntlClientProvider } from "next-intl";
-import messages from "../../messages/en.json";
-import * as nextRouter from "next/router";
 import { IGroup, ITodo, IUser } from "@/types";
 
+jest.mock("next-intl", () => ({
+  useTranslations: jest.fn().mockReturnValue((key: string) => key),
+}));
+
 describe("TodoDetails component", () => {
-  beforeAll(() => {
-    const useRouter = jest.spyOn(nextRouter, "useRouter");
-
-    useRouter.mockImplementation(
-      () =>
-        ({
-          query: { locale: "en" },
-        } as unknown as nextRouter.NextRouter)
-    );
-  });
-
   const testTodo = {
     id: "1",
     status: "In progress",
@@ -63,14 +53,12 @@ describe("TodoDetails component", () => {
   it("should render todo details user view with no editing options", () => {
     const userRole = "User";
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
-        <TodoDetails
-          information={testTodo}
-          userRole={userRole}
-          userData={testUserData}
-          groupData={testGroupData}
-        />
-      </NextIntlClientProvider>
+      <TodoDetails
+        information={testTodo}
+        userRole={userRole}
+        userData={testUserData}
+        groupData={testGroupData}
+      />
     );
 
     expect(screen.getByText(/In progress/)).toBeInTheDocument();
@@ -84,17 +72,15 @@ describe("TodoDetails component", () => {
   it("should render todo details manager view with editing option", () => {
     const userRole = "Manager";
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
-        <TodoDetails
-          information={testTodo}
-          userRole={userRole}
-          userData={testUserData}
-          groupData={testGroupData}
-          onEditAction={jest
-            .fn()
-            .mockResolvedValue({ success: true, data: {} as ITodo })}
-        />
-      </NextIntlClientProvider>
+      <TodoDetails
+        information={testTodo}
+        userRole={userRole}
+        userData={testUserData}
+        groupData={testGroupData}
+        onEditAction={jest
+          .fn()
+          .mockResolvedValue({ success: true, data: {} as ITodo })}
+      />
     );
 
     expect(screen.getByText(/In progress/)).toBeInTheDocument();
@@ -108,15 +94,13 @@ describe("TodoDetails component", () => {
   it("should render todo details admin view with editing option", () => {
     const userRole = "Admin";
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
-        <TodoDetails
-          information={testTodo}
-          userRole={userRole}
-          userData={testUserData}
-          groupData={testGroupData}
-          onEditAction={jest.fn().mockResolvedValue({})}
-        />
-      </NextIntlClientProvider>
+      <TodoDetails
+        information={testTodo}
+        userRole={userRole}
+        userData={testUserData}
+        groupData={testGroupData}
+        onEditAction={jest.fn().mockResolvedValue({})}
+      />
     );
 
     expect(screen.getByText(/In progress/)).toBeInTheDocument();
@@ -130,15 +114,13 @@ describe("TodoDetails component", () => {
 
   it("should let manager edit only assigned to field", async () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
-        <TodoDetails
-          information={testTodo}
-          userRole="Manager"
-          userData={testUserData}
-          groupData={testGroupData}
-          onEditAction={jest.fn().mockResolvedValue({})}
-        />
-      </NextIntlClientProvider>
+      <TodoDetails
+        information={testTodo}
+        userRole="Manager"
+        userData={testUserData}
+        groupData={testGroupData}
+        onEditAction={jest.fn().mockResolvedValue({})}
+      />
     );
 
     const editButton = screen.getByText(/Edit/);
@@ -162,15 +144,13 @@ describe("TodoDetails component", () => {
 
   it("should let admin edit everything", async () => {
     render(
-      <NextIntlClientProvider messages={messages} locale="en">
-        <TodoDetails
-          information={testTodo}
-          userRole="Admin"
-          userData={testUserData}
-          groupData={testGroupData}
-          onEditAction={jest.fn().mockResolvedValue({})}
-        />
-      </NextIntlClientProvider>
+      <TodoDetails
+        information={testTodo}
+        userRole="Admin"
+        userData={testUserData}
+        groupData={testGroupData}
+        onEditAction={jest.fn().mockResolvedValue({})}
+      />
     );
 
     const editButton = screen.getByText(/Edit/);

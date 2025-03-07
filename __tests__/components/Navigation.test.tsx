@@ -17,6 +17,8 @@ describe("Navigation component", () => {
   });
 
   it("should render navigation without a session", () => {
+    // I want to keep this approach of handling next-intl translations as well
+    // as just a reminder, maybe in the futere it might me usefull
     render(
       <NextIntlClientProvider messages={messages} locale="en">
         <Navigation isLoggedIn={false} user={null} signOut={jest.fn} />
