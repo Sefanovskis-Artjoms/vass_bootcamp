@@ -6,8 +6,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import ReduxProvider from "../components/ReduxProvider";
-import { auth } from "../../utils/auth";
-import { signOut } from "next-auth/react";
+import { auth, signOut } from "../../utils/auth";
 import dataService from "@/services/dataService";
 import { IResponse, IUser } from "@/types";
 
@@ -20,6 +19,12 @@ export default async function RootLayout({
 }) {
   await connectDB();
   const session = await auth();
+  const signoutWithUseServer = async function (options: {
+    redirectTo: string;
+  }) {
+    "use server";
+    return await signOut(options);
+  };
 
   if (!routing.locales.includes(locale as never)) {
     notFound();
@@ -42,7 +47,7 @@ export default async function RootLayout({
             <Navigation
               isLoggedIn={session ? true : false}
               user={userData}
-              signOut={signOut}
+              signOut={signoutWithUseServer}
             />
             {children}
           </NextIntlClientProvider>

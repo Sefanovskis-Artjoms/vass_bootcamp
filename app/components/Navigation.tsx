@@ -13,7 +13,7 @@ export default function Navigation({
 }: {
   isLoggedIn: boolean;
   user: IUser | null;
-  signOut: (options: { callbackUrl: string }) => void;
+  signOut: (options: { redirectTo: string }) => void;
 }) {
   const t = useTranslations();
 
