@@ -15,7 +15,8 @@ export default function LoginForm({
 }) {
   const router = useRouter();
   const [formError, setFormError] = useState<string | null>(null);
-  const t = useTranslations();
+  const t = useTranslations("Pages.Login");
+  const tCommon = useTranslations("Common");
   const {
     register,
     handleSubmit,
@@ -44,21 +45,23 @@ export default function LoginForm({
     ) {
       setError("password", {
         type: "manual",
-        message: t("Pages.Login." + loginResponse.error.message),
+        message: t("Errors." + loginResponse.error.message),
       });
       return;
     }
     setFormError(
-      loginResponse?.error?.message
-        ? t("Errors." + loginResponse.error.message)
-        : t("Pages.Login.Unexpected error occurred, please try again later")
+      t("Errors." + loginResponse.error.message, {
+        default: tCommon(
+          "Errors.Unexpected error occurred, please try again later"
+        ),
+      })
     );
   };
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-gray-200 rounded-lg shadow-md border border-slate-500">
       <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-        {t("Common.Log-in")}
+        {tCommon("Log-in")}
       </h2>
       <form onSubmit={handleSubmit(onFormSubmit)}>
         <div className="mb-4">
@@ -66,13 +69,11 @@ export default function LoginForm({
             htmlFor="username"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Login.Username")}:
+            {t("Username")}:
           </label>
           <input
             {...register("username", {
-              required: t(
-                "Pages.Login.Form Messages.Please enter your username"
-              ),
+              required: t("Form Messages.Please enter your username"),
             })}
             type="text"
             id="username"
@@ -91,13 +92,11 @@ export default function LoginForm({
             htmlFor="password"
             className="block text-sm font-medium text-gray-700"
           >
-            {t("Pages.Login.Password")}:
+            {t("Password")}:
           </label>
           <input
             {...register("password", {
-              required: t(
-                "Pages.Login.Form Messages.Please enter your password"
-              ),
+              required: t("Form Messages.Please enter your password"),
             })}
             type="password"
             id="password"
@@ -113,15 +112,13 @@ export default function LoginForm({
           )}
         </div>
         <div className="mb-6 text-right underline underline-offset-2">
-          <Link href="/register">
-            {t("Pages.Login.Have no account? Register here!")}
-          </Link>
+          <Link href="/register">{t("Have no account? Register here!")}</Link>
         </div>
         <button
           type="submit"
           className="mb-2 w-full flex justify-center uppercase py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-slate-50 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
         >
-          {t("Common.Log-in")}{" "}
+          {tCommon("Log-in")}{" "}
           <ArrowRightEndOnRectangleIcon className="ml-2 h-5 w-5" />
         </button>
 

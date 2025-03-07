@@ -7,19 +7,24 @@ import TodoList from "../components/TodoList";
 import TodoListSearchBar from "../components/TodoListSearchBar";
 
 export default async function HomePage() {
+  const session = await auth();
+  const userRole = session?.user?.role;
+  const userId = session?.user?.id;
+
+  const [t, cardData] = await Promise.all([
+    getTranslations("Common"),
+    fetchTodoData(),
+  ]);
+
   async function fetchTodoData(): Promise<ITodo[] | null> {
-    const getAllTodosResponse: IResponse<ITodo[]> =
-      await dataService.getAllTodos();
+    const getAllTodosResponse = await dataService.getAssignedTodos(
+      userId as string
+    );
     if (!getAllTodosResponse.success) {
       return null;
     }
     return getAllTodosResponse.data;
   }
-
-  const session = await auth();
-  const userRole = session?.user?.role;
-  const t = await getTranslations();
-  const cardData: ITodo[] | null = await fetchTodoData();
 
   if (cardData === null) {
     return <p className="text-red-500">{t("Errors.Error in fetching data")}</p>;

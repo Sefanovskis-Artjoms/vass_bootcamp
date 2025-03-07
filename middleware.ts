@@ -17,6 +17,8 @@ export async function middleware(request: NextRequest) {
     `${locale}/add-card`,
     `${locale}/view-users`,
     `${locale}/view-user-details`,
+    `${locale}/view-groups`,
+    `${locale}/view-group-details`,
   ];
 
   if (!session) {
@@ -51,8 +53,11 @@ export const config = {
     "/(en|lv|ru)/add-card",
     "/(en|lv|ru)/card-info/:id*",
     "/(en|lv|ru)/login/",
+    "/(en|lv|ru)/register",
     "/(en|lv|ru)/view-users",
     "/(en|lv|ru)/view-user-details/:id*",
+    "/(en|lv|ru)/view-groups",
+    "/(en|lv|ru)/view-group-details/:id*",
   ],
 };
 

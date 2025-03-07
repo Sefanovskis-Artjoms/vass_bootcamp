@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import User from "../../../models/users-model";
 import { IResponse } from "@/types";
- 
+
 export async function GET(
   request: Request,
   { params }: { params: { username: string } }
@@ -32,13 +32,12 @@ export async function GET(
       data: { isUnique },
     };
     return NextResponse.json(response, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching user details:", error);
+  } catch {
     const response: IResponse = {
       success: false,
       error: {
         type: "SERVER",
-        message: "Internal Server Error",
+        message: "Internal server error",
       },
     };
     return NextResponse.json(response, { status: 500 });

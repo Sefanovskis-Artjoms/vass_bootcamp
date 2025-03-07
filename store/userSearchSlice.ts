@@ -2,39 +2,60 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IUserSearchState } from "@/types";
 
 const initialState: IUserSearchState = {
-  searchQuery: "",
-  searchFields: [],
-  filterRoles: [],
+  // Viewusers and viewGroupDetails are the namespaces for the two pages where the same search slice is used
+  viewUsers: { searchQuery: "", searchFields: [], filterRoles: [] },
+  viewGroupDetails: { searchQuery: "", searchFields: [], filterRoles: [] },
 };
 
 const userSearchSlice = createSlice({
   name: "userSearch",
   initialState,
   reducers: {
-    setSearchQuery(state, action: PayloadAction<string>) {
-      state.searchQuery = action.payload;
+    setSearchQuery(
+      state,
+      action: PayloadAction<{ namespace: string; query: string }>
+    ) {
+      const { namespace, query } = action.payload;
+      if (!state[namespace]) return;
+      state[namespace].searchQuery = query;
     },
-    toggleSearchField(state, action: PayloadAction<string>) {
-      const field = action.payload;
-      if (state.searchFields.includes(field)) {
-        state.searchFields = state.searchFields.filter((f) => f !== field);
+    toggleSearchField(
+      state,
+      action: PayloadAction<{ namespace: string; field: string }>
+    ) {
+      const { namespace, field } = action.payload;
+      if (!state[namespace]) return;
+      if (state[namespace].searchFields.includes(field)) {
+        state[namespace].searchFields = state[namespace].searchFields.filter(
+          (f) => f !== field
+        );
       } else {
-        state.searchFields.push(field);
+        state[namespace].searchFields.push(field);
       }
     },
-    resetSearchFields(state) {
-      state.searchFields = [];
+    resetSearchFields(state, action: PayloadAction<{ namespace: string }>) {
+      const { namespace } = action.payload;
+      if (!state[namespace]) return;
+      state[namespace].searchFields = [];
     },
-    toggleFilterRole(state, action: PayloadAction<string>) {
-      const role = action.payload;
-      if (state.filterRoles.includes(role)) {
-        state.filterRoles = state.filterRoles.filter((r) => r !== role);
+    toggleFilterRole(
+      state,
+      action: PayloadAction<{ namespace: string; role: string }>
+    ) {
+      const { namespace, role } = action.payload;
+      if (!state[namespace]) return;
+      if (state[namespace].filterRoles.includes(role)) {
+        state[namespace].filterRoles = state[namespace].filterRoles.filter(
+          (r) => r !== role
+        );
       } else {
-        state.filterRoles.push(role);
+        state[namespace].filterRoles.push(role);
       }
     },
-    resetFilterRoles(state) {
-      state.filterRoles = [];
+    resetFilterRoles(state, action: PayloadAction<{ namespace: string }>) {
+      const { namespace } = action.payload;
+      if (!state[namespace]) return;
+      state[namespace].filterRoles = [];
     },
   },
 });

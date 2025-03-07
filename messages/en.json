@@ -6,10 +6,20 @@
     "Save": "Save",
     "Delete": "Delete",
     "Deleting": "Deleting",
+    "Confirm": "Confirm",
     "Add": "Add",
+    "Adding": "Adding",
     "Edit": "Edit",
     "Back": "Back",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "Remove": "Remove",
+    "Removing": "Removing",
+    "Errors": {
+      "Error in fetching user data": "Error in fetching user data",
+      "Internal server error": "Internal server error",
+      "Error in fetching data": "Error in fetching data",
+      "Unexpected error occurred, please try again later": "Unexpected error occurred, please try again later"
+    }
   },
   "Pages": {
     "Login": {
@@ -62,6 +72,8 @@
       "Other": "Other",
       "Assign to": "Assign to",
       "Assigned to": "Assigned to",
+      "to User": "User",
+      "to Group": "Group",
       "Unassigned": "Unassigned",
       "Loading users": "Loading users",
       "Title": "Title",
@@ -103,18 +115,28 @@
       "Errors": {
         "Error in updating user role": "Error in updating role"
       }
+    },
+    "GroupPages": {
+      "Create new group": "Create new group",
+      "Group name": "Group name",
+      "Nr": "Nr",
+      "User count": "User count",
+      "Name": "Name",
+      "View details": "View details",
+      "group details": "- group details",
+      "Add new user to the group": "Add new user to the group",
+      "View users in the group": "View users in the group",
+      "Errors": {
+        "Please enter a group name": "Please enter a group name",
+        "Error occured while creating group, please try again later": "Error occured while creating group, please try again later"
+      }
     }
   },
   "Navigation": {
     "To do list": "To do list",
     "Add to do item": "Add to do item",
     "View all users": "View all users",
+    "View groups": "View groups",
     "Hi": "Hi"
-  },
-  "Errors": {
-    "Error in fetching user data": "Error in fetching user data",
-    "Internal server error": "Internal server error",
-    "Error in fetching data": "Error in fetching data",
-    "Unexpected error occurred, please try again later": "Unexpected error occurred, please try again later"
   }
 }

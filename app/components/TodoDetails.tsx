@@ -1,6 +1,6 @@
 "use client";
 
-import { IResponse, ITodo, IUser } from "@/types";
+import { IGroup, IResponse, ITodo, IUser } from "@/types";
 import {
   PencilSquareIcon,
   ClipboardDocumentCheckIcon,
@@ -14,31 +14,42 @@ export default function TodoDetails({
   onEditAction,
   userData,
   userRole,
+  groupData,
 }: {
   information: ITodo;
   onEditAction?: (updatedTodo: ITodo) => Promise<IResponse<ITodo>>;
   userData: IUser[];
   userRole?: string;
+  groupData: IGroup[];
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
-  const t = useTranslations();
+  const [assignedToUser, setAssignedToUser] = useState<boolean>(
+    information.assignedTo.type === "user"
+  );
+  const t = useTranslations("Pages.ToDoPages");
+  const tCommon = useTranslations("Common");
+  const assignedTo: string = getAssignedToString();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<ITodo>({
     defaultValues: {
       title: information.title,
       description: information.description,
       status: information.status,
       type: information.type,
-      assignedTo: information.assignedTo,
+      assignedTo: {
+        type: information.assignedTo.type,
+        id: information.assignedTo.id,
+      },
     },
   });
 
-  const onSubmit = async (editedInformation: ITodo) => {
+  async function onSubmit(editedInformation: ITodo) {
     if (!onEditAction) return;
     const editTodoResponse: IResponse<ITodo> = await onEditAction({
       ...editedInformation,
@@ -51,19 +62,37 @@ export default function TodoDetails({
       return;
     }
     setUpdateError(
-      t("Pages.ToDoPages.Errors." + editTodoResponse.error.message, {
-        default: t("Errors.Unexpected error occurred, please try again later"),
+      t("Errors." + editTodoResponse.error.message, {
+        default: tCommon(
+          "Errors.Unexpected error occurred, please try again later"
+        ),
       })
     );
-  };
+  }
 
-  const assignedUser = userData?.find(
-    (user) => user.id === information.assignedTo
-  );
+  function handleAssignedToChange() {
+    setAssignedToUser((prev) => {
+      const newAssignedToUser = !prev;
+      setValue("assignedTo.type", newAssignedToUser ? "user" : "group");
+      return newAssignedToUser;
+    });
+  }
 
-  const assignedTo: string = !assignedUser
-    ? t("Pages.ToDoPages.Unassigned")
-    : `${assignedUser.name} ${assignedUser.surname} (${assignedUser.username})`;
+  function getAssignedToString() {
+    if (information.assignedTo.type === "user") {
+      const assignedUser = userData?.find(
+        (user) => user.id === information.assignedTo.id
+      );
+
+      return !assignedUser
+        ? t("Unassigned")
+        : `${assignedUser.name} ${assignedUser.surname} (${assignedUser.username})`;
+    }
+    const assignedGroup = groupData?.find(
+      (group) => group.id === information.assignedTo.id
+    );
+    return !assignedGroup ? t("Unassigned") : `Group - ${assignedGroup.name}`;
+  }
 
   // For readibility component split into three parts: view state, full edit state(for admins), limited edit state(for managers)
   // Not sure if this is the best approach as it completely ignores DRY principle, but at least it's readable
@@ -73,18 +102,16 @@ export default function TodoDetails({
         <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
           <div className="mb-4">
             <label className="text-slate-500 text-sm block ">
-              {t("Pages.ToDoPages.Status")}:
+              {t("Status")}:
             </label>
             <div className="text-xl font-semibold text-gray-800">
-              {t(`Pages.ToDoPages.${information.status}`)}
+              {t(`${information.status}`)}
             </div>
           </div>
           <div>
-            <label className="text-slate-500 text-sm block">
-              {t("Pages.ToDoPages.Type")}:
-            </label>
+            <label className="text-slate-500 text-sm block">{t("Type")}:</label>
             <div className="text-xl font-semibold text-gray-800">
-              {t(`Pages.ToDoPages.${information.type}`)}
+              {t(information.type)}
             </div>
           </div>
         </div>
@@ -95,16 +122,14 @@ export default function TodoDetails({
               {information.title}
             </span>
             <span className="text-sm text-slate-500">
-              , {t("Pages.ToDoPages.created on")}: {information.date}
+              , {t("created on")}: {information.date}
             </span>
           </div>
 
           <div className="mb-4 text-gray-700">{information.description}</div>
 
           <div className="mt-auto">
-            <span className="text-sm text-slate-500">
-              {t("Pages.ToDoPages.Assigned to")}:{" "}
-            </span>
+            <span className="text-sm text-slate-500">{t("Assigned to")}: </span>
             <span className="text-gray-900">{assignedTo}</span>
           </div>
         </div>
@@ -115,7 +140,7 @@ export default function TodoDetails({
             onClick={() => setIsEditing(true)}
           >
             <PencilSquareIcon className="h-7 w-7 mr-1" />
-            <span className="text-md font-semibold">{t("Common.Edit")}</span>
+            <span className="text-md font-semibold">{tCommon("Edit")}</span>
           </button>
         )}
       </div>
@@ -127,32 +152,28 @@ export default function TodoDetails({
         <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
           <div className="mb-4">
             <label className="text-slate-500 text-sm block ">
-              {t("Pages.ToDoPages.Status")}:
+              {t("Status")}:
             </label>
             <select
               {...register("status")}
               className="text-xl font-semibold text-gray-800 bg-transparent border rounded border-gray-500"
             >
-              <option value="In progress">
-                {t("Pages.ToDoPages.In progress")}
-              </option>
-              <option value="Done">{t("Pages.ToDoPages.Done")}</option>
-              <option value="To do">{t("Pages.ToDoPages.To do")}</option>
+              <option value="In progress">{t("In progress")}</option>
+              <option value="Done">{t("Done")}</option>
+              <option value="To do">{t("To do")}</option>
             </select>
           </div>
           <div>
-            <label className="text-slate-500 text-sm block">
-              {t("Pages.ToDoPages.Type")}:
-            </label>
+            <label className="text-slate-500 text-sm block">{t("Type")}:</label>
 
             <select
               {...register("type")}
               className="text-xl font-semibold text-gray-800 bg-transparent border rounded border-gray-500"
             >
-              <option value="Feature">{t("Pages.ToDoPages.Feature")}</option>
-              <option value="Bug">{t("Pages.ToDoPages.Bug")}</option>
-              <option value="Story">{t("Pages.ToDoPages.Story")}</option>
-              <option value="Other">{t("Pages.ToDoPages.Other")}</option>
+              <option value="Feature">{t("Feature")}</option>
+              <option value="Bug">{t("Bug")}</option>
+              <option value="Story">{t("Story")}</option>
+              <option value="Other">{t("Other")}</option>
             </select>
           </div>
         </div>
@@ -163,14 +184,14 @@ export default function TodoDetails({
               <input
                 type="text"
                 {...register("title", {
-                  required: t("Pages.ToDoPages.Form Messages.Title required"),
+                  required: t("Form Messages.Title required"),
                 })}
                 className={`p-1 text-xl font-semibold bg-transparent border rounded border-gray-500
                     ${errors.title ? "border-red-500" : "border-gray-300"}`}
               />
             </span>
             <span className="text-sm text-slate-500">
-              , {t("Pages.ToDoPages.created on")}: {information.date}
+              , {t("created on")}: {information.date}
             </span>
             {errors.title && (
               <p className="text-red-500 text-sm">{errors.title.message}</p>
@@ -179,9 +200,7 @@ export default function TodoDetails({
           <div className="mb-4 text-gray-700">
             <textarea
               {...register("description", {
-                required: t(
-                  "Pages.ToDoPages.Form Messages.Description required"
-                ),
+                required: t("Form Messages.Description required"),
               })}
               className={`p-1 text-md bg-transparent border rounded border-gray-500 min-w-full min-h-[150px] 
                    ${
@@ -196,27 +215,55 @@ export default function TodoDetails({
           </div>
 
           <div className="mt-auto">
-            <span className="text-sm text-slate-500">
-              {t("Pages.ToDoPages.Assign to")}:{" "}
-            </span>
-            <select
-              {...register("assignedTo")}
-              id="assignToSelect"
-              className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
-            >
-              <option value="UNASSIGNED">
-                {t("Pages.ToDoPages.Unassigned")}
-              </option>
-              {userData === null ? (
-                <option disabled> {t("Pages.ToDoPages.Loading users")} </option>
-              ) : (
-                userData.map((user) => (
-                  <option key={user.id} value={user.id}>
-                    {user.name} {user.surname} ({user.username})
-                  </option>
-                ))
-              )}
-            </select>
+            <div className="flex items-center gap-4 mb-2">
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={assignedToUser}
+                  onChange={handleAssignedToChange}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-100 border border-gray-400 rounded-full peer after:content-[''] after:absolute after:top-1 after:left-1.5 after:bg-gray-600 after:border-gray-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+              </label>
+              <span className="text-md text-slate-800">
+                {t("Assign to")}: {assignedToUser ? t("to User") : t("Group")}
+              </span>
+            </div>
+            {assignedToUser ? (
+              <select
+                {...register("assignedTo.id")}
+                id="assignToSelect"
+                className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
+              >
+                <option value="UNASSIGNED">{t("Unassigned")}</option>
+                {userData.length === 0 ? (
+                  <option disabled> {t("Loading users")} </option>
+                ) : (
+                  userData.map((user) => (
+                    <option key={user.id} value={user.id}>
+                      {user.name} {user.surname} ({user.username})
+                    </option>
+                  ))
+                )}
+              </select>
+            ) : (
+              <select
+                {...register("assignedTo.id")}
+                id="assignToSelect"
+                className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
+              >
+                <option value="UNASSIGNED">{t("Unassigned")}</option>
+                {groupData.length === 0 ? (
+                  <option disabled> {t("Loading users")} </option>
+                ) : (
+                  groupData.map((group) => (
+                    <option key={group.id} value={group.id}>
+                      {group.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            )}
           </div>
           {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
         </div>
@@ -225,7 +272,7 @@ export default function TodoDetails({
           onClick={handleSubmit(onSubmit)}
         >
           <ClipboardDocumentCheckIcon className="h-7 w-7 mr-1" />
-          <span className="text-md font-semibold">{t("Common.Save")}</span>
+          <span className="text-md font-semibold">{tCommon("Save")}</span>
         </button>
       </div>
     );
@@ -235,18 +282,16 @@ export default function TodoDetails({
       <div className="flex flex-col justify-center m-3 border-r-2 border-slate-500">
         <div className="mb-4">
           <label className="text-slate-500 text-sm block ">
-            {t("Pages.ToDoPages.Status")}:
+            {t("Status")}:
           </label>
           <div className="text-xl font-semibold text-gray-800">
-            {t(`Pages.ToDoPages.${information.status}`)}
+            {t(information.status)}
           </div>
         </div>
         <div>
-          <label className="text-slate-500 text-sm block">
-            {t("Pages.ToDoPages.Type")}:
-          </label>
+          <label className="text-slate-500 text-sm block">{t("Type")}:</label>
           <div className="text-xl font-semibold text-gray-800">
-            {t(`Pages.ToDoPages.${information.type}`)}
+            {t(information.type)}
           </div>
         </div>
       </div>
@@ -257,33 +302,61 @@ export default function TodoDetails({
             {information.title}
           </span>
           <span className="text-sm text-slate-500">
-            , {t("Pages.ToDoPages.created on")}: {information.date}
+            , {t("created on")}: {information.date}
           </span>
         </div>
         <div className="mb-4 text-gray-700">{information.description}</div>
 
         <div className="mt-auto">
-          <span className="text-sm text-slate-500">
-            {t("Pages.ToDoPages.Assigned to")}:{" "}
-          </span>
-          <select
-            {...register("assignedTo")}
-            id="assignToSelect"
-            className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
-          >
-            <option value="UNASSIGNED">
-              {t("Pages.ToDoPages.Unassigned")}
-            </option>
-            {userData === null ? (
-              <option disabled>{t("Pages.ToDoPages.Loading users")}</option>
-            ) : (
-              userData.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name} {user.surname} ({user.username})
-                </option>
-              ))
-            )}
-          </select>
+          <div className="flex items-center gap-4 mb-2">
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={assignedToUser}
+                onChange={handleAssignedToChange}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-100 border border-gray-400 rounded-full peer after:content-[''] after:absolute after:top-1 after:left-1.5 after:bg-gray-600 after:border-gray-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
+            </label>
+            <span className="text-md text-slate-800">
+              {t("Assign to")}: {assignedToUser ? t("to User") : t("to Group")}
+            </span>
+          </div>
+          {assignedToUser ? (
+            <select
+              {...register("assignedTo.id")}
+              id="assignToSelect"
+              className="block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
+            >
+              <option value="UNASSIGNED">{t("Unassigned")}</option>
+              {userData.length === 0 ? (
+                <option disabled> {t("Loading users")} </option>
+              ) : (
+                userData.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.name} {user.surname} ({user.username})
+                  </option>
+                ))
+              )}
+            </select>
+          ) : (
+            <select
+              {...register("assignedTo.id")}
+              id="assignToSelect"
+              className="mt-1 block w-full bg-white border border-gray-300 rounded-md text-lg font-semibold p-1"
+            >
+              <option value="UNASSIGNED">{t("Unassigned")}</option>
+              {groupData.length === 0 ? (
+                <option disabled> {t("Loading users")} </option>
+              ) : (
+                groupData.map((group) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))
+              )}
+            </select>
+          )}
         </div>
         {updateError && <p className="text-red-500 mt-2">{updateError}</p>}
       </div>
@@ -292,7 +365,7 @@ export default function TodoDetails({
         onClick={handleSubmit(onSubmit)}
       >
         <ClipboardDocumentCheckIcon className="h-7 w-7 mr-1" />
-        <span className="text-md font-semibold">{t("Common.Save")}</span>
+        <span className="text-md font-semibold">{tCommon("Save")}</span>
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import SignOutButton from "./SignOutButton";
-import LanguageSwithcer from "./LanguageSwithcer";
+import LanguageSwithcer from "./LanguageSwitcher";
 import dataService from "@/services/dataService";
 import { IResponse, IUser } from "@/types";
 import { Link } from "@/i18n/routing";
@@ -62,6 +62,14 @@ export default async function Navigation() {
                     className="shadow-md text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
                   >
                     {t("Navigation.View all users")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/view-groups"
+                    className="shadow-md text-gray-800 font-semibold bg-gray-300 hover:bg-gray-400 hover:text-gray-900 py-2 px-4 rounded-md transition-colors duration-300"
+                  >
+                    {t("Navigation.View groups")}
                   </Link>
                 </li>
               </>

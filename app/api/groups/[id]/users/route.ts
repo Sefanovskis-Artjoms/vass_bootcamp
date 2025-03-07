@@ -1,22 +1,35 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import User from "../../models/users-model";
-import { IResponse, IUser } from "@/types";
+import Group from "../../../models/groups-model";
+import User from "../../../models/users-model";
+import { IResponse, IGroup } from "@/types";
 
-export async function GET(
+export async function POST(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
-
-    if (!id) {
+    const { id: groupId } = params;
+    if (!groupId) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
           field: "id",
-          message: "ID is required",
+          message: "Group ID is required",
+        },
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    const { userId } = await request.json();
+    if (!userId) {
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          field: "userId",
+          message: "User ID is required",
         },
       };
       return NextResponse.json(response, { status: 400 });
@@ -24,22 +37,38 @@ export async function GET(
 
     await connectDB();
 
-    const user = await User.findOne({ id: id });
-
+    const user = await User.findOne({ id: userId });
     if (!user) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
+          field: "userId",
           message: "User not found",
         },
       };
       return NextResponse.json(response, { status: 404 });
     }
 
-    const response: IResponse<IUser> = {
+    const group = await Group.findOneAndUpdate(
+      { id: groupId },
+      { $addToSet: { users: [userId] } },
+      { new: true }
+    );
+    if (!group) {
+      const response: IResponse = {
+        success: false,
+        error: {
+          type: "FORM",
+          message: "Group not found",
+        },
+      };
+      return NextResponse.json(response, { status: 404 });
+    }
+
+    const response: IResponse<IGroup> = {
       success: true,
-      data: user,
+      data: group,
     };
     return NextResponse.json(response, { status: 200 });
   } catch {
@@ -54,33 +83,32 @@ export async function GET(
   }
 }
 
-export async function PUT(
+export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = params;
-
-    if (!id) {
+    const { id: groupId } = params;
+    if (!groupId) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
           field: "id",
-          message: "ID is required",
+          message: "Group ID is required",
         },
       };
       return NextResponse.json(response, { status: 400 });
     }
 
-    const body: Partial<IUser> = await request.json();
-
-    if (Object.keys(body).length === 0) {
+    const { userId } = await request.json();
+    if (!userId) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
-          message: "No data provided for update",
+          field: "userId",
+          message: "User ID is required",
         },
       };
       return NextResponse.json(response, { status: 400 });
@@ -88,26 +116,25 @@ export async function PUT(
 
     await connectDB();
 
-    const user = await User.findOneAndUpdate(
-      { id: id },
-      { $set: body },
+    const group = await Group.findOneAndUpdate(
+      { id: groupId },
+      { $pull: { users: userId } },
       { new: true }
     );
-
-    if (!user) {
+    if (!group) {
       const response: IResponse = {
         success: false,
         error: {
           type: "FORM",
-          message: "User not found",
+          message: "Group not found",
         },
       };
       return NextResponse.json(response, { status: 404 });
     }
 
-    const response: IResponse<IUser> = {
+    const response: IResponse<IGroup> = {
       success: true,
-      data: user,
+      data: group,
     };
     return NextResponse.json(response, { status: 200 });
   } catch {

@@ -6,10 +6,20 @@
     "Save": "Сохранить",
     "Delete": "Удалить",
     "Deleting": "Удаляется",
+    "Confirm deletion": "Подтвердить",
     "Add": "Добавить",
+    "Adding": "Добавляется",
     "Edit": "Редактировать",
     "Back": "Назад",
-    "Cancel": "Отменить"
+    "Cancel": "Отменить",
+    "Remove": "Убрать",
+    "Removing": "Убирается",
+    "Errors": {
+      "Error in fetching user data": "Ошибка при получении данных пользователя",
+      "Internal server error": "Внутренняя ошибка сервера",
+      "Error in fetching data": "Ошибка при получении данных",
+      "Unexpected error occurred, please try again later": "Произошла непредвиденная ошибка, попробуйте позже"
+    }
   },
   "Pages": {
     "Login": {
@@ -62,6 +72,8 @@
       "Other": "Другое",
       "Assign to": "Назначить",
       "Assigned to": "Назначено",
+      "to User": "Пользователю",
+      "to Group": "Группе",
       "Unassigned": "Не назначено",
       "Loading users": "Загрузка пользователей",
       "Title": "Заголовок",
@@ -103,18 +115,28 @@
       "Errors": {
         "Error in updating user role": "Ошибка при обновлении роли пользователя"
       }
+    },
+    "GroupPages": {
+      "Create new group": "Создать новую группу",
+      "Group name": "Название группы",
+      "Nr": "№",
+      "User count": "Количество пользователей",
+      "Name": "Название",
+      "View details": "Просмотреть детали",
+      "group details": "- детали группы",
+      "Add new user to the group": "Добавить нового пользователя в группу",
+      "View users in the group": "Просмотреть пользователей в группе",
+      "Errors": {
+        "Please enter a group name": "Пожалуйста, введите название группы",
+        "Error occured while creating group, please try again later": "Произошла ошибка при создании группы, попробуйте позже"
+      }
     }
   },
   "Navigation": {
     "To do list": "Список задач",
     "Add to do item": "Добавить задачу",
     "View all users": "Просмотреть всех пользователей",
+    "View groups": "Просмотреть группы",
     "Hi": "Привет"
-  },
-  "Errors": {
-    "Error in fetching user data": "Ошибка при получении данных пользователя",
-    "Internal server error": "Внутренняя ошибка сервера",
-    "Error in fetching data": "Ошибка при получении данных",
-    "Unexpected error occurred, please try again later": "Произошла непредвиденная ошибка, попробуйте позже"
   }
 }

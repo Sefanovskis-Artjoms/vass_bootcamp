@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
-import User from "../models/users-model";
-import { IResponse, IUser } from "@/types";
+import Group from "../models/groups-model";
+import { IResponse, IGroup } from "@/types";
 
 export async function GET() {
   await connectDB();
   try {
-    const users = await User.find({});
-    const response: IResponse<IUser[]> = {
+    const groups = await Group.find({});
+    const response: IResponse<IGroup[]> = {
       success: true,
-      data: users,
+      data: groups,
     };
     return NextResponse.json(response, { status: 200 });
   } catch {
@@ -28,11 +28,11 @@ export async function POST(request: Request) {
   await connectDB();
 
   try {
-    const newUser: IUser = await request.json();
-    const createdUser = await User.create(newUser);
-    const response: IResponse<IUser> = {
+    const newGroup: IGroup = await request.json();
+    const createdGroup = await Group.create(newGroup);
+    const response: IResponse<IGroup> = {
       success: true,
-      data: createdUser,
+      data: createdGroup,
     };
     return NextResponse.json(response, { status: 200 });
   } catch {
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       success: false,
       error: {
         type: "SERVER",
-        message: "Failed to to create a new user",
+        message: "Failed to to create a new group",
       },
     };
     return NextResponse.json(response, { status: 500 });
