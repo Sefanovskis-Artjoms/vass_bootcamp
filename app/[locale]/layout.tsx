@@ -37,7 +37,9 @@ export default async function RootLayout({
     if (!response.success) return null;
     return response.data;
   };
-  const userData: IUser | null = await getUserData(session?.user?.id as string);
+  const userData: IUser | null = session?.user?.id
+    ? await getUserData(session.user.id as string)
+    : null;
 
   return (
     <html lang={locale}>
