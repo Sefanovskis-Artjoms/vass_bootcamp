@@ -1,5 +1,5 @@
 import TodoDetails from "@/app/components/TodoDetails";
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import dataService from "@/services/dataService";
 import { IGroup, IResponse, ITodo, IUser } from "@/types";
 import { revalidateTag } from "next/cache";

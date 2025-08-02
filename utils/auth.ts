@@ -1,9 +1,9 @@
 import Credentials from "next-auth/providers/credentials";
-import connectDB from "@/lib/mongodb";
-import User from "./app/api/models/users-model";
+import connectDB from "@/utils/mongodb";
+import User from "../app/api/models/users-model";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
-import { IUser } from "./types";
+import { IUser } from "../types";
 
 declare module "next-auth" {
   interface Session {

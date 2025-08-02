@@ -1,7 +1,7 @@
 import { IResponse, ITodo } from "@/types";
 import dataService from "@/services/dataService";
 import { revalidateTag } from "next/cache";
-import { auth } from "@/auth";
+import { auth } from "@/utils/auth";
 import { getTranslations } from "next-intl/server";
 import TodoList from "../components/TodoList";
 import TodoListSearchBar from "../components/TodoListSearchBar";

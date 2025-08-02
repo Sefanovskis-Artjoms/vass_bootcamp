@@ -188,6 +188,7 @@ export default function TodoDetails({
                 })}
                 className={`p-1 text-xl font-semibold bg-transparent border rounded border-gray-500
                     ${errors.title ? "border-red-500" : "border-gray-300"}`}
+                data-testid="title-input"
               />
             </span>
             <span className="text-sm text-slate-500">
@@ -206,6 +207,7 @@ export default function TodoDetails({
                    ${
                      errors.description ? "border-red-500" : "border-gray-300"
                    }`}
+              data-testid="description-input"
             />
             {errors.description && (
               <p className="text-red-500 text-sm">
@@ -226,7 +228,8 @@ export default function TodoDetails({
                 <div className="w-11 h-6 bg-gray-100 border border-gray-400 rounded-full peer after:content-[''] after:absolute after:top-1 after:left-1.5 after:bg-gray-600 after:border-gray-400 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full"></div>
               </label>
               <span className="text-md text-slate-800">
-                {t("Assign to")}: {assignedToUser ? t("to User") : t("Group")}
+                {t("Assign to")}:{" "}
+                {assignedToUser ? t("to User") : t("to Group")}
               </span>
             </div>
             {assignedToUser ? (

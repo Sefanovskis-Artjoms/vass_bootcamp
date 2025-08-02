@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
+import connectDB from "@/utils/mongodb";
 import Todo from "../../models/todos-model";
 import { IResponse, ITodo } from "@/types";
 

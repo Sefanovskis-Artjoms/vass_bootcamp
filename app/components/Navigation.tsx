@@ -1,32 +1,26 @@
-import { auth } from "@/auth";
+"use client";
+
 import SignOutButton from "./SignOutButton";
 import LanguageSwithcer from "./LanguageSwitcher";
-import dataService from "@/services/dataService";
-import { IResponse, IUser } from "@/types";
+import { IUser } from "@/types";
 import { Link } from "@/i18n/routing";
-import { getTranslations } from "next-intl/server";
+import { useTranslations } from "next-intl";
 
-export default async function Navigation() {
-  const t = await getTranslations();
-  const session = await auth();
+export default function Navigation({
+  isLoggedIn,
+  user,
+  signOut,
+}: {
+  isLoggedIn: boolean;
+  user: IUser | null;
+  signOut: (options: { redirectTo: string }) => void;
+}) {
+  const t = useTranslations();
 
-  let name,
-    surname: string = "";
-  let userDataError: boolean = false;
-  if (session?.user?.id) {
-    const userDetailsResponse: IResponse<IUser> =
-      await dataService.getUserDetails(session.user.id as string);
-    if (!userDetailsResponse.success) {
-      userDataError = true;
-    } else {
-      name = userDetailsResponse.data.name;
-      surname = userDetailsResponse.data.surname;
-    }
-  }
   return (
     <nav className="flex items-center justify-between bg-gray-200 p-4 rounded-md shadow-md border border-slate-500 mb-4">
       <ul className="flex space-x-6">
-        {!session && (
+        {!isLoggedIn && (
           <li>
             <Link
               href="/login"
@@ -36,7 +30,7 @@ export default async function Navigation() {
             </Link>
           </li>
         )}
-        {session && (
+        {isLoggedIn && (
           <>
             <li>
               <Link
@@ -46,7 +40,7 @@ export default async function Navigation() {
                 {t("Navigation.To do list")}
               </Link>
             </li>
-            {session.user.role === "Admin" && (
+            {user?.role === "Admin" && (
               <>
                 <li>
                   <Link
@@ -79,14 +73,14 @@ export default async function Navigation() {
       </ul>
       <div className="flex items-center gap-x-10">
         <LanguageSwithcer />
-        {session && (
+        {isLoggedIn && (
           <>
-            {!userDataError && (
+            {user && (
               <div className="font-bold text-lg text-gray-700">
-                {t("Navigation.Hi")} {name} {surname}
+                {t("Navigation.Hi")} {user.name} {user.surname}
               </div>
             )}
-            <SignOutButton />
+            <SignOutButton signOutAction={signOut} />
           </>
         )}
       </div>

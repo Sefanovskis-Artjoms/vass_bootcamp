@@ -1,4 +1,4 @@
-import connectDB from "@/lib/mongodb";
+import connectDB from "@/utils/mongodb";
 import { NextResponse } from "next/server";
 import { IGroup, IResponse, ITodo } from "@/types";
 import User from "../../../models/users-model";

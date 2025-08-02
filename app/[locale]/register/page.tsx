@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
-import { signIn } from "@/auth";
+import { signIn } from "@/utils/auth";
 
 export default function LoginPage() {
   async function handleRegister(data: {

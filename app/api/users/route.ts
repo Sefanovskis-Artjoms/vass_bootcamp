@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/lib/mongodb";
+import connectDB from "@/utils/mongodb";
 import User from "../models/users-model";
 import { IResponse, IUser } from "@/types";
 
