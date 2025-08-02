@@ -1,0 +1,142 @@
+{
+  "Common": {
+    "Log-out": "Выйти",
+    "Log-in": "Войти",
+    "Submit": "Отправить",
+    "Save": "Сохранить",
+    "Delete": "Удалить",
+    "Deleting": "Удаляется",
+    "Confirm deletion": "Подтвердить",
+    "Add": "Добавить",
+    "Adding": "Добавляется",
+    "Edit": "Редактировать",
+    "Back": "Назад",
+    "Cancel": "Отменить",
+    "Remove": "Убрать",
+    "Removing": "Убирается",
+    "Errors": {
+      "Error in fetching user data": "Ошибка при получении данных пользователя",
+      "Internal server error": "Внутренняя ошибка сервера",
+      "Error in fetching data": "Ошибка при получении данных",
+      "Unexpected error occurred, please try again later": "Произошла непредвиденная ошибка, попробуйте позже"
+    }
+  },
+  "Pages": {
+    "Login": {
+      "Username": "Имя пользователя",
+      "Password": "Пароль",
+      "Have no account? Register here!": "Нет профиля? Зарегистрируйтесь здесь!",
+      "Form Messages": {
+        "Please enter your username": "Пожалуйста, введите имя пользователя",
+        "Please enter your password": "Пожалуйста, введите пароль"
+      },
+      "Errors": {
+        "Invalid username or password": "Неверное имя пользователя или пароль"
+      }
+    },
+    "Register": {
+      "Name": "Имя",
+      "Surname": "Фамилия",
+      "Username": "Имя пользователя",
+      "Password": "Пароль",
+      "Register": "Регистрация",
+      "Registering": "Регистрируется",
+      "Repeat password": "Повторите пароль",
+      "Form Messages": {
+        "Please enter your name": "Пожалуйста, введите имя",
+        "Please enter your surname": "Пожалуйста, введите фамилию",
+        "Please enter your username": "Пожалуйста, введите имя пользователя",
+        "Username is required": "Имя пользователя обязательно",
+        "Username must be at least 5 characters long": "Имя пользователя должно быть не менее 5 символов",
+        "Username is already taken": "Имя пользователя уже занято",
+        "Please enter your password": "Пожалуйста, введите пароль",
+        "Password must be at least 6 characters long": "Пароль должен быть не менее 6 символов",
+        "Please repeat your password": "Пожалуйста, повторите пароль",
+        "Passwords do not match": "Пароли не совпадают"
+      },
+      "Errors": {
+        "Unexpected error occured while registering, please try again later": "Произошла непредвиденная ошибка при регистрации, попробуйте позже",
+        "Failed to create a new user": "Не удалось создать нового пользователя",
+        "Failed to sign-in": "Не удалось войти"
+      }
+    },
+    "ToDoPages": {
+      "Status": "Статус",
+      "To do": "Задача",
+      "In progress": "В процессе",
+      "Done": "Готово",
+      "Type": "Тип",
+      "Feature": "Функция",
+      "Bug": "Ошибка",
+      "Story": "История",
+      "Other": "Другое",
+      "Assign to": "Назначить",
+      "Assigned to": "Назначено",
+      "to User": "Пользователю",
+      "to Group": "Группе",
+      "Unassigned": "Не назначено",
+      "Loading users": "Загрузка пользователей",
+      "Title": "Заголовок",
+      "created on": "создано",
+      "Description": "Описание",
+      "Search": "Поиск",
+      "Newest first": "Новые в начале",
+      "Oldest first": "Старые в начале",
+      "Filter by type": "Фильтровать по типу",
+      "Reset selection": "Сбросить выбор",
+      "Filter by status": "Фильтровать по статусу",
+      "Form Messages": {
+        "Title required": "Заголовок обязателен",
+        "Description required": "Описание обязательно"
+      },
+      "Errors": {
+        "To do not found": "Задача не найдена",
+        "ID is required": "ID обязателен",
+        "Failed to add to do": "Не удалось добавить задачу"
+      }
+    },
+    "UserPages": {
+      "Nr": "№",
+      "ID": "ID",
+      "Name": "Имя",
+      "Surname": "Фамилия",
+      "Username": "Имя пользователя",
+      "Role": "Роль",
+      "Admin": "Администратор",
+      "Manager": "Менеджер",
+      "User": "Пользователь",
+      "View details": "Просмотреть детали",
+      "View": "Просмотр",
+      "User details": "Детали пользователя",
+      "Search": "Поиск",
+      "Search by fields": "Поиск по полям",
+      "Reset selection": "Сбросить выбор",
+      "Filter by role": "Фильтровать по роли",
+      "Errors": {
+        "Error in updating user role": "Ошибка при обновлении роли пользователя"
+      }
+    },
+    "GroupPages": {
+      "Create new group": "Создать новую группу",
+      "Group name": "Название группы",
+      "Nr": "№",
+      "User count": "Количество пользователей",
+      "Name": "Название",
+      "View details": "Просмотреть детали",
+      "group details": "- детали группы",
+      "Add new user to the group": "Добавить нового пользователя в группу",
+      "View users in the group": "Просмотреть пользователей в группе",
+      "Errors": {
+        "Please enter a group name": "Пожалуйста, введите название группы",
+        "Error occured while creating group, please try again later": "Произошла ошибка при создании группы, попробуйте позже"
+      }
+    }
+  },
+  "Navigation": {
+    "To do list": "Список задач",
+    "Add to do item": "Добавить задачу",
+    "View all users": "Просмотреть всех пользователей",
+    "View groups": "Просмотреть группы",
+    "Hi": "Привет"
+  }
+}

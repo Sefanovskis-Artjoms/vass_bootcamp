@@ -1,0 +1,142 @@
+{
+  "Common": {
+    "Log-out": "Izrakstīties",
+    "Log-in": "Pieteikties",
+    "Submit": "Iesniegt",
+    "Save": "Saglabāt",
+    "Delete": "Dzēst",
+    "Deleting": "Dzēšās",
+    "Confirm": "Apstiprināt",
+    "Add": "Pievienot",
+    "Adding": "Pievienojās",
+    "Edit": "Rediģēt",
+    "Back": "Atpakaļ",
+    "Cancel": "Atcelt",
+    "Remove": "Noņemt",
+    "Removing": "Noņem",
+    "Errors": {
+      "Error in fetching user data": "Kļūda lietotāja datu iegūšanā",
+      "Internal server error": "Iekšēja servera kļūda",
+      "Error in fetching data": "Kļūda datu iegūšanā",
+      "Unexpected error occurred, please try again later": "Notikusi neparedzēta kļūda, lūdzu mēģiniet vēlāk"
+    }
+  },
+  "Pages": {
+    "Login": {
+      "Username": "Lietotājvārds",
+      "Password": "Parole",
+      "Have no account? Register here!": "Nav konta? Reģistrējies šeit!",
+      "Form Messages": {
+        "Please enter your username": "Lūdzu ievadiet lietotājvārdu",
+        "Please enter your password": "Lūdzu ievadiet paroli"
+      },
+      "Errors": {
+        "Invalid username or password": "Nepareizs lietotājvārds vai parole"
+      }
+    },
+    "Register": {
+      "Name": "Vārds",
+      "Surname": "Uzvārds",
+      "Username": "Lietotājvārds",
+      "Password": "Parole",
+      "Register": "Reģistrēties",
+      "Registering": "Reģistrējās",
+      "Repeat password": "Atkārtojiet paroli",
+      "Form Messages": {
+        "Please enter your name": "Lūdzu ievadiet vārdu",
+        "Please enter your surname": "Lūdzu ievadiet uzvārdu",
+        "Please enter your username": "Lūdzu ievadiet lietotājvārdu",
+        "Username is required": "Lietotājvārds ir obligāts",
+        "Username must be at least 5 characters long": "Lietotājvārdam jābūt vismaz 5 rakstzīmju garam",
+        "Username is already taken": "Lietotājvārds jau ir aizņemts",
+        "Please enter your password": "Lūdzu ievadiet paroli",
+        "Password must be at least 6 characters long": "Parolei jābūt vismaz 6 rakstzīmju garai",
+        "Please repeat your password": "Lūdzu atkārtojiet paroli",
+        "Passwords do not match": "Paroles nesakrīt"
+      },
+      "Errors": {
+        "Unexpected error occured while registering, please try again later": "Reģistrējoties notikusi neparedzēta kļūda, lūdzu mēģiniet vēlāk",
+        "Failed to create a new user": "Notikusi kļūda jauna lietotāja izveidē",
+        "Failed to sign-in": "Pieteikšanās neizdevās"
+      }
+    },
+    "ToDoPages": {
+      "Status": "Statuss",
+      "To do": "Jādara",
+      "In progress": "Procesā",
+      "Done": "Pabeigts",
+      "Type": "Tips",
+      "Feature": "Funkcija",
+      "Bug": "Kļūda",
+      "Story": "Stāsts",
+      "Other": "Cits",
+      "Assign to": "Piešķirt",
+      "Assigned to": "Piešķirts",
+      "to User": "Lietotājam",
+      "to Group": "Grupai",
+      "Unassigned": "Nepiešķirts",
+      "Loading users": "Lādē lietotājus",
+      "Title": "Virsraksts",
+      "created on": "izveidots",
+      "Description": "Apraksts",
+      "Search": "Meklēt",
+      "Newest first": "Jaunākie vispirms",
+      "Oldest first": "Vecākie vispirms",
+      "Filter by type": "Atlasīt pēc tipa",
+      "Reset selection": "Atiestatīt izvēli",
+      "Filter by status": "Atlasīt pēc statusa",
+      "Form Messages": {
+        "Title required": "Virsraksts ir obligāts",
+        "Description required": "Apraksts ir obligāts"
+      },
+      "Errors": {
+        "To do not found": "Darāmais nav atrasts",
+        "ID is required": "ID ir obligāts",
+        "Failed to add to do": "Neizdevās pievienot darāmo"
+      }
+    },
+    "UserPages": {
+      "Nr": "Nr",
+      "ID": "ID",
+      "Name": "Vārds",
+      "Surname": "Uzvārds",
+      "Username": "Lietotājvārds",
+      "Role": "Loma",
+      "Admin": "Administrators",
+      "Manager": "Menedžeris",
+      "User": "Lietotājs",
+      "View details": "Skatīt detaļas",
+      "View": "Skatīt",
+      "User details": "Lietotāja informācija",
+      "Search": "Meklēt",
+      "Search by fields": "Meklēt pēc laukiem",
+      "Reset selection": "Atiestatīt izvēli",
+      "Filter by role": "Atlasīt pēc lomas",
+      "Errors": {
+        "Error in updating user role": "Kļūda lietotāja lomas atjaunināšanā"
+      }
+    },
+    "GroupPages": {
+      "Create new group": "Izveidot jaunu grupu",
+      "Group name": "Grupas nosaukums",
+      "Nr": "Nr",
+      "User count": "Lietotāju skaits",
+      "Name": "Nosaukums",
+      "View details": "Skatīt detaļas",
+      "group details": "- grupas detaļas",
+      "Add new user to the group": "Pievienot jaunu lietotāju grupai",
+      "View users in the group": "Skatīt lietotājus grupā",
+      "Errors": {
+        "Please enter a group name": "Lūdzu ievadiet grupas nosaukumu",
+        "Error occured while creating group, please try again later": "Radusies kļūda izveidojot grupu, lūdzu mēģiniet vēlāk"
+      }
+    }
+  },
+  "Navigation": {
+    "To do list": "Darāmo saraksts",
+    "Add to do item": "Pievienot darāmo",
+    "View all users": "Skatīt visus lietotājus",
+    "View groups": "Skatīt grupas",
+    "Hi": "Sveiki"
+  }
+}

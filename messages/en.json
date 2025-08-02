@@ -1,0 +1,142 @@
+{
+  "Common": {
+    "Log-out": "Log-out",
+    "Log-in": "Log-in",
+    "Submit": "Submit",
+    "Save": "Save",
+    "Delete": "Delete",
+    "Deleting": "Deleting",
+    "Confirm": "Confirm",
+    "Add": "Add",
+    "Adding": "Adding",
+    "Edit": "Edit",
+    "Back": "Back",
+    "Cancel": "Cancel",
+    "Remove": "Remove",
+    "Removing": "Removing",
+    "Errors": {
+      "Error in fetching user data": "Error in fetching user data",
+      "Internal server error": "Internal server error",
+      "Error in fetching data": "Error in fetching data",
+      "Unexpected error occurred, please try again later": "Unexpected error occurred, please try again later"
+    }
+  },
+  "Pages": {
+    "Login": {
+      "Username": "Username",
+      "Password": "Password",
+      "Have no account? Register here!": "Have no account? Register here!",
+      "Form Messages": {
+        "Please enter your username": "Please enter your username",
+        "Please enter your password": "Please enter your password"
+      },
+      "Errors": {
+        "Invalid username or password": "Invalid username or password"
+      }
+    },
+    "Register": {
+      "Name": "Name",
+      "Surname": "Surname",
+      "Username": "Username",
+      "Password": "Password",
+      "Register": "Register",
+      "Registering": "Registering",
+      "Repeat password": "Repeat password",
+      "Form Messages": {
+        "Please enter your name": "Please enter your name",
+        "Please enter your surname": "Please enter your surname",
+        "Please enter your username": "Please enter your username",
+        "Username is required": "Username is required",
+        "Username must be at least 5 characters long": "Username must be at least 5 characters long",
+        "Username is already taken": "Username is already taken",
+        "Please enter your password": "Please enter your password",
+        "Password must be at least 6 characters long": "Password must be at least 6 characters long",
+        "Please repeat your password": "Please repeat your password",
+        "Passwords do not match": "Passwords do not match"
+      },
+      "Errors": {
+        "Unexpected error occured while registering, please try again later": "Unexpected error occured while registering, please try again later",
+        "Failed to create a new user": "Failed to create a new user",
+        "Failed to sign-in": "Failed to sign-in"
+      }
+    },
+    "ToDoPages": {
+      "Status": "Status",
+      "To do": "To do",
+      "In progress": "In progress",
+      "Done": "Done",
+      "Type": "Type",
+      "Feature": "Feature",
+      "Bug": "Bug",
+      "Story": "Story",
+      "Other": "Other",
+      "Assign to": "Assign to",
+      "Assigned to": "Assigned to",
+      "to User": "User",
+      "to Group": "Group",
+      "Unassigned": "Unassigned",
+      "Loading users": "Loading users",
+      "Title": "Title",
+      "created on": "created on",
+      "Description": "Description",
+      "Search": "Search",
+      "Newest first": "Newest first",
+      "Oldest first": "Oldest first",
+      "Filter by type": "Filter by type",
+      "Reset selection": "Reset selection",
+      "Filter by status": "Filter by status",
+      "Form Messages": {
+        "Title required": "Title is required",
+        "Description required": "Description is required"
+      },
+      "Errors": {
+        "To do not found": "To do not found",
+        "ID is required": "ID is required",
+        "Failed to add to do": "Failed to add to do"
+      }
+    },
+    "UserPages": {
+      "Nr": "Nr",
+      "ID": "ID",
+      "Name": "Name",
+      "Surname": "Surname",
+      "Username": "Username",
+      "Role": "Role",
+      "Admin": "Admin",
+      "Manager": "Manager",
+      "User": "User",
+      "View details": "View details",
+      "View": "View",
+      "User details": "User details",
+      "Search": "Search",
+      "Search by fields": "Search by fields",
+      "Reset selection": "Reset selection",
+      "Filter by role": "Filter by role",
+      "Errors": {
+        "Error in updating user role": "Error in updating role"
+      }
+    },
+    "GroupPages": {
+      "Create new group": "Create new group",
+      "Group name": "Group name",
+      "Nr": "Nr",
+      "User count": "User count",
+      "Name": "Name",
+      "View details": "View details",
+      "group details": "- group details",
+      "Add new user to the group": "Add new user to the group",
+      "View users in the group": "View users in the group",
+      "Errors": {
+        "Please enter a group name": "Please enter a group name",
+        "Error occured while creating group, please try again later": "Error occured while creating group, please try again later"
+      }
+    }
+  },
+  "Navigation": {
+    "To do list": "To do list",
+    "Add to do item": "Add to do item",
+    "View all users": "View all users",
+    "View groups": "View groups",
+    "Hi": "Hi"
+  }
+}
